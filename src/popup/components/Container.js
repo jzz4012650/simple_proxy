@@ -35,7 +35,7 @@ class Container extends Component {
     render() {
         return (
             <div className="popup-wrapper">
-                <h2>Proxy Mode:
+                <h2>{chrome.i18n.getMessage("proxy_mode")}
                     <SelectField
                         autoWidth={true}
                         value={this.props.proxyMode}
@@ -46,7 +46,7 @@ class Container extends Component {
                             <MenuItem
                                 key={i}
                                 value={d.name}
-                                primaryText={<span className="mode-option">{d.name}</span>}
+                                primaryText={<span className="mode-option">{d.text}</span>}
                                 secondaryText={<span className="explanation">{d.desc}</span>}
                             />
                         ))}

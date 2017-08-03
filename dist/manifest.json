@@ -1,9 +1,8 @@
 {
     "manifest_version": 2,
-
-    "name": "Simple Proxy",
-    "description": "This extension can set up proxy for each host you have visited.",
-    "version": "1.0",
+    "name": "__MSG_name__",
+    "description": "__MSG_description__",
+    "version": "1.1",
     "browser_action": {
         "default_icon": "icon16.png",
         "default_popup": "popup.html",
@@ -17,6 +16,7 @@
         "48": "icon48.png",
         "128": "icon128.png"
     },
+    "default_locale": "en",
     "options_page": "options.html",
     "permissions": [
         "proxy",

@@ -2,7 +2,6 @@ var path = require("path");
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-var DEV_MODE        = process.argv.indexOf("--dev-mode") >= 0;
 var HOT_SERVER_PORT = 3000;
 var SRC_PATH        = "/src";
 var OUTPUT_PATH     = "/dist";
@@ -11,7 +10,6 @@ var JS_NAME         = "[name].js";
 var CSS_NAME        = "[name].css";
 
 var options = {
-    // devtool: DEV_MODE ? 'eval-source-map' : 'hidden-eval',
     devtool: 'source-map',
     entry: {
         'options': './src/options/index.js',
@@ -33,7 +31,7 @@ var options = {
             include: path.join(__dirname, SRC_PATH)
         }, {
             test:    /\.jsx?$/,
-            loaders: DEV_MODE ? ['react-hot', 'babel'] : ['babel'],
+            loader: 'babel-loader',
             include: path.join(__dirname, SRC_PATH)
         }, {
             test:    /\.json$/,
@@ -55,10 +53,5 @@ var options = {
     ]
 }
 
-if (DEV_MODE) {
-    options.entry.unshift("webpack-dev-server/client?http://localhost:" + HOT_SERVER_PORT);
-    options.entry.unshift("webpack/hot/only-dev-server");
-    options.plugins.unshift(new webpack.HotModuleReplacementPlugin());
-}
 
 module.exports = options;

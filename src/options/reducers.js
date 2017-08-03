@@ -105,7 +105,7 @@ export default handleActions({
                 ...state,
                 showSnackbar: true,
                 snackbarType: 1,
-                snackbarContent: 'Configurations saved!'
+                snackbarContent: chrome.i18n.getMessage("option_saved")
             }
         },
         throw: (state, action) => {
@@ -114,7 +114,7 @@ export default handleActions({
                 ...state,
                 showSnackbar: true,
                 snackbarType: 0,
-                snackbarContent: 'Configurations saved failed.'
+                snackbarContent: chrome.i18n.getMessage("option_save_failed")
             }
         }
     },

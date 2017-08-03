@@ -4,7 +4,6 @@ import Domain from './Domain';
 
 
 const DomainList = props => {
-    console.log('123');
     return (
         <List>
             {props.hostList.map((d, i) => (

@@ -1,0 +1,65 @@
+{
+  "name": {
+    "message": "Simple Proxy"
+  },
+  "description": {
+    "message": "This extension can set up proxy for each host you have visited."
+  },
+  "options": {
+    "message": "OPTIONS"
+  },
+  "save_option": {
+    "message": "SAVE"
+  },
+  "proxy_server_list": {
+    "message": "Proxy Server List"
+  },
+  "proxy_server_desc": {
+    "message": "Configure your proxy server. One proxy server a line. Will auto try next one if the bef"
+  },
+  "white_list": {
+    "message": "White List"
+  },
+  "white_list_desc": {
+    "message": "When the whitelist mode is turned on, the domain names outside the whitelist will go through the proxy"
+  },
+  "black_list":{
+    "message": "Black List"
+  },
+  "black_list_desc":{
+    "message": "When the blacklist mode is turned on, only the domain name in the blacklist will go through the proxy."
+  },
+  "option_saved":{
+    "message": "Configuration saved successfully!"
+  },
+  "option_save_failed":{
+    "message": "Configuration save failed!"
+  },
+  "proxy_mode":{
+    "message": "Proxy mode: "
+  },
+  "mode_system":{
+    "message": "SYSTEM"
+  },
+  "mode_direct":{
+    "message": "DIRECT"
+  },
+  "mode_white_list":{
+    "message": "WHITE_LIST"
+  },
+  "mode_black_list":{
+    "message": "BLACK_LIST"
+  },
+  "mode_system_desc":{
+    "message": "Use the proxy settings of system"
+  },
+  "mode_direct_desc":{
+    "message": "Disable proxy"
+  },
+  "mode_white_list_desc":{
+    "message": "Domain outside white list will use proxy"
+  },
+  "mode_black_list_desc":{
+    "message": "Domain inside black list will use proxy"
+  }
+}
