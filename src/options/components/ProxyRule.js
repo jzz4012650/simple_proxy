@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { TextField, FloatingActionButton } from 'material-ui';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import ContentClear from 'material-ui/svg-icons/content/clear';
+import React, { PureComponent } from 'react';
+import { TextField } from 'material-ui';
+import Button from 'material-ui/Button'
+import ContentAdd from 'material-ui-icons/Add'
+import ContentClear from 'material-ui-icons/Clear'
 
-
-class ProxyRule extends Component {
+class ProxyRule extends PureComponent {
 
     handleRuleChange(e, value) {
         const { index, type } = this.props;
@@ -23,26 +23,21 @@ class ProxyRule extends Component {
 
     render() {
         return (
-            <div>
+            <div style={{ marginTop: 10 }}>
                 <TextField
                     style={{ verticalAlign: 'bottom' }}
-                    hintText="some.host.com"
+                    placeholder="some.host.com"
                     value={this.props.value}
                     onChange={this.handleRuleChange.bind(this)}
-                />
-                <FloatingActionButton
-                    mini={true}
-                    style={{ margin: '0 0 0 0.5em', verticalAlign: 'top' }}
+                />{' '}
+                <Button raised dense color="primary"
                     onClick={this.handleAddBtnClick.bind(this)}>
-                    <ContentAdd/>
-                </FloatingActionButton>
-                <FloatingActionButton
-                    mini={true}
-                    secondary={true}
-                    style={{ margin: '0 0 0 0.5em', verticalAlign: 'top' }}
+                    <ContentAdd />
+                </Button>{' '}
+                <Button raised dense color="accent"
                     onClick={this.handleClearBtnClick.bind(this)}>
-                    <ContentClear/>
-                </FloatingActionButton>
+                    <ContentClear />
+                </Button>
             </div>
         );
     }

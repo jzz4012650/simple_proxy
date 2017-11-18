@@ -61,5 +61,17 @@
   },
   "mode_black_list_desc":{
     "message": "Domain inside black list will use proxy"
+  },
+  "domain_list": {
+    "message": "Current page requested domain name: "
+  },
+  "domain_neither": {
+    "message": "Neither"
+  },
+  "domain_black": {
+    "message": "Black"
+  },
+  "domain_white": {
+    "message": "White"
   }
 }

@@ -61,5 +61,17 @@
   },
   "mode_black_list_desc":{
     "message": "仅黑名单内的域名使用代理"
+  },
+  "domain_list": {
+    "message": "当前页面请求过的域名："
+  },
+  "domain_neither": {
+    "message": "默认"
+  },
+  "domain_black": {
+    "message": "黑名单"
+  },
+  "domain_white": {
+    "message": "白名单"
   }
 }

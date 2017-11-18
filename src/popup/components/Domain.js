@@ -1,62 +1,60 @@
-import React, {Component} from 'react';
-import { ListItem, IconMenu, IconButton, MenuItem } from 'material-ui';
-import FontIcon from 'material-ui/FontIcon';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import RemoveCircle from 'material-ui/svg-icons/content/remove-circle';
-import RemoveCircleOutline from 'material-ui/svg-icons/content/remove-circle-outline';
+import React, { PureComponent } from 'react';
+import { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
+import Menu, { MenuItem } from 'material-ui/Menu'
+import IconButton from 'material-ui/IconButton'
+import MoreVertIcon from 'material-ui-icons/MoreVert'
+import RemoveCircle from 'material-ui-icons/RemoveCircle'
+import RemoveCircleOutline from 'material-ui-icons/RemoveCircleOutline'
 
-class Domain extends Component {
+class Domain extends PureComponent {
 
-    constructor(props) {
-        super(props);
-        this.iconType = -1;
+  constructor(props) {
+    super(props);
+    this.state = {
+      anchorEl: null
+    }
+  }
+
+  renderRightIconBtton(iconType) {
+    let icon
+    switch (iconType) {
+      case 0:
+        icon = <RemoveCircleOutline />
+        break
+      case 1:
+        icon = <RemoveCircle />
+      default:
+        icon = <MoreVertIcon />
+    }
+    return (
+      <IconButton onClick={(e) => this.props.onOpenMenu(e.target, this.props.host, iconType)}>
+        {icon}
+      </IconButton>
+    )
+  }
+
+  render() {
+    const { host, blackList, whiteList } = this.props;
+    let iconType
+
+    switch (true) {
+      case (blackList.indexOf('*' + host) >= 0):
+        iconType = 1; break;
+      case (whiteList.indexOf('*' + host) >= 0):
+        iconType = 0; break;
+      default:
+        iconType = -1;
     }
 
-
-    handleHostTypeChange(e, child) {
-        let type = child.props.value;
-        let prevType = this.iconType;
-        this.props.modifyHostType(this.props.host, prevType, type);
-    }
-
-    renderRightIconBtton(iconType) {
-        let icon = <MoreVertIcon/>;
-
-        if (iconType === 0) icon = <RemoveCircleOutline/>;
-        if (iconType === 1) icon = <RemoveCircle/>;
-
-        return (
-            <IconMenu
-                onItemTouchTap={this.handleHostTypeChange.bind(this)}
-                iconButtonElement={<IconButton>{icon}</IconButton>}>
-                <MenuItem value={-1} primaryText="Neither" leftIcon={<MoreVertIcon/>}/>
-                <MenuItem value={1} primaryText="Black" leftIcon={<RemoveCircle/>}/>
-                <MenuItem value={0} primaryText="White" leftIcon={<RemoveCircleOutline/>}/>
-            </IconMenu>
-        )
-    }
-
-    render() {
-        const { host, blackList, whiteList } = this.props;
-
-        switch(true) {
-            case (blackList.indexOf('*' + host) >= 0):
-                this.iconType = 1; break;
-            case (whiteList.indexOf('*' + host) >= 0):
-                this.iconType = 0; break;
-            default:
-                this.iconType = -1;
-        }
-
-        return (
-            <ListItem
-                disabled={true}
-                primaryText={host}
-                autoGenerateNestedIndicator={false}
-                rightIconButton={this.renderRightIconBtton(this.iconType)}>
-            </ListItem>
-        );
-    }
+    return (
+      <ListItem>
+        <ListItemText primary={host} />
+        <ListItemSecondaryAction>
+          {this.renderRightIconBtton(iconType)}
+        </ListItemSecondaryAction>
+      </ListItem>
+    );
+  }
 }
 
 export default Domain;

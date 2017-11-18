@@ -1,2 +1,11 @@
-body,html{padding:0;margin:0;background:#e0e0e0}.main-body{padding-top:64px}
+html,
+body {
+  padding: 0;
+  margin: 0;
+  background: #E0E0E0;
+}
+.main-body {
+  padding-top: 64px;
+}
+
 /*# sourceMappingURL=options.css.map*/

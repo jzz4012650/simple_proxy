@@ -1,2 +1,29 @@
-body{width:450px;height:320px;margin:0;overflow:hidden}.popup-wrapper,body #root{width:100%;height:100%}.popup-wrapper{display:flex;flex-direction:column}.popup-wrapper h2{flex:0 1 0;background:#00bcd4;margin:0;padding:.5em 1em;font-size:20px;color:#fff}.popup-wrapper .domain-list-wrapper{flex:1 0 0;overflow-y:auto}.mode-option{padding-right:1em}.explanation{color:#aaa;font-size:12px}
+body {
+  width: 450px;
+  height: 320px;
+  margin: 0;
+  overflow: hidden;
+}
+body #root {
+  width: 100%;
+  height: 100%;
+}
+.popup-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.popup-wrapper .domain-list-wrapper {
+  flex: 1 0 0px;
+  overflow-y: auto;
+}
+.mode-option {
+  padding-right: 1em;
+}
+.explanation {
+  color: #AAA;
+  font-size: 12px;
+}
+
 /*# sourceMappingURL=popup.css.map*/

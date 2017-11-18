@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
-import { SelectField, MenuItem, TextField, FloatingActionButton } from 'material-ui';
-import ContentAdd from 'material-ui/svg-icons/content/add';
-import ContentClear from 'material-ui/svg-icons/content/clear';
+import React, { PureComponent } from 'react';
+import { TextField } from 'material-ui';
+import Select from 'material-ui/Select'
+import Button from 'material-ui/Button'
+import { MenuItem } from 'material-ui/Menu'
+import IconAdd from 'material-ui-icons/Add'
+import IconClear from 'material-ui-icons/Clear'
 import { PROXY_TYPES } from '../constants';
 import { addProxyServer, deleteProxyServer } from '../actions';
 
-class ProxyServer extends Component {
+class ProxyServer extends PureComponent {
 
     constructor(props) {
         super(props);
@@ -16,21 +19,21 @@ class ProxyServer extends Component {
         }
     }
 
-    handleTypeChange(e, i, type) {
+    handleTypeChange(e) {
         const { index, modify, server } = this.props;
-        let newServer = Object.assign({}, server, { type });
+        let newServer = Object.assign({}, server, { type: e.target.value });
         modify({ index, newServer });
     }
 
-    handleHostChange(e, host) {
+    handleHostChange(e) {
         const { index, modify, server } = this.props;
-        let newServer = Object.assign({}, server, { host });
+        let newServer = Object.assign({}, server, { host: e.target.value });
         modify({ index, newServer });
     }
 
-    handlePortChange(e, port) {
+    handlePortChange(e) {
         const { index, modify, server } = this.props;
-        let newServer = Object.assign({}, server, { port });
+        let newServer = Object.assign({}, server, { port: e.target.value });
         modify({ index, newServer });
     }
 
@@ -44,37 +47,32 @@ class ProxyServer extends Component {
 
     render() {
         return (
-            <div className="proxy-server">
-                <SelectField
+            <div style={{ marginTop: 10 }}>
+                <Select
                     value={this.props.server.type}
-                    style={{ verticalAlign: 'bottom', textAlign: 'left' }}
                     onChange={this.handleTypeChange.bind(this)}>
                     {PROXY_TYPES.map((d, i) => (
-                        <MenuItem key={i} value={d} primaryText={d}/>
+                        <MenuItem key={i} value={d}>{d}</MenuItem>
                     ))}
-                </SelectField>
+                </Select>{' '}
                 <TextField
-                    hintText="example.proxy.com"
+                    placeholder="example.proxy.com"
                     value={this.props.server.host}
-                    style={{ verticalAlign: 'bottom' }}
                     onChange={this.handleHostChange.bind(this)}
-                />
+                />{' '}
                 <TextField
-                    hintText="8080"
+                    placeholder="8080"
                     value={this.props.server.port}
-                    style={{ verticalAlign: 'bottom' }}
                     onChange={this.handlePortChange.bind(this)}
-                />
-                <FloatingActionButton mini
-                    style={{ margin: '0 0 0 0.5em', verticalAlign: 'top' }}
+                />{' '}
+                <Button raised dense color="primary"
                     onClick={this.handleAddBtnClick.bind(this)}>
-                    <ContentAdd/>
-                </FloatingActionButton>
-                <FloatingActionButton mini secondary
-                    style={{ margin: '0 0 0 0.5em', verticalAlign: 'top' }}
+                    <IconAdd />
+                </Button>{' '}
+                <Button raised dense color="accent"
                     onClick={this.handleClearBtnClick.bind(this)}>
-                    <ContentClear/>
-                </FloatingActionButton>
+                    <IconClear />
+                </Button>
             </div>
         );
     }

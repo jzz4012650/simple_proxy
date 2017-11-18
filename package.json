@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "webpack --config webpack.config.js --progress --profile --colors --watch",
+    "start": "webpack --config webpack.config.js --progress --profile --watch --dev",
     "build": "webpack --config webpack.config.js --progress --profile --colors --optimize-minimize --optimize-occurence-order"
   },
   "repository": {
@@ -37,11 +37,12 @@
     "webpack-dev-server": "^1.12.1"
   },
   "dependencies": {
-    "material-ui": "^0.18.7",
+    "immutable": "^3.8.2",
+    "material-ui": "next",
+    "material-ui-icons": "^1.0.0-beta.17",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "react-redux": "^4.4.5",
-    "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-actions": "^0.12.0",
     "redux-promise": "^0.5.3"

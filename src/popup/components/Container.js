@@ -1,67 +1,85 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux'
-import { SelectField, MenuItem } from 'material-ui';
 import { Card, CardTitle, CardText, CardActions } from 'material-ui/Card';
+
+import Header from './Header'
 import DomainList from './DomainList';
+import DomainMenu from './DomainMenu'
 import * as actions from '../actions';
 import { PROXY_MODES } from '../constants';
 
-class Container extends Component {
 
-    constructor(props) {
-        super(props);
-        this.handleProxyModeChange = this.handleProxyModeChange.bind(this);
-    }
+class Container extends PureComponent {
 
-    componentDidMount() {
-        let bgPage = chrome.extension.getBackgroundPage();
-        Promise.all([
-            bgPage.getProxyMode(),
-            bgPage.getCurrentTabHosts(),
-            bgPage.getProxyRules()
-        ]).then(values => {
-            this.props.initData({
-                mode: values[0],
-                hostList: values[1],
-                rules: values[2]
-            })
-        })
+  constructor(props) {
+    super(props)
+    this.state = {
+      anchorEl: null,
+      anchorHost: null,
+      iconType: -1
     }
+  }
 
-    handleProxyModeChange(e, index, value) {
-        this.props.changeProxyMode(value);
-    }
+  handleHideMenu() {
+    this.setState({ anchorEl: null })
+  }
 
-    render() {
-        return (
-            <div className="popup-wrapper">
-                <h2>{chrome.i18n.getMessage("proxy_mode")}
-                    <SelectField
-                        autoWidth={true}
-                        value={this.props.proxyMode}
-                        style={{ margin: '0 0 0 0.5em', verticalAlign: 'middle' }}
-                        labelStyle={{ color: '#FFF' }}
-                        onChange={this.handleProxyModeChange}>
-                        {this.props.proxyModes.map((d, i) => (
-                            <MenuItem
-                                key={i}
-                                value={d.name}
-                                primaryText={<span className="mode-option">{d.text}</span>}
-                                secondaryText={<span className="explanation">{d.desc}</span>}
-                            />
-                        ))}
-                    </SelectField>
-                </h2>
-                <div className="domain-list-wrapper">
-                    <DomainList
-                        hostList={this.props.hostList}
-                        blackList={this.props.blackList}
-                        whiteList={this.props.whiteList}
-                        modifyHostType={this.props.modifyHostType}/>
-                </div>
-            </div>
-        );
-    }
+  handleOpenMenu(target, host, type) {
+    console.log(host)
+    this.setState({
+      anchorEl: target,
+      anchorHost: host,
+      iconType: type
+    });
+  }
+
+  handleMenuChange(host, prevType, type) {
+    console.log(431)
+    this.handleHideMenu()
+    this.props.modifyHostType(this.state.anchorHost, prevType, type)
+  }
+
+  componentDidMount() {
+    let bgPage = chrome.extension.getBackgroundPage();
+    Promise.all([
+      bgPage.getProxyMode(),
+      bgPage.getCurrentTabHosts(),
+      bgPage.getProxyRules()
+    ]).then(values => {
+      this.props.initData({
+        mode: values[0],
+        hostList: values[1],
+        rules: values[2]
+      })
+    })
+  }
+
+  render() {
+    return (
+      <div className="popup-wrapper">
+        <Header
+          proxyMode={this.props.proxyMode}
+          proxyModes={this.props.proxyModes}
+          changeProxyMode={this.props.changeProxyMode}
+        />
+        <div className="domain-list-wrapper">
+          <DomainList
+            hostList={this.props.hostList}
+            blackList={this.props.blackList}
+            whiteList={this.props.whiteList}
+            onOpenMenu={this.handleOpenMenu.bind(this)}
+          />
+        </div>
+        <DomainMenu
+          iconType={this.state.iconType}
+          anchorEl={this.state.anchorEl}
+          modifyHostType={this.props.modifyHostType}
+          onHide={() => this.handleHideMenu}
+          onMenuChange={this.handleMenuChange.bind(this)}
+        />
+      </div>
+    );
+  }
 }
 
 export default connect(state => state, actions)(Container);
