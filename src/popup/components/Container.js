@@ -25,7 +25,6 @@ class Container extends PureComponent {
   }
 
   handleOpenMenu(target, host, type) {
-    console.log(host)
     this.setState({
       anchorEl: target,
       anchorHost: host,
@@ -33,8 +32,7 @@ class Container extends PureComponent {
     });
   }
 
-  handleMenuChange(host, prevType, type) {
-    console.log(431)
+  handleMenuChange(prevType, type) {
     this.handleHideMenu()
     this.props.modifyHostType(this.state.anchorHost, prevType, type)
   }
@@ -74,7 +72,7 @@ class Container extends PureComponent {
           iconType={this.state.iconType}
           anchorEl={this.state.anchorEl}
           modifyHostType={this.props.modifyHostType}
-          onHide={() => this.handleHideMenu}
+          onHide={this.handleHideMenu.bind(this)}
           onMenuChange={this.handleMenuChange.bind(this)}
         />
       </div>

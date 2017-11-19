@@ -1,43 +1,40 @@
 import React, { PureComponent } from 'react';
 import Menu, { MenuItem } from 'material-ui/Menu'
-import MoreVertIcon from 'material-ui-icons/MoreVert'
-import RemoveCircle from 'material-ui-icons/RemoveCircle'
-import RemoveCircleOutline from 'material-ui-icons/RemoveCircleOutline'
+import { withStyles } from 'material-ui/styles';
 
-const DOMAIN_STATE = [{
-  value: -1,
-  text: chrome.i18n.getMessage('domain_neither'),
-  icon: <MoreVertIcon />
-}, {
-  value: 1,
-  text: chrome.i18n.getMessage('domain_black'),
-  icon: <RemoveCircle />
-}, {
-  value: 0,
-  text: chrome.i18n.getMessage('domain_white'),
-  icon: <RemoveCircleOutline />
-}]
+import DomainState from './DomainState'
+
+const styles = theme => ({
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  }
+})
 
 class DomainMenu extends PureComponent {
 
+  handleMenuClick(value) {
+    this.props.onMenuChange(this.props.iconType, value)
+  }
 
   render() {
+    const { classes } = this.props
     return (
       <Menu
         open={!!this.props.anchorEl}
         anchorEl={this.props.anchorEl}
         onRequestClose={this.props.onHide}>
-        {DOMAIN_STATE.map((d, i) =>
+        {DomainState.map((d, i) =>
           <MenuItem
             key={i}
             selected={this.props.iconType === d.value}
-            onClick={() => this.props.onMenuChange(this.props.iconType, d.value)}>
-            {d.icon}{' '}{d.text}
+            onClick={() => this.handleMenuClick(d.value)}>
+            {React.cloneElement(d.icon, { className: classes.leftIcon })}
+            {d.text}
           </MenuItem>
         )}
       </Menu>
-    );
+    )
   }
 }
 
-export default DomainMenu;
+export default withStyles(styles)(DomainMenu);

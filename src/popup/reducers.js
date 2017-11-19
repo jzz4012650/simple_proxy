@@ -33,14 +33,14 @@ export default handleActions({
     MODIFY_HOST_TYPE: (state, action) => {
         let { host, prevType, type } = action.payload;
         let { blackList, whiteList, proxyMode } = state;
-console.log(host)
+
         if (prevType === type) return state;
 
-        if (type === 1) blackList = blackList.concat(['*' + host]);
-        if (type === 0) whiteList = whiteList.concat(['*' + host]);
-        if (prevType === 1) blackList = blackList.filter(d => d !== ('*' + host));
-        if (prevType === 0) whiteList = whiteList.filter(d => d !== ('*' + host));
-console.log(blackList)
+        if (type === 1) blackList = blackList.concat([host]);
+        if (type === 0) whiteList = whiteList.concat([host]);
+        if (prevType === 1) blackList = blackList.filter(d => d !== host);
+        if (prevType === 0) whiteList = whiteList.filter(d => d !== host);
+
         bgPage.updateBlackWhiteList(blackList, whiteList, proxyMode);
 
         return {

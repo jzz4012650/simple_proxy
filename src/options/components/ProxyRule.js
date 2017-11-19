@@ -6,9 +6,9 @@ import ContentClear from 'material-ui-icons/Clear'
 
 class ProxyRule extends PureComponent {
 
-    handleRuleChange(e, value) {
+    handleRuleChange(e) {
         const { index, type } = this.props;
-        this.props.modify({ index, value, type });
+        this.props.modify({ index, type, value: e.target.value.trim() });
     }
 
     handleAddBtnClick() {

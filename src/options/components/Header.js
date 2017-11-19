@@ -1,23 +1,19 @@
 import React, { PureComponent } from 'react'
-import { AppBar, Toolbar, Typography, Button } from 'material-ui'
+import { AppBar, Toolbar, Typography, Button, Tooltip } from 'material-ui'
 import { withStyles } from 'material-ui/styles';
 import IconSave from 'material-ui-icons/Save'
+import IconUpdate from 'material-ui-icons/CloudUpload'
 
 const styles = theme => ({
   flex: {
     flex: 1
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
   }
 })
 
 class Header extends PureComponent {
-
-  handleSaveClick() {
-    this.props.saveConfig(
-      this.props.proxyServers,
-      this.props.blackList,
-      this.props.whiteList
-    )
-  }
 
   render() {
     const { classes } = this.props
@@ -27,11 +23,15 @@ class Header extends PureComponent {
           <Typography className={classes.flex} type="title" color="inherit" >
             {chrome.i18n.getMessage("options")}
           </Typography>
-          <Button color="contrast" onClick={() => this.handleSaveClick}>
-            <IconSave />
-            <Typography type="button">
-              {chrome.i18n.getMessage("save_option")}
-            </Typography>
+          <Tooltip title={chrome.i18n.getMessage("migration_explain")} placement="bottom-end">
+            <Button color="contrast" onClick={this.props.migrate}>
+              <IconUpdate className={classes.leftIcon} />
+              {chrome.i18n.getMessage("migration")}
+            </Button>
+          </Tooltip>
+          <Button color="contrast" onClick={this.props.onSave}>
+            <IconSave className={classes.leftIcon} />
+            {chrome.i18n.getMessage("save_option")}
           </Button>
         </Toolbar>
       </AppBar>

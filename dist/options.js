@@ -46,8 +46,6 @@
 
 	'use strict';
 	
-	__webpack_require__(1);
-	
 	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -95,12 +93,7 @@
 	), document.getElementById('root'));
 
 /***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ }),
+/* 1 */,
 /* 2 */,
 /* 3 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -34735,7 +34728,6 @@
 	            });
 	        },
 	        throw: function _throw(state, action) {
-	            console.error(action.payload);
 	            return _extends({}, state, {
 	                showSnackbar: true,
 	                snackbarType: 0,
@@ -34747,6 +34739,24 @@
 	        return _extends({}, state, {
 	            showSnackbar: false
 	        });
+	    },
+	    MIGRATE: {
+	        next: function next(state, action) {
+	            return _extends({}, state, {
+	                blackList: action.payload[BLACK_LIST],
+	                whiteList: action.payload[WHITE_LIST],
+	                showSnackbar: true,
+	                snackbarType: 1,
+	                snackbarContent: chrome.i18n.getMessage("migration_ok")
+	            });
+	        },
+	        throw: function _throw(state, action) {
+	            return _extends({}, state, {
+	                showSnackbar: true,
+	                snackbarType: 0,
+	                snackbarContent: chrome.i18n.getMessage("migration_fail")
+	            });
+	        }
 	    }
 	}, defaultProps);
 
@@ -40075,7 +40085,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	var PROXY_TYPES = exports.PROXY_TYPES = ['PROXY', 'SOCKS'];
+	var PROXY_TYPES = exports.PROXY_TYPES = ['PROXY', 'HTTP', 'HTTPS', 'SOCKS', 'SOCKS4', 'SOCKS5'];
 	var PROXY_SERVER_TPL = exports.PROXY_SERVER_TPL = JSON.stringify({ type: PROXY_TYPES[0], host: 'example.proxy.com', port: '8080' });
 
 /***/ }),
@@ -40087,6 +40097,8 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
@@ -40164,11 +40176,20 @@
 	      var _this2 = this;
 	
 	      var bgPage = chrome.extension.getBackgroundPage();
-	      Promise.all([bgPage.getProxyServers(), bgPage.getProxyRules()]).then(function (values) {
-	        _this2.props.initConfiguration(values);
+	      Promise.all([bgPage.getProxyServers(), bgPage.getProxyRules()]).then(function (_ref) {
+	        var _ref2 = _slicedToArray(_ref, 2),
+	            servers = _ref2[0],
+	            rules = _ref2[1];
+	
+	        _this2.props.initConfiguration(servers, rules);
 	      }, function (reason) {
 	        console.log(reason);
 	      });
+	    }
+	  }, {
+	    key: 'handleSaveConfig',
+	    value: function handleSaveConfig() {
+	      this.props.saveConfig(this.props.proxyServers, this.props.blackList, this.props.whiteList);
 	    }
 	  }, {
 	    key: 'render',
@@ -40178,7 +40199,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'container' },
-	        _react2.default.createElement(_Header2.default, { saveConfig: this.props.saveConfig }),
+	        _react2.default.createElement(_Header2.default, { onSave: this.handleSaveConfig.bind(this), migrate: this.props.migrate }),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'main-body' },
@@ -40205,7 +40226,7 @@
 	              { position: 'static', color: 'primary' },
 	              _react2.default.createElement(
 	                _Tabs2.default,
-	                { fullWidth: true,
+	                {
 	                  value: this.state.activeTab,
 	                  onChange: function onChange(e, v) {
 	                    return _this3.setState({ activeTab: v });
@@ -69878,16 +69899,17 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
-	exports.handleSnackbarClose = exports.saveConfig = exports.modifyProxyRule = exports.modifyProxyServer = exports.deleteProxyRule = exports.deleteProxyServer = exports.addProxyRule = exports.addProxyServer = exports.initConfiguration = undefined;
+	exports.migrate = exports.handleSnackbarClose = exports.saveConfig = exports.modifyProxyRule = exports.modifyProxyServer = exports.deleteProxyRule = exports.deleteProxyServer = exports.addProxyRule = exports.addProxyServer = exports.initConfiguration = undefined;
 	
 	var _reduxActions = __webpack_require__(453);
 	
 	var bgPage = chrome.extension.getBackgroundPage();
-	var saveProxyServersAndRules = bgPage.saveProxyServersAndRules;
-	var initConfiguration = exports.initConfiguration = (0, _reduxActions.createAction)('INIT_CONFIGURATION', function (values) {
+	var saveProxyServersAndRules = bgPage.saveProxyServersAndRules,
+	    migrateBWList = bgPage.migrateBWList;
+	var initConfiguration = exports.initConfiguration = (0, _reduxActions.createAction)('INIT_CONFIGURATION', function (servers, rules) {
 	    return {
-	        servers: values[0],
-	        rules: values[1]
+	        servers: servers,
+	        rules: rules
 	    };
 	});
 	
@@ -69908,6 +69930,10 @@
 	});
 	
 	var handleSnackbarClose = exports.handleSnackbarClose = (0, _reduxActions.createAction)('HANDLE_SNACKBAR_CLOSE');
+	
+	var migrate = exports.migrate = (0, _reduxActions.createAction)('MIGRATE', function () {
+	    return migrateBWList();
+	});
 
 /***/ }),
 /* 813 */
@@ -69933,6 +69959,10 @@
 	
 	var _Save2 = _interopRequireDefault(_Save);
 	
+	var _CloudUpload = __webpack_require__(838);
+	
+	var _CloudUpload2 = _interopRequireDefault(_CloudUpload);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -69945,6 +69975,9 @@
 	  return {
 	    flex: {
 	      flex: 1
+	    },
+	    leftIcon: {
+	      marginRight: theme.spacing.unit
 	    }
 	  };
 	};
@@ -69959,15 +69992,8 @@
 	  }
 	
 	  _createClass(Header, [{
-	    key: 'handleSaveClick',
-	    value: function handleSaveClick() {
-	      this.props.saveConfig(this.props.proxyServers, this.props.blackList, this.props.whiteList);
-	    }
-	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _this2 = this;
-	
 	      var classes = this.props.classes;
 	
 	      return _react2.default.createElement(
@@ -69982,16 +70008,20 @@
 	            chrome.i18n.getMessage("options")
 	          ),
 	          _react2.default.createElement(
-	            _materialUi.Button,
-	            { color: 'contrast', onClick: function onClick() {
-	                return _this2.handleSaveClick;
-	              } },
-	            _react2.default.createElement(_Save2.default, null),
+	            _materialUi.Tooltip,
+	            { title: chrome.i18n.getMessage("migration_explain"), placement: 'bottom-end' },
 	            _react2.default.createElement(
-	              _materialUi.Typography,
-	              { type: 'button' },
-	              chrome.i18n.getMessage("save_option")
+	              _materialUi.Button,
+	              { color: 'contrast', onClick: this.props.migrate },
+	              _react2.default.createElement(_CloudUpload2.default, { className: classes.leftIcon }),
+	              chrome.i18n.getMessage("migration")
 	            )
+	          ),
+	          _react2.default.createElement(
+	            _materialUi.Button,
+	            { color: 'contrast', onClick: this.props.onSave },
+	            _react2.default.createElement(_Save2.default, { className: classes.leftIcon }),
+	            chrome.i18n.getMessage("save_option")
 	          )
 	        )
 	      );
@@ -70184,6 +70214,7 @@
 	                _react2.default.createElement(
 	                    _Select2.default,
 	                    {
+	                        autoWidth: false,
 	                        value: this.props.server.type,
 	                        onChange: this.handleTypeChange.bind(this) },
 	                    _constants.PROXY_TYPES.map(function (d, i) {
@@ -70446,12 +70477,12 @@
 	
 	    _createClass(ProxyRule, [{
 	        key: 'handleRuleChange',
-	        value: function handleRuleChange(e, value) {
+	        value: function handleRuleChange(e) {
 	            var _props = this.props,
 	                index = _props.index,
 	                type = _props.type;
 	
-	            this.props.modify({ index: index, value: value, type: type });
+	            this.props.modify({ index: index, type: type, value: e.target.value.trim() });
 	        }
 	    }, {
 	        key: 'handleAddBtnClick',
@@ -70519,8 +70550,8 @@
 	var React = __webpack_require__(3);
 	var React__default = _interopDefault(React);
 	var shallowEqual = _interopDefault(__webpack_require__(131));
-	var hoistNonReactStatics = _interopDefault(__webpack_require__(821));
-	var changeEmitter = __webpack_require__(822);
+	var hoistNonReactStatics = _interopDefault(__webpack_require__(353));
+	var changeEmitter = __webpack_require__(821);
 	var $$observable = _interopDefault(__webpack_require__(198));
 	
 	var setStatic = function setStatic(key, value) {
@@ -71584,77 +71615,6 @@
 /* 821 */
 /***/ (function(module, exports) {
 
-	/**
-	 * Copyright 2015, Yahoo! Inc.
-	 * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
-	 */
-	'use strict';
-	
-	var REACT_STATICS = {
-	    childContextTypes: true,
-	    contextTypes: true,
-	    defaultProps: true,
-	    displayName: true,
-	    getDefaultProps: true,
-	    mixins: true,
-	    propTypes: true,
-	    type: true
-	};
-	
-	var KNOWN_STATICS = {
-	  name: true,
-	  length: true,
-	  prototype: true,
-	  caller: true,
-	  callee: true,
-	  arguments: true,
-	  arity: true
-	};
-	
-	var defineProperty = Object.defineProperty;
-	var getOwnPropertyNames = Object.getOwnPropertyNames;
-	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
-	var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
-	var getPrototypeOf = Object.getPrototypeOf;
-	var objectPrototype = getPrototypeOf && getPrototypeOf(Object);
-	
-	module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
-	    if (typeof sourceComponent !== 'string') { // don't hoist over string (html) components
-	
-	        if (objectPrototype) {
-	            var inheritedComponent = getPrototypeOf(sourceComponent);
-	            if (inheritedComponent && inheritedComponent !== objectPrototype) {
-	                hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
-	            }
-	        }
-	
-	        var keys = getOwnPropertyNames(sourceComponent);
-	
-	        if (getOwnPropertySymbols) {
-	            keys = keys.concat(getOwnPropertySymbols(sourceComponent));
-	        }
-	
-	        for (var i = 0; i < keys.length; ++i) {
-	            var key = keys[i];
-	            if (!REACT_STATICS[key] && !KNOWN_STATICS[key] && (!blacklist || !blacklist[key])) {
-	                var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
-	                try { // Avoid failures from read-only properties
-	                    defineProperty(targetComponent, key, descriptor);
-	                } catch (e) {}
-	            }
-	        }
-	
-	        return targetComponent;
-	    }
-	
-	    return targetComponent;
-	};
-
-
-/***/ }),
-/* 822 */
-/***/ (function(module, exports) {
-
 	'use strict';
 	
 	Object.defineProperty(exports, "__esModule", {
@@ -71706,6 +71666,64 @@
 	    emit: emit
 	  };
 	};
+
+/***/ }),
+/* 822 */,
+/* 823 */,
+/* 824 */,
+/* 825 */,
+/* 826 */,
+/* 827 */,
+/* 828 */,
+/* 829 */,
+/* 830 */,
+/* 831 */,
+/* 832 */,
+/* 833 */,
+/* 834 */,
+/* 835 */,
+/* 836 */,
+/* 837 */,
+/* 838 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _pure = __webpack_require__(665);
+	
+	var _pure2 = _interopRequireDefault(_pure);
+	
+	var _SvgIcon = __webpack_require__(662);
+	
+	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var SvgIconCustom = global.__MUI_SvgIcon__ || _SvgIcon2.default;
+	
+	var _ref = _react2.default.createElement('path', { d: 'M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z' });
+	
+	var CloudUpload = function CloudUpload(props) {
+	  return _react2.default.createElement(
+	    SvgIconCustom,
+	    props,
+	    _ref
+	  );
+	};
+	
+	CloudUpload = (0, _pure2.default)(CloudUpload);
+	CloudUpload.muiName = 'SvgIcon';
+	
+	exports.default = CloudUpload;
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ })
 /******/ ]);

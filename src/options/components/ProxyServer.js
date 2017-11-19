@@ -49,6 +49,7 @@ class ProxyServer extends PureComponent {
         return (
             <div style={{ marginTop: 10 }}>
                 <Select
+                    autoWidth={false}
                     value={this.props.server.type}
                     onChange={this.handleTypeChange.bind(this)}>
                     {PROXY_TYPES.map((d, i) => (

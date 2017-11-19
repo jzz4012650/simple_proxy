@@ -109,7 +109,6 @@ export default handleActions({
             }
         },
         throw: (state, action) => {
-            console.error(action.payload);
             return {
                 ...state,
                 showSnackbar: true,
@@ -122,6 +121,26 @@ export default handleActions({
         return {
             ...state,
             showSnackbar: false
+        }
+    },
+    MIGRATE: {
+        next: (state, action) => {
+            return {
+                ...state,
+                blackList: action.payload[BLACK_LIST],
+                whiteList: action.payload[WHITE_LIST],
+                showSnackbar: true,
+                snackbarType: 1,
+                snackbarContent: chrome.i18n.getMessage("migration_ok")
+            }
+        },
+        throw: (state, action) => {
+            return {
+                ...state,
+                showSnackbar: true,
+                snackbarType: 0,
+                snackbarContent: chrome.i18n.getMessage("migration_fail")
+            }
         }
     }
 }, defaultProps)

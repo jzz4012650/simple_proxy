@@ -1,12 +1,12 @@
 import { createAction } from 'redux-actions';
 
 let bgPage = chrome.extension.getBackgroundPage();
-const { saveProxyServersAndRules } = bgPage;
+const { saveProxyServersAndRules, migrateBWList } = bgPage;
 
-export const initConfiguration = createAction('INIT_CONFIGURATION', values => {
+export const initConfiguration = createAction('INIT_CONFIGURATION', (servers, rules) => {
     return {
-        servers: values[0],
-        rules: values[1]
+        servers,
+        rules
     }
 })
 
@@ -27,3 +27,7 @@ export const saveConfig = createAction('SAVE_CONFIG', (servers, blackList, white
 })
 
 export const handleSnackbarClose = createAction('HANDLE_SNACKBAR_CLOSE')
+
+export const migrate = createAction('MIGRATE', () => {
+    return migrateBWList()
+})

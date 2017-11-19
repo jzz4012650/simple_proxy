@@ -69,12 +69,28 @@ chrome.webNavigation.onBeforeNavigate.addListener(function (details) {
 chrome.webRequest.onBeforeRequest.addListener(function (details) {
     collectHosts(details);
 }, {
-        urls: [
-            "http://*/*",
-            "https://*/*"
-        ]
-    });
+    urls: [
+        "http://*/*",
+        "https://*/*"
+    ]
+});
 
+/**
+ * migrate black and white list from old version
+ */
+function migrateBWList() {
+    return getProxyRules().then(function(obj) {
+        var update = function(d) { return d.replace(/^\*(?!\.)/, '') }
+        var wList = obj[WHITE_LIST].map(update)
+        var bList = obj[BLACK_LIST].map(update)
+        return saveProxyRules(bList, wList).then(function(rules) {
+            getProxyMode().then(function (mode) {
+                setProxyMode(mode);
+            })
+            return Promise.resolve(rules)
+        })
+    })
+}
 
 /**
  * push first-level domain into hostlist of corresponding tab, uniqueness ensured.
@@ -154,7 +170,6 @@ function setProxyMode(mode) {
     return new Promise(function (resolve, reject) {
         chrome.storage.local.set({ PROXY_MODE: mode }, function (obj) {
             generateProxySettingObj(mode).then(function (settingObj) {
-                console.log(settingObj);
                 chrome.proxy.settings.set(settingObj, function () {
                     resolve(mode);
                 });
@@ -190,7 +205,10 @@ function saveProxyRules(blackList, whiteList) {
             BLACK_LIST: blackList,
             WHITE_LIST: whiteList
         }, function () {
-            resolve();
+            resolve({
+                BLACK_LIST: blackList,
+                WHITE_LIST: whiteList
+            });
         })
     });
 }
@@ -311,7 +329,8 @@ function generatePacBlack() {
                     var rules = ${proxyRules};
                     var proxyServers = '${proxyServers}';
                     for (var i = 0, l = rules.length; i < l; i++) {
-                        if (shExpMatch(host, rules[i])) return proxyServers;
+                        if (host === rules[i] || host.substr(-rules[i].length - 1) === ('.'+rules[i]))
+                            return proxyServers;
                     }
                     return 'DIRECT';
                 }
@@ -341,7 +360,8 @@ function generatePacWhite() {
                     var rules = ${proxyRules};
                     var proxyServers = '${proxyServers}';
                     for (var i = 0, l = rules.length; i < l; i++) {
-                        if (shExpMatch(host, rules[i])) return 'DIRECT';
+                        if (host === rules[i] || host.substr(-rules[i].length - 1) === ('.'+rules[i]))
+                            return 'DIRECT';
                     }
                     return proxyServers;
                 }

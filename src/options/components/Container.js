@@ -26,17 +26,25 @@ class Container extends PureComponent {
     Promise.all([
       bgPage.getProxyServers(),
       bgPage.getProxyRules()
-    ]).then(values => {
-      this.props.initConfiguration(values)
+    ]).then(([servers, rules]) => {
+      this.props.initConfiguration(servers, rules)
     }, reason => {
       console.log(reason)
     })
   }
 
+  handleSaveConfig() {
+    this.props.saveConfig(
+      this.props.proxyServers,
+      this.props.blackList,
+      this.props.whiteList
+    )
+  }
+
   render() {
     return (
       <div className="container">
-        <Header saveConfig={this.props.saveConfig} />
+        <Header onSave={this.handleSaveConfig.bind(this)} migrate={this.props.migrate}/>
         <div className="main-body">
           <Card style={{ margin: 20 }}>
             <CardHeader title={chrome.i18n.getMessage("proxy_server_list")} subheader={chrome.i18n.getMessage("proxy_server_desc")} />
@@ -51,7 +59,7 @@ class Container extends PureComponent {
           </Card>
           <div style={{ margin: 20 }}>
             <AppBar position="static" color="primary">
-              <Tabs fullWidth
+              <Tabs
                 value={this.state.activeTab}
                 onChange={(e, v) => this.setState({ activeTab: v })}>
                 <Tab value="black" icon={<IconList />} label={chrome.i18n.getMessage("black_list")} />

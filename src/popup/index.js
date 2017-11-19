@@ -1,5 +1,3 @@
-import './index.less';
-
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { createStore, applyMiddleware } from 'redux'
@@ -16,7 +14,7 @@ let store = createStore(reducers, applyMiddleware(promiseMiddleware));
 const theme = createMuiTheme({
     palette: {
         primary: blue
-    },
+    }
 });
 
 render(
