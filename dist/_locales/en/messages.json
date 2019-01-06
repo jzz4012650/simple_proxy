@@ -11,6 +11,15 @@
   "save_option": {
     "message": "SAVE"
   },
+  "proxy_server": {
+    "message": "Proxy servers"
+  },
+  "hosts_use_proxy": {
+    "message": "Hosts use proxy"
+  },
+  "hosts_bypass_proxy": {
+    "message": "Hosts bypass proxy"
+  },
   "proxy_server_list": {
     "message": "Proxy Server List"
   },

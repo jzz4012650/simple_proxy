@@ -39,3 +39,4 @@ jspm_packages
 *.pem
 *.crx
 dist.zip
+./dist

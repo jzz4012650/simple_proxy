@@ -24,6 +24,8 @@
     "indent": [
       "warn",
       2
-    ]
+    ],
+    "semi": "warn",
+    "quotes": ["warn", "single"]
   }
 }

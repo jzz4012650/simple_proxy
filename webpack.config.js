@@ -1,54 +1,57 @@
-var path = require("path");
-var webpack = require("webpack");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+const path = require('path');
+const Webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-var ENV = process.argv.includes('--dev') ? 'development' : 'production';
-var HOT_SERVER_PORT = 3000;
-var SRC_PATH = "/src";
-var OUTPUT_PATH = "/dist";
-var STATIC_PATH = "/static";
-var JS_NAME = "[name].js";
-var CSS_NAME = "[name].css";
+const SRC_PATH = './src';
+const OUTPUT_PATH = './dist';
+const STATIC_PATH = './static';
+const JS_NAME = '[name].js';
+const CSS_NAME = '[name].css';
 
-var options = {
-    devtool: 'source-map',
+module.exports = function(env, argv) {
+  const devtool = {
+    'development': 'inline-cheap-source-map',
+    'production': 'source-map'
+  };
+  const options = {
+    devtool: devtool[argv.mode],
     entry: {
-        'options': './src/options/index.js',
-        'popup': './src/popup/index.js'
+      // vendor: ['react', 'react-dom', 'react-redux', 'redux', 'redux-actions', 'redux-promise'],
+      options: './src/options/index.js',
+      popup: './src/popup/index.js',
+      // background: './src/background.js'
     },
     output: {
-        filename: JS_NAME,
-        path: path.join(__dirname, OUTPUT_PATH),
-        publicPath: OUTPUT_PATH
-    },
-    resolve: {
-        root: path.join(__dirname, SRC_PATH),
-        extensions: ["", ".js", ".jsx"]
+      filename: JS_NAME,
+      path: path.resolve(__dirname, OUTPUT_PATH),
     },
     module: {
-        loaders: [{
-            test: /\.less$/,
-            loader: ExtractTextPlugin.extract("css!less"),
-            include: path.join(__dirname, SRC_PATH)
+      rules: [{
+        test: /\.jsx?$/,
+        use: {
+          loader: 'babel-loader'
+        }
+      }, {
+        test: /\.less$/,
+        use: [{
+          loader: 'style-loader'
         }, {
-            test: /\.jsx?$/,
-            loader: 'babel-loader',
-            include: path.join(__dirname, SRC_PATH)
+          loader: 'css-loader'
         }, {
-            test: /\.json$/,
-            loader: "json-loader",
-            include: path.join(__dirname, STATIC_PATH)
+          loader: 'less-loader'
         }]
+      }],
     },
     plugins: [
-        new ExtractTextPlugin(CSS_NAME),
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify(ENV),
-            },
-        })
+      new CopyWebpackPlugin([{
+        from: './public/**/*',
+        to: './',
+        transformPath(targetPath) {
+          return targetPath.replace(/public\//, '');
+        }
+      }])
     ]
-}
+  };
 
-
-module.exports = options;
+  return options;
+};

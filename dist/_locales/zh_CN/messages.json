@@ -11,6 +11,15 @@
   "save_option": {
     "message": "保存"
   },
+  "proxy_server": {
+    "message": "代理服务器"
+  },
+  "hosts_use_proxy": {
+    "message": "使用代理的域名"
+  },
+  "hosts_bypass_proxy": {
+    "message": "跳过代理的域名"
+  },
   "proxy_server_list": {
     "message": "代理服务器列表"
   },
