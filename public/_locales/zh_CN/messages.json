@@ -2,17 +2,29 @@
   "name": {
     "message": "便捷代理"
   },
+  "confirm": {
+    "message": "确认"
+  },
+  "cancel": {
+    "message": "取消"
+  },
   "description": {
     "message": "域名级别代理，能自动识别网站请求的域名，并支持黑白名单模式。"
   },
   "options": {
-    "message": "配置"
+    "message": "设置"
   },
   "save_option": {
     "message": "保存"
   },
   "proxy_server": {
     "message": "代理服务器"
+  },
+  "add_proxy_server": {
+    "message": "添加代理服务器"
+  },
+  "proxy_method": {
+    "message": "代理方式"
   },
   "hosts_use_proxy": {
     "message": "使用代理的域名"

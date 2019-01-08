@@ -1,0 +1,110 @@
+{
+  "name": {
+    "message": "Simple Proxy"
+  },
+  "confirm": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "description": {
+    "message": "This extension can set up proxy for each host you have visited."
+  },
+  "options": {
+    "message": "Settings"
+  },
+  "save_option": {
+    "message": "SAVE"
+  },
+  "proxy_server": {
+    "message": "Proxy Servers"
+  },
+  "add_proxy_server": {
+    "message": "Add Proxy Server"
+  },
+  "proxy_method": {
+    "message": "Method"
+  },
+  "hosts_use_proxy": {
+    "message": "Hosts use proxy"
+  },
+  "hosts_bypass_proxy": {
+    "message": "Hosts bypass proxy"
+  },
+  "proxy_server_list": {
+    "message": "Proxy Server List"
+  },
+  "proxy_server_desc": {
+    "message": "Configure your proxy server. One proxy server a line. Will auto try next one if the previous one fails."
+  },
+  "white_list": {
+    "message": "White List"
+  },
+  "white_list_desc": {
+    "message": "When the whitelist mode is turned on, all the domain names (and its sub domains) outside the whitelist will use proxy."
+  },
+  "black_list": {
+    "message": "Black List"
+  },
+  "black_list_desc": {
+    "message": "When the blacklist mode is turned on, only the domain name (and its sub domains) in the blacklist will use proxy."
+  },
+  "option_saved": {
+    "message": "Configuration saved successfully!"
+  },
+  "option_save_failed": {
+    "message": "Configuration save failed!"
+  },
+  "proxy_mode": {
+    "message": "Proxy mode: "
+  },
+  "mode_system": {
+    "message": "SYSTEM"
+  },
+  "mode_direct": {
+    "message": "DIRECT"
+  },
+  "mode_white_list": {
+    "message": "WHITE_LIST"
+  },
+  "mode_black_list": {
+    "message": "BLACK_LIST"
+  },
+  "mode_system_desc": {
+    "message": "Use the proxy settings of system"
+  },
+  "mode_direct_desc": {
+    "message": "Disable proxy"
+  },
+  "mode_white_list_desc": {
+    "message": "All domains outside white list will use proxy"
+  },
+  "mode_black_list_desc": {
+    "message": "Only domain inside black list will use proxy"
+  },
+  "domain_list": {
+    "message": "The domain name requested by the current page: "
+  },
+  "domain_neither": {
+    "message": "Neither"
+  },
+  "domain_black": {
+    "message": "Black"
+  },
+  "domain_white": {
+    "message": "White"
+  },
+  "migration": {
+    "message": "Migrate from old version"
+  },
+  "migration_explain": {
+    "message": "Since the rule format of black(white) list has been changed in new version, click this button will change the format of rules in black(white) list"
+  },
+  "migration_ok": {
+    "message": "Migration success!"
+  },
+  "migration_fail": {
+    "message": "Migration failed!"
+  }
+}

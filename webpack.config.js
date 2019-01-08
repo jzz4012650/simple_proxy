@@ -10,7 +10,7 @@ const CSS_NAME = '[name].css';
 
 module.exports = function(env, argv) {
   const devtool = {
-    'development': 'inline-cheap-source-map',
+    'development': 'source-map',
     'production': 'source-map'
   };
   const options = {
@@ -18,7 +18,7 @@ module.exports = function(env, argv) {
     entry: {
       // vendor: ['react', 'react-dom', 'react-redux', 'redux', 'redux-actions', 'redux-promise'],
       options: './src/options/index.js',
-      popup: './src/popup/index.js',
+      // popup: './src/popup/index.js',
       // background: './src/background.js'
     },
     output: {

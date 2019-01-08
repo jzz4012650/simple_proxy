@@ -1,21 +1,25 @@
 import React, { Component, Fragment } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import ToolBar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Fab from '@material-ui/core/Fab';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Fab,
+  Tooltip,
+  IconButton,
+  Grid,
+  Tabs,
+  Tab,
+} from '@material-ui/core';
+
 import IconSave from '@material-ui/icons/Save';
+import IconMenu from '@material-ui/icons/Menu';
 import IconServer from '@material-ui/icons/Public';
 import IconLink from '@material-ui/icons/LinkOutlined';
 import IconLinkOff from '@material-ui/icons/LinkOffOutlined';
 
-
 import { withStyles } from '@material-ui/core/styles';
 import ProxyServers from './ProxyServers';
+import Drawer from './Drawer';
 
 const styles = theme => ({
   saveIcon: {
@@ -26,6 +30,9 @@ const styles = theme => ({
   },
   tabs: {
     flex: 1
+  },
+  activeColor: {
+    color: theme.palette.primary.main
   }
 });
 
@@ -48,17 +55,25 @@ class Container extends Component {
 
   handleTabChange(e, value) {
     this.setState({
-      currentTab: value
+      currentTab: value,
+      showDrawer: false,
     });
   }
 
   render() {
     const { classes } = this.props;
-    const {currentTab} = this.state;
+    const { currentTab, showDrawer } = this.state;
     return (
       <Fragment>
-        <AppBar position="static" color="primary">
-          <ToolBar>
+        <AppBar position="sticky" color="primary">
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              style={{ marginLeft: -12 }}
+              onClick={() => this.setState({ showDrawer: !showDrawer })}
+            >
+              <IconMenu />
+            </IconButton>
             <Typography variant="h6" color="inherit">
               {chrome.i18n.getMessage('options')}
             </Typography>
@@ -68,19 +83,25 @@ class Container extends Component {
               onChange={this.handleTabChange.bind(this)}
               centered
             >
-              <Tab icon={<IconServer/>} label={chrome.i18n.getMessage('proxy_server')} />
-              <Tab icon={<IconLink/>} label={chrome.i18n.getMessage('hosts_use_proxy')} />
-              <Tab icon={<IconLinkOff/>} label={chrome.i18n.getMessage('hosts_bypass_proxy')} />
+              <Tab icon={<IconServer />} label={chrome.i18n.getMessage('proxy_server')} />
+              <Tab icon={<IconLink />} label={chrome.i18n.getMessage('hosts_use_proxy')} />
+              <Tab icon={<IconLinkOff />} label={chrome.i18n.getMessage('hosts_bypass_proxy')} />
             </Tabs>
             <Tooltip title="Github">
-              <IconButton color="inherit">
+              <IconButton color="inherit" style={{ marginRight: -12 }}>
                 <IconGithub />
               </IconButton>
             </Tooltip>
-          </ToolBar>
+          </Toolbar>
         </AppBar>
+        <Drawer
+          show={showDrawer}
+          current={currentTab}
+          onClick={(currentTab) => this.setState({ currentTab, showDrawer: false })}
+          onClose={() => this.setState({showDrawer: false})}
+        />
         <Grid container spacing={16} direction="column" alignItems="center">
-          <Grid item/>
+          <Grid item />
           {currentTab === 0 && <ProxyServers />}
         </Grid>
         <Tooltip title={chrome.i18n.getMessage('save_option')}>

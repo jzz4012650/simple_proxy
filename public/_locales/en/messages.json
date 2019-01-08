@@ -2,17 +2,29 @@
   "name": {
     "message": "Simple Proxy"
   },
+  "confirm": {
+    "message": "OK"
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
   "description": {
     "message": "This extension can set up proxy for each host you have visited."
   },
   "options": {
-    "message": "OPTIONS"
+    "message": "Settings"
   },
   "save_option": {
     "message": "SAVE"
   },
   "proxy_server": {
-    "message": "Proxy servers"
+    "message": "Proxy Servers"
+  },
+  "add_proxy_server": {
+    "message": "Add Proxy Server"
+  },
+  "proxy_method": {
+    "message": "Method"
   },
   "hosts_use_proxy": {
     "message": "Hosts use proxy"
