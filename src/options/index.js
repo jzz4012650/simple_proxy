@@ -1,29 +1,36 @@
-import React, {Fragment} from 'react';
-import ReactDOM from 'react-dom';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import {MuiThemeProvider,createMuiTheme} from '@material-ui/core/styles';
-import {blue, pink} from '@material-ui/core/colors';
-import Options from './Options';
+import React, { Fragment } from 'react'
+import ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { HashRouter, Route } from 'react-router-dom'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { blue, pink } from '@material-ui/core/colors'
+import Options from './components/Options'
+import store from './redux/store'
 
 const theme = createMuiTheme({
   palette: {
     primary: blue,
-    secondary: pink,
+    secondary: pink
   },
   typography: {
-    useNextVariants: true,
-  },
-});
+    useNextVariants: true
+  }
+})
 
-function App() {
+function App () {
   return (
     <Fragment>
-      <CssBaseline/>
+      <CssBaseline />
       <MuiThemeProvider theme={theme}>
-        <Options></Options>
+        <Provider store={store}>
+          <HashRouter>
+            <Route path="/" component={Options}/>
+          </HashRouter>
+        </Provider>
       </MuiThemeProvider>
     </Fragment>
-  );
+  )
 }
 
-ReactDOM.render(<App />, document.querySelector('#root'));
+ReactDOM.render(<App />, document.querySelector('#root'))

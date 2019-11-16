@@ -1,7 +1,7 @@
 {
   "parser": "babel-eslint",
   "extends": [
-    "eslint:recommended",
+    "standard",
     "plugin:react/recommended"
   ],
   "parserOptions": {
@@ -26,6 +26,7 @@
       2
     ],
     "semi": "warn",
-    "quotes": ["warn", "single"]
+    "quotes": ["warn", "single"],
+    "space-before-blocks": ["warn", "always"]
   }
 }

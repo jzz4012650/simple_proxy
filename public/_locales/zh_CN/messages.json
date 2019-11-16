@@ -27,10 +27,10 @@
     "message": "代理方式"
   },
   "hosts_use_proxy": {
-    "message": "使用代理的域名"
+    "message": "域名黑名单"
   },
   "hosts_bypass_proxy": {
-    "message": "跳过代理的域名"
+    "message": "域名白名单"
   },
   "proxy_server_list": {
     "message": "代理服务器列表"

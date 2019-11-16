@@ -27,16 +27,16 @@
     "message": "Method"
   },
   "hosts_use_proxy": {
-    "message": "Hosts use proxy"
+    "message": "Blacklisted hosts"
   },
   "hosts_bypass_proxy": {
-    "message": "Hosts bypass proxy"
+    "message": "Whitelisted hosts"
   },
   "proxy_server_list": {
     "message": "Proxy Server List"
   },
   "proxy_server_desc": {
-    "message": "Configure your proxy server. One proxy server a line. Will auto try next one if the previous one fails."
+    "message": "Configure your proxy server. One proxy server a line. Will auto try next server if the previous one fails."
   },
   "white_list": {
     "message": "White List"
