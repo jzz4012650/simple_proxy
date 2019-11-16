@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const JS_OUTPUT_PATH = 'dist'
-const PUBLICK_PATH = 'asserts'
+const PUBLIC_PATH = 'asserts'
 const JS_NAME = 'js/[name].js'
 const CSS_NAME = 'css/[name].css'
 
@@ -21,7 +21,7 @@ module.exports = function (env, argv) {
       // background: './src/background.js'
     },
     output: {
-      publicPath: PUBLICK_PATH,
+      publicPath: PUBLIC_PATH,
       filename: JS_NAME,
       path: path.resolve(__dirname, JS_OUTPUT_PATH)
     },
@@ -34,14 +34,14 @@ module.exports = function (env, argv) {
       }, {
         test: /\.less$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          // MiniCssExtractPlugin.loader,
           'css-loader',
           'less-loader'
         ]
       }, {
         test: /\.css$/,
         use: [
-          MiniCssExtractPlugin.loader,
+          // MiniCssExtractPlugin.loader,
           'css-loader'
         ]
       }]
@@ -50,9 +50,9 @@ module.exports = function (env, argv) {
       usedExports: true
     },
     plugins: [
-      new MiniCssExtractPlugin({
-        filename: CSS_NAME
-      }),
+      // new MiniCssExtractPlugin({
+      //   filename: CSS_NAME
+      // }),
       new Webpack.DllReferencePlugin({
         manifest: path.resolve(__dirname, 'dist/dll.manifest.json')
       }),

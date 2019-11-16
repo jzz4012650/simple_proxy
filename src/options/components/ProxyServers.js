@@ -1,6 +1,5 @@
-import React, { PureComponent, Fragment } from 'react'
-import throttle from 'lodash/throttle'
-import { connect } from 'react-redux'
+import React, { Fragment, useState, useEffect } from 'react'
+import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 
 import IconButton from '@material-ui/core/IconButton'
 import Card from '@material-ui/core/Card'
@@ -19,81 +18,62 @@ import IconDelete from '@material-ui/icons/DeleteForever'
 import Add from '@material-ui/icons/Add'
 
 import NewServerPopup from './NewServerPopup'
-import { addProxyServer, removeProxyServer } from '../redux/actions'
+import { ADD_PROXY_SERVER, REMOVE_PROXY_SERVER, INIT } from '../redux/actionTypes'
+import { getConfig } from '../services/config'
 
-class ProxyServers extends PureComponent {
-  constructor (props) {
-    super(props)
-    this.state = {
-      showPopup: false,
-      serverList: []
-    }
-    this.handleNewServer = throttle(this.handleNewServer.bind(this), 500, { trailing: false })
+const ProxyServers = props => {
+  const [showPopup, setPopup] = useState(false)
+  const proxyServers = useSelector(store => store.proxyServers, shallowEqual)
+  const dispatch = useDispatch()
+  const handleNewServer = (newProxyServer) => {
+    dispatch({ type: ADD_PROXY_SERVER, payload: newProxyServer })
+    setPopup(false)
+  }
+  const handleRemoveServer = (index) => {
+    dispatch({ type: REMOVE_PROXY_SERVER, payload: index })
   }
 
-  handleNewServer (newProxyServer) {
-    const { serverList } = this.state
-    const { addProxyServer } = this.props
-    addProxyServer(newProxyServer)
-    this.setState({
-      showPopup: false
-    })
-  }
-
-  handleRemoveServer (index) {
-    const { serverList } = this.state
-    const { removeProxyServer } = this.props
-    removeProxyServer(index)
-  }
-
-  render () {
-    const { showPopup } = this.state
-    const { proxyServers } = this.props
-    return (
-      <Fragment>
-        <Card>
-          <CardHeader
-            title={chrome.i18n.getMessage('proxy_server_list')}
-            subheader={chrome.i18n.getMessage('proxy_server_desc')}
-          />
-          <Divider />
-          <List>
-            {proxyServers.map((server, i) => (
-              <ListItem key={i} divider>
-                <ListItemIcon>
-                  <IconLink />
-                </ListItemIcon>
-                <ListItemText primary={`${server.host}:${server.port}`} secondary={server.method} />
-                <ListItemSecondaryAction>
-                  <IconButton onClick={this.handleRemoveServer.bind(this, i)}>
-                    <IconDelete />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
-            ))}
-            <ListItem button onClick={() => this.setState({ showPopup: true })}>
-              <ListItemAvatar>
-                <Avatar >
-                  <Add />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText>
-                {chrome.i18n.getMessage('add_proxy_server')}
-              </ListItemText>
-            </ListItem>
-          </List>
-        </Card>
-        <NewServerPopup
-          open={showPopup}
-          onConfirm={this.handleNewServer}
-          onClose={() => this.setState({ showPopup: false })}
+  return (
+    <Fragment>
+      <Card>
+        <CardHeader
+          title={chrome.i18n.getMessage('proxy_server_list')}
+          subheader={chrome.i18n.getMessage('proxy_server_desc')}
         />
-      </Fragment>
-    )
-  }
+        <Divider />
+        <List>
+          {proxyServers.map((server, i) => (
+            <ListItem key={i} divider>
+              <ListItemIcon>
+                <IconLink />
+              </ListItemIcon>
+              <ListItemText primary={`${server.host}:${server.port}`} secondary={server.method} />
+              <ListItemSecondaryAction>
+                <IconButton onClick={() => handleRemoveServer(i)}>
+                  <IconDelete />
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+          ))}
+          <ListItem button onClick={() => setPopup(true)}>
+            <ListItemAvatar>
+              <Avatar >
+                <Add />
+              </Avatar>
+            </ListItemAvatar>
+            <ListItemText>
+              {chrome.i18n.getMessage('add_proxy_server')}
+            </ListItemText>
+          </ListItem>
+        </List>
+      </Card>
+      <NewServerPopup
+        open={showPopup}
+        onConfirm={handleNewServer}
+        onClose={() => setPopup(false)}
+      />
+    </Fragment>
+  )
 }
 
-export default connect(
-  ({ proxyServers }) => ({ proxyServers }),
-  { addProxyServer, removeProxyServer }
-)(ProxyServers)
+export default ProxyServers

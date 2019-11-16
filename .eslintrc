@@ -15,9 +15,6 @@
   ],
   "env": {
     "es6": true,
-    "node": true,
-    "browser": true,
-    "commonjs": true,
     "webextensions": true
   },
   "rules": {
@@ -27,6 +24,7 @@
     ],
     "semi": "warn",
     "quotes": ["warn", "single"],
-    "space-before-blocks": ["warn", "always"]
+    "space-before-blocks": ["warn", "always"],
+    "react/prop-types": [0]
   }
 }

@@ -40,3 +40,4 @@ jspm_packages
 *.crx
 dist.zip
 ./dist
+.DS_Store

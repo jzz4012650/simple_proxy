@@ -4,7 +4,7 @@
   "description": "__MSG_description__",
   "version": "3.0",
   "browser_action": {
-    "default_icon": "icon32.png",
+    "default_icon": "icon48.png",
     "default_popup": "popup.html",
     "default_title": "Proxy"
   },
@@ -14,11 +14,9 @@
     ]
   },
   "icons": {
-    "16": "icon32.png",
-    "19": "icon38.png",
-    "38": "icon76.png",
-    "48": "icon96.png",
-    "128": "icon256.png"
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "default_locale": "en",
   "options_page": "options.html",
