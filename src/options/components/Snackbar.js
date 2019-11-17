@@ -44,4 +44,9 @@ class SnackbarWrapper extends Component {
   }
 }
 
+export const showSnack = function (msg) {
+  const e = new window.CustomEvent(SHOW_SNACK, { detail: msg })
+  window.dispatchEvent(e)
+}
+
 export default SnackbarWrapper

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useSelector, useDispatch, shallowEqual } from 'react-redux'
 
 import IconButton from '@material-ui/core/IconButton'
@@ -18,8 +18,7 @@ import IconDelete from '@material-ui/icons/DeleteForever'
 import Add from '@material-ui/icons/Add'
 
 import NewServerPopup from './NewServerPopup'
-import { ADD_PROXY_SERVER, REMOVE_PROXY_SERVER, INIT } from '../redux/actionTypes'
-import { getConfig } from '../services/config'
+import { ADD_PROXY_SERVER, REMOVE_PROXY_SERVER } from '../redux/actionTypes'
 
 const ProxyServers = props => {
   const [showPopup, setPopup] = useState(false)

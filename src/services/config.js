@@ -1,5 +1,6 @@
-import { storageLocal, storageSync } from '../../services/storage'
-import { BLACK_LIST, WHITE_LIST, PROXY_SERVERS } from '../../constants/storage'
+import { storageLocal, storageSync } from './storage'
+import { BLACK_LIST, WHITE_LIST, PROXY_SERVERS } from '../constants/storage'
+import { updateProxyConfig } from './proxyConfig'
 
 export const getConfig = () => {
   return Promise.all([
@@ -21,6 +22,7 @@ export const saveConfig = (config) => {
       [BLACK_LIST]: config[BLACK_LIST],
       [WHITE_LIST]: config[WHITE_LIST]
     })
-  ])
-  // TODO: setProxy
+  ]).then(() => {
+    updateProxyConfig()
+  })
 }

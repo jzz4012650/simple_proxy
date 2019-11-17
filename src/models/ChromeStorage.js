@@ -2,6 +2,7 @@ class ChromeStorage {
   constructor (type = 'local') {
     this.type = type
   }
+
   get (keys) {
     return new Promise((resolve, reject) => {
       chrome.storage[this.type].get(keys, (obj) => {
@@ -13,6 +14,7 @@ class ChromeStorage {
       })
     })
   }
+
   set (obj) {
     return new Promise((resolve, reject) => {
       chrome.storage[this.type].set(obj, () => {

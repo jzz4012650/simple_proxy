@@ -16,9 +16,9 @@ module.exports = function (env, argv) {
   const options = {
     devtool: devtool[argv.mode],
     entry: {
-      options: './src/options/index.js'
+      options: './src/options/index.js',
       // popup: './src/popup/index.js',
-      // background: './src/background.js'
+      background: './src/background/index.js'
     },
     output: {
       publicPath: PUBLIC_PATH,

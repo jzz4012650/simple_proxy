@@ -10,7 +10,7 @@
   },
   "background": {
     "scripts": [
-      "background.js"
+      "asserts/js/background.js"
     ]
   },
   "icons": {

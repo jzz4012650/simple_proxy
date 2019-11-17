@@ -3,10 +3,10 @@ import { useDispatch, useStore } from 'react-redux'
 import { Fab, Tooltip, makeStyles } from '@material-ui/core'
 import IconSave from '@material-ui/icons/Save'
 
-import { showSnack } from '../services/snack'
+import { showSnack } from './Snackbar'
 import { PROXY_SERVERS, BLACK_LIST, WHITE_LIST } from '../../constants/storage'
-import { setProxy } from '../../services/proxyConfig'
-import { getConfig, saveConfig } from '../services/config'
+import { updateProxyConfig } from '../../services/proxyConfig'
+import { getConfig, saveConfig } from '../../services/config'
 import { INIT } from '../redux/actionTypes'
 
 const useStyle = makeStyles(theme => ({
@@ -29,9 +29,8 @@ const BtnSave = props => {
       [WHITE_LIST]: whiteList
     }
     saveConfig(config).then(() => {
-      console.log(111)
       showSnack(chrome.i18n.getMessage('option_saved'))
-      setProxy()
+      updateProxyConfig()
     })
   }
 

@@ -62433,6 +62433,49 @@ module.exports = function (originalModule) {
 
 /***/ }),
 
+/***/ "./src/constants/proxyModes.js":
+/*!*************************************!*\
+  !*** ./src/constants/proxyModes.js ***!
+  \*************************************/
+/*! exports provided: DIRECT, SYSTEM, BLACK_LIST, WHITE_LIST, PROXY_MODES, PROXY_MODE_MAP */
+/*! exports used: BLACK_LIST, DIRECT, PROXY_MODES, SYSTEM, WHITE_LIST */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DIRECT; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SYSTEM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BLACK_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return WHITE_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return PROXY_MODES; });
+/* unused harmony export PROXY_MODE_MAP */
+const DIRECT = 'DIRECT';
+const SYSTEM = 'SYSTEM';
+const BLACK_LIST = 'BLACK_LIST';
+const WHITE_LIST = 'WHITE_LIST';
+const PROXY_MODES = [{
+  name: DIRECT,
+  title: chrome.i18n.getMessage('mode_direct'),
+  desc: chrome.i18n.getMessage('mode_direct_desc')
+}, {
+  name: SYSTEM,
+  title: chrome.i18n.getMessage('mode_system'),
+  desc: chrome.i18n.getMessage('mode_system_desc')
+}, {
+  name: BLACK_LIST,
+  title: chrome.i18n.getMessage('mode_black_list'),
+  desc: chrome.i18n.getMessage('mode_black_list_desc')
+}, {
+  name: WHITE_LIST,
+  title: chrome.i18n.getMessage('mode_white_list'),
+  desc: chrome.i18n.getMessage('mode_white_list_desc')
+}];
+const PROXY_MODE_MAP = {};
+PROXY_MODES.forEach(d => {
+  PROXY_MODE_MAP[d.name] = d;
+});
+
+/***/ }),
+
 /***/ "./src/constants/storage.js":
 /*!**********************************!*\
   !*** ./src/constants/storage.js ***!
@@ -62450,6 +62493,50 @@ const PROXY_SERVERS = 'PROXY_SERVERS';
 const BLACK_LIST = 'BLACK_LIST';
 const WHITE_LIST = 'WHITE_LIST';
 const PROXY_MODE = 'PROXY_MODE';
+
+/***/ }),
+
+/***/ "./src/models/ChromeStorage.js":
+/*!*************************************!*\
+  !*** ./src/models/ChromeStorage.js ***!
+  \*************************************/
+/*! exports provided: default */
+/*! exports used: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+class ChromeStorage {
+  constructor(type = 'local') {
+    this.type = type;
+  }
+
+  get(keys) {
+    return new Promise((resolve, reject) => {
+      chrome.storage[this.type].get(keys, obj => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve(obj);
+        }
+      });
+    });
+  }
+
+  set(obj) {
+    return new Promise((resolve, reject) => {
+      chrome.storage[this.type].set(obj, () => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["a"] = (ChromeStorage);
 
 /***/ }),
 
@@ -62614,10 +62701,10 @@ const BlackList = props => {
 /* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
 /* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/icons/Save */ "./node_modules/@material-ui/icons/Save.js");
 /* harmony import */ var _material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Save__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _services_snack__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../services/snack */ "./src/options/services/snack.js");
+/* harmony import */ var _Snackbar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./Snackbar */ "./src/options/components/Snackbar.js");
 /* harmony import */ var _constants_storage__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../constants/storage */ "./src/constants/storage.js");
 /* harmony import */ var _services_proxyConfig__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../services/proxyConfig */ "./src/services/proxyConfig.js");
-/* harmony import */ var _services_config__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../services/config */ "./src/options/services/config.js");
+/* harmony import */ var _services_config__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../services/config */ "./src/services/config.js");
 /* harmony import */ var _redux_actionTypes__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../redux/actionTypes */ "./src/options/redux/actionTypes.js");
 
 
@@ -62653,9 +62740,8 @@ const BtnSave = props => {
       [_constants_storage__WEBPACK_IMPORTED_MODULE_5__[/* WHITE_LIST */ "d"]]: whiteList
     };
     Object(_services_config__WEBPACK_IMPORTED_MODULE_7__[/* saveConfig */ "b"])(config).then(() => {
-      console.log(111);
-      Object(_services_snack__WEBPACK_IMPORTED_MODULE_4__[/* showSnack */ "a"])(chrome.i18n.getMessage('option_saved'));
-      Object(_services_proxyConfig__WEBPACK_IMPORTED_MODULE_6__[/* setProxy */ "a"])();
+      Object(_Snackbar__WEBPACK_IMPORTED_MODULE_4__[/* showSnack */ "b"])(chrome.i18n.getMessage('option_saved'));
+      Object(_services_proxyConfig__WEBPACK_IMPORTED_MODULE_6__[/* updateProxyConfig */ "a"])();
     });
   };
 
@@ -62945,7 +63031,6 @@ const Options = props => {
 /* harmony import */ var _material_ui_icons_Add__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Add__WEBPACK_IMPORTED_MODULE_15__);
 /* harmony import */ var _NewServerPopup__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./NewServerPopup */ "./src/options/components/NewServerPopup.js");
 /* harmony import */ var _redux_actionTypes__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ../redux/actionTypes */ "./src/options/redux/actionTypes.js");
-/* harmony import */ var _services_config__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ../services/config */ "./src/options/services/config.js");
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
@@ -62953,7 +63038,6 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) { return; } var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
 
 
 
@@ -63027,11 +63111,12 @@ const ProxyServers = props => {
 /*!********************************************!*\
   !*** ./src/options/components/Snackbar.js ***!
   \********************************************/
-/*! exports provided: default */
-/*! exports used: default */
+/*! exports provided: showSnack, default */
+/*! exports used: default, showSnack */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return showSnack; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _material_ui_core_Snackbar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Snackbar */ "./node_modules/@material-ui/core/esm/Snackbar/index.js");
@@ -63087,6 +63172,12 @@ class SnackbarWrapper extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
 }
 
+const showSnack = function showSnack(msg) {
+  const e = new window.CustomEvent(_constants_channels__WEBPACK_IMPORTED_MODULE_2__[/* SHOW_SNACK */ "a"], {
+    detail: msg
+  });
+  window.dispatchEvent(e);
+};
 /* harmony default export */ __webpack_exports__["a"] = (SnackbarWrapper);
 
 /***/ }),
@@ -63484,10 +63575,10 @@ const initSate = [];
 
 /***/ }),
 
-/***/ "./src/options/services/config.js":
-/*!****************************************!*\
-  !*** ./src/options/services/config.js ***!
-  \****************************************/
+/***/ "./src/services/config.js":
+/*!********************************!*\
+  !*** ./src/services/config.js ***!
+  \********************************/
 /*! exports provided: getConfig, saveConfig */
 /*! exports used: getConfig, saveConfig */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -63495,12 +63586,14 @@ const initSate = [];
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getConfig; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return saveConfig; });
-/* harmony import */ var _services_storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../services/storage */ "./src/services/storage.js");
-/* harmony import */ var _constants_storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../constants/storage */ "./src/constants/storage.js");
+/* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./storage */ "./src/services/storage.js");
+/* harmony import */ var _constants_storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants/storage */ "./src/constants/storage.js");
+/* harmony import */ var _proxyConfig__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./proxyConfig */ "./src/services/proxyConfig.js");
+
 
 
 const getConfig = () => {
-  return Promise.all([_services_storage__WEBPACK_IMPORTED_MODULE_0__[/* storageLocal */ "a"].get([_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* PROXY_SERVERS */ "c"]]), _services_storage__WEBPACK_IMPORTED_MODULE_0__[/* storageSync */ "b"].get([_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* BLACK_LIST */ "a"], _constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* WHITE_LIST */ "d"]])]).then(([local, sync]) => {
+  return Promise.all([_storage__WEBPACK_IMPORTED_MODULE_0__[/* storageLocal */ "a"].get([_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* PROXY_SERVERS */ "c"]]), _storage__WEBPACK_IMPORTED_MODULE_0__[/* storageSync */ "b"].get([_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* BLACK_LIST */ "a"], _constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* WHITE_LIST */ "d"]])]).then(([local, sync]) => {
     return Promise.resolve({
       PROXY_SERVERS: local[_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* PROXY_SERVERS */ "c"]],
       BLACK_LIST: sync[_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* BLACK_LIST */ "a"]],
@@ -63509,78 +63602,54 @@ const getConfig = () => {
   });
 };
 const saveConfig = config => {
-  return Promise.all([_services_storage__WEBPACK_IMPORTED_MODULE_0__[/* storageLocal */ "a"].set({
+  return Promise.all([_storage__WEBPACK_IMPORTED_MODULE_0__[/* storageLocal */ "a"].set({
     [_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* PROXY_SERVERS */ "c"]]: config[_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* PROXY_SERVERS */ "c"]]
-  }), _services_storage__WEBPACK_IMPORTED_MODULE_0__[/* storageSync */ "b"].set({
+  }), _storage__WEBPACK_IMPORTED_MODULE_0__[/* storageSync */ "b"].set({
     [_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* BLACK_LIST */ "a"]]: config[_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* BLACK_LIST */ "a"]],
     [_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* WHITE_LIST */ "d"]]: config[_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* WHITE_LIST */ "d"]]
-  })]); // TODO: setProxy
-};
-
-/***/ }),
-
-/***/ "./src/options/services/snack.js":
-/*!***************************************!*\
-  !*** ./src/options/services/snack.js ***!
-  \***************************************/
-/*! exports provided: showSnack */
-/*! exports used: showSnack */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return showSnack; });
-/* harmony import */ var _constants_channels__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../constants/channels */ "./src/options/constants/channels.js");
-
-const showSnack = function showSnack(msg) {
-  const e = new CustomEvent(_constants_channels__WEBPACK_IMPORTED_MODULE_0__[/* SHOW_SNACK */ "a"], {
-    detail: msg
+  })]).then(() => {
+    Object(_proxyConfig__WEBPACK_IMPORTED_MODULE_2__[/* updateProxyConfig */ "a"])();
   });
-  window.dispatchEvent(e);
 };
 
 /***/ }),
 
-/***/ "./src/services/ChromeStorage.js":
-/*!***************************************!*\
-  !*** ./src/services/ChromeStorage.js ***!
-  \***************************************/
-/*! exports provided: default */
-/*! exports used: default */
+/***/ "./src/services/pacScript.js":
+/*!***********************************!*\
+  !*** ./src/services/pacScript.js ***!
+  \***********************************/
+/*! exports provided: generatePac */
+/*! exports used: generatePac */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-class ChromeStorage {
-  constructor(type = 'local') {
-    this.type = type;
-  }
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return generatePac; });
+/* harmony import */ var _config__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./config */ "./src/services/config.js");
+/* harmony import */ var _constants_proxyModes__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants/proxyModes */ "./src/constants/proxyModes.js");
+/* harmony import */ var _constants_storage__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../constants/storage */ "./src/constants/storage.js");
 
-  get(keys) {
-    return new Promise((resolve, reject) => {
-      chrome.storage[this.type].get(keys, obj => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve(obj);
+
+
+const generatePac = proxyMode => {
+  return new Promise(function (resolve, reject) {
+    Object(_config__WEBPACK_IMPORTED_MODULE_0__[/* getConfig */ "a"])().then(config => {
+      const proxyServers = config[_constants_storage__WEBPACK_IMPORTED_MODULE_2__[/* PROXY_SERVERS */ "c"]].map(d => `${d.method} ${d.host}:${d.port}`).join(';') || 'DIRECT';
+      const proxyRules = `{
+        ${config[proxyMode === _constants_proxyModes__WEBPACK_IMPORTED_MODULE_1__[/* BLACK_LIST */ "a"] ? _constants_storage__WEBPACK_IMPORTED_MODULE_2__[/* BLACK_LIST */ "a"] : _constants_storage__WEBPACK_IMPORTED_MODULE_2__[/* WHITE_LIST */ "d"]].map(d => `"${d}": 1`).join(',')}
+      }`;
+      resolve(`
+        function FindProxyForURL(url, host) {
+          var rules = ${proxyRules};
+          var proxyServers = "${proxyServers}";
+          if (host in rules) {
+            return ${proxyMode === _constants_proxyModes__WEBPACK_IMPORTED_MODULE_1__[/* BLACK_LIST */ "a"] ? 'proxyServers' : 'DIRECT'};
+          }
+          return ${proxyMode === _constants_proxyModes__WEBPACK_IMPORTED_MODULE_1__[/* BLACK_LIST */ "a"] ? 'DIRECT' : 'proxyServers'};
         }
-      });
+      `);
     });
-  }
-
-  set(obj) {
-    return new Promise((resolve, reject) => {
-      chrome.storage[this.type].set(obj, () => {
-        if (chrome.runtime.lastError) {
-          reject(chrome.runtime.lastError);
-        } else {
-          resolve();
-        }
-      });
-    });
-  }
-
-}
-
-/* harmony default export */ __webpack_exports__["a"] = (ChromeStorage);
+  });
+};
 
 /***/ }),
 
@@ -63588,21 +63657,76 @@ class ChromeStorage {
 /*!*************************************!*\
   !*** ./src/services/proxyConfig.js ***!
   \*************************************/
-/*! exports provided: setProxyMode, setProxy */
-/*! exports used: setProxy */
+/*! exports provided: updateProxyConfig */
+/*! exports used: updateProxyConfig */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* unused harmony export setProxyMode */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setProxy; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return updateProxyConfig; });
 /* harmony import */ var _storage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./storage */ "./src/services/storage.js");
 /* harmony import */ var _constants_storage__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../constants/storage */ "./src/constants/storage.js");
+/* harmony import */ var _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../constants/proxyModes */ "./src/constants/proxyModes.js");
+/* harmony import */ var _pacScript__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pacScript */ "./src/services/pacScript.js");
 
 
-const setProxyMode = () => {};
-const setProxy = () => {
+
+
+
+const generateProxySettingObj = mode => {
+  return new Promise(function (resolve, reject) {
+    let settingObj = {
+      scope: 'regular',
+      value: {}
+    };
+
+    switch (mode) {
+      case _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* SYSTEM */ "d"]:
+        settingObj.value.mode = 'system';
+        resolve(settingObj);
+        break;
+
+      case _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* DIRECT */ "b"]:
+        settingObj.value.mode = 'direct';
+        resolve(settingObj);
+        break;
+
+      case _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* WHITE_LIST */ "e"]:
+        Object(_pacScript__WEBPACK_IMPORTED_MODULE_3__[/* generatePac */ "a"])(_constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* WHITE_LIST */ "e"]).then(pac => {
+          settingObj.value.mode = 'pac_script';
+          settingObj.value.pacScript = {
+            data: pac
+          };
+          resolve(settingObj);
+        });
+        break;
+
+      case _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* BLACK_LIST */ "a"]:
+        Object(_pacScript__WEBPACK_IMPORTED_MODULE_3__[/* generatePac */ "a"])(_constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* BLACK_LIST */ "a"]).then(pac => {
+          settingObj.value.mode = 'pac_script';
+          settingObj.value.pacScript = {
+            data: pac
+          };
+          resolve(settingObj);
+        });
+        break;
+    }
+  });
+};
+
+const setProxy = settingObj => {
+  return new Promise((resolve, reject) => {
+    chrome.proxy.settings.set(settingObj, () => {
+      resolve();
+    });
+  });
+};
+
+const updateProxyConfig = () => {
   _storage__WEBPACK_IMPORTED_MODULE_0__[/* storageLocal */ "a"].get([_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* PROXY_MODE */ "b"]]).then(obj => {
-    console.log(obj[_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* PROXY_MODE */ "b"]]);
+    const proxyMode = obj[_constants_storage__WEBPACK_IMPORTED_MODULE_1__[/* PROXY_MODE */ "b"]] || _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* BLACK_LIST */ "a"];
+    generateProxySettingObj(proxyMode).then(settingObj => {
+      setProxy(settingObj);
+    });
   });
 };
 
@@ -63619,10 +63743,10 @@ const setProxy = () => {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return storageLocal; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return storageSync; });
-/* harmony import */ var _ChromeStorage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ChromeStorage */ "./src/services/ChromeStorage.js");
+/* harmony import */ var _models_ChromeStorage__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../models/ChromeStorage */ "./src/models/ChromeStorage.js");
 
-const storageLocal = new _ChromeStorage__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]('local');
-const storageSync = new _ChromeStorage__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]('sync');
+const storageLocal = new _models_ChromeStorage__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]('local');
+const storageSync = new _models_ChromeStorage__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"]('sync');
 
 /***/ }),
 
