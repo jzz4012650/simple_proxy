@@ -1,8 +1,5 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { addBlackList, removeBlackList } from '../redux/actions'
-
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import List from '@material-ui/core/List'
@@ -17,43 +14,34 @@ import WindowScroller from 'react-virtualized/dist/es/WindowScroller'
 import VirtualList from 'react-virtualized/dist/es/List'
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer'
 
-class BlackList extends PureComponent {
-  constructor (props) {
-    super(props)
-    this.state = {
-      host: ''
-    }
-  }
+import { ADD_BLACKLIST, REMOVE_BACKLIST } from '../redux/actionTypes'
 
-  handleNewListItem () {
-    const { host } = this.state
+const BlackList = props => {
+  const dispatch = useDispatch()
+  const blackList = useSelector(store => store.blackList)
+  const [host, setHost] = useState('')
+  const handleNewItem = () => {
     if (host !== '') {
-      this.props.addBlackList(host)
-      this.setState({
-        host: ''
-      })
+      dispatch({ type: ADD_BLACKLIST, payload: host })
+      setHost('')
     }
   }
-
-  handleKeyPress (e) {
+  const handleRemoveItem = (index) => {
+    dispatch({ type: REMOVE_BACKLIST, payload: index })
+  }
+  const handleKeyUp = (e) => {
     if (e.key === 'Enter') {
-      this.handleNewListItem()
+      handleNewItem()
     }
   }
-
-  handleRemoveItem (index) {
-    this.props.removeBlackList(index)
-  }
-
-  rowRenderer ({ index, key, style }) {
-    const { blackList } = this.props
+  const rowRenderer = ({ index, key, style }) => {
     return (
       <div key={key} style={style}>
         <ListItem divider>
           <ListItemText primary={blackList[index]} />
           <ListItemSecondaryAction>
             <IconButton>
-              <IconDelete onClick={this.handleRemoveItem.bind(this, index)} />
+              <IconDelete onClick={() => handleRemoveItem(index)} />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
@@ -61,73 +49,57 @@ class BlackList extends PureComponent {
     )
   }
 
-  render () {
-    const { host } = this.state
-    const { blackList } = this.props
-    return (
-      <Card>
-        <CardHeader
-          title={chrome.i18n.getMessage('black_list')}
-          subheader={chrome.i18n.getMessage('black_list_desc')}
-        />
+  return (
+    <Card>
+      <CardHeader
+        title={chrome.i18n.getMessage('black_list')}
+        subheader={chrome.i18n.getMessage('black_list_desc')}
+      />
 
-        <WindowScroller scroll>
-          {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
-            <div>
-              <List>
-                <ListItem divider>
-                  <ListItemText
-                    primary={
-                      <Input
-                        type="text"
-                        fullWidth
-                        value={host}
-                        onKeyPress={e => this.handleKeyPress(e)}
-                        onChange={e => this.setState({ host: e.target.value })}
-                      />
-                    }
-                  >
-                  </ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={this.handleNewListItem.bind(this)} >
-                      <IconAdd />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
+      <WindowScroller scroll>
+        {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
+          <div>
+            <List>
+              <ListItem divider>
+                <ListItemText>
+                  <Input
+                    type="text"
+                    fullWidth
+                    value={host}
+                    onKeyUp={handleKeyUp}
+                    onChange={e => setHost(e.target.value)}
+                  />
+                </ListItemText>
+                <ListItemSecondaryAction>
+                  <IconButton onClick={handleNewItem} >
+                    <IconAdd />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
 
-                <AutoSizer disableHeight>
-                  {({ width }) => (
-                    <div ref={registerChild}>
-                      <VirtualList
-                        autoHeight
-                        width={width}
-                        height={height}
-                        scrollTop={scrollTop}
-                        isScrolling={isScrolling}
-                        onScroll={onChildScroll}
-                        rowCount={blackList.length}
-                        rowHeight={47}
-                        rowRenderer={this.rowRenderer.bind(this)}
-                      />
-                    </div>
-                  )}
-                </AutoSizer>
-              </List>
-            </div>
-          )}
-        </WindowScroller>
-      </Card>
-    )
-  }
+              <AutoSizer disableHeight>
+                {({ width }) => (
+                  <div ref={registerChild}>
+                    <VirtualList
+                      autoHeight
+                      width={width}
+                      height={height}
+                      scrollTop={scrollTop}
+                      isScrolling={isScrolling}
+                      onScroll={onChildScroll}
+                      rowCount={blackList.length}
+                      rowHeight={47}
+                      rowRenderer={rowRenderer}
+                    />
+                  </div>
+                )}
+              </AutoSizer>
+            </List>
+          </div>
+        )}
+      </WindowScroller>
+    </Card>
+  )
 }
 
-BlackList.propTypes = {
-  blackList: PropTypes.arrayOf(PropTypes.string),
-  addBlackList: PropTypes.func,
-  removeBlackList: PropTypes.func
-}
-
-export default connect(
-  ({ blackList }) => ({ blackList }),
-  { addBlackList, removeBlackList }
-)(BlackList)
+export default BlackList

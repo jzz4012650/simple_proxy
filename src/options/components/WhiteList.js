@@ -1,8 +1,5 @@
-import React, { PureComponent } from 'react'
-import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { addWhiteList, removeWhiteList } from '../redux/actions'
-
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import Card from '@material-ui/core/Card'
 import CardHeader from '@material-ui/core/CardHeader'
 import List from '@material-ui/core/List'
@@ -17,43 +14,34 @@ import WindowScroller from 'react-virtualized/dist/es/WindowScroller'
 import VirtualList from 'react-virtualized/dist/es/List'
 import AutoSizer from 'react-virtualized/dist/es/AutoSizer'
 
-class WhiteList extends PureComponent {
-  constructor (props) {
-    super(props)
-    this.state = {
-      host: ''
-    }
-  }
+import { ADD_WHITELIST, REMOVE_WHITELIST } from '../redux/actionTypes'
 
-  handleNewListItem () {
-    const { host } = this.state
+const WhiteList = props => {
+  const dispatch = useDispatch()
+  const whiteList = useSelector(store => store.whiteList)
+  const [host, setHost] = useState('')
+  const handleNewItem = () => {
     if (host !== '') {
-      this.props.addWhiteList(host)
-      this.setState({
-        host: ''
-      })
+      dispatch({ type: ADD_WHITELIST, payload: host })
+      setHost('')
     }
   }
-
-  handleKeyPress (e) {
+  const handleRemoveItem = (index) => {
+    dispatch({ type: REMOVE_WHITELIST, payload: index })
+  }
+  const handleKeyUp = (e) => {
     if (e.key === 'Enter') {
-      this.handleNewListItem()
+      handleNewItem()
     }
   }
-
-  handleRemoveItem (index) {
-    this.props.removeWhiteList(index)
-  }
-
-  rowRenderer ({ index, key, style }) {
-    const { whiteList } = this.props
+  const rowRenderer = ({ index, key, style }) => {
     return (
       <div key={key} style={style}>
         <ListItem divider>
           <ListItemText primary={whiteList[index]} />
           <ListItemSecondaryAction>
             <IconButton>
-              <IconDelete onClick={this.handleRemoveItem.bind(this, index)} />
+              <IconDelete onClick={() => handleRemoveItem(index)} />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
@@ -61,70 +49,57 @@ class WhiteList extends PureComponent {
     )
   }
 
-  render () {
-    const { host } = this.state
-    const { whiteList } = this.props
-    return (
-      <Card>
-        <CardHeader
-          title={chrome.i18n.getMessage('white_list')}
-          subheader={chrome.i18n.getMessage('white_list_desc')}
-        />
+  return (
+    <Card>
+      <CardHeader
+        title={chrome.i18n.getMessage('white_list')}
+        subheader={chrome.i18n.getMessage('white_list_desc')}
+      />
 
-        <WindowScroller scroll>
-          {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
-            <div>
-              <List>
-                <ListItem divider>
-                  <ListItemText>
-                    <Input
-                      type="text"
-                      fullWidth
-                      value={host}
-                      onKeyPress={e => this.handleKeyPress(e)}
-                      onChange={e => this.setState({ host: e.target.value })}
+      <WindowScroller scroll>
+        {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
+          <div>
+            <List>
+              <ListItem divider>
+                <ListItemText>
+                  <Input
+                    type="text"
+                    fullWidth
+                    value={host}
+                    onKeyUp={handleKeyUp}
+                    onChange={e => setHost(e.target.value)}
+                  />
+                </ListItemText>
+                <ListItemSecondaryAction>
+                  <IconButton onClick={handleNewItem} >
+                    <IconAdd />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+
+              <AutoSizer disableHeight>
+                {({ width }) => (
+                  <div ref={registerChild}>
+                    <VirtualList
+                      autoHeight
+                      width={width}
+                      height={height}
+                      scrollTop={scrollTop}
+                      isScrolling={isScrolling}
+                      onScroll={onChildScroll}
+                      rowCount={whiteList.length}
+                      rowHeight={47}
+                      rowRenderer={rowRenderer}
                     />
-                  </ListItemText>
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={this.handleNewListItem.bind(this)} >
-                      <IconAdd />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-
-                <AutoSizer disableHeight>
-                  {({ width }) => (
-                    <div ref={registerChild}>
-                      <VirtualList
-                        autoHeight
-                        width={width}
-                        height={height}
-                        scrollTop={scrollTop}
-                        isScrolling={isScrolling}
-                        onScroll={onChildScroll}
-                        rowCount={whiteList.length}
-                        rowHeight={47}
-                        rowRenderer={this.rowRenderer.bind(this)}
-                      />
-                    </div>
-                  )}
-                </AutoSizer>
-              </List>
-            </div>
-          )}
-        </WindowScroller>
-      </Card>
-    )
-  }
+                  </div>
+                )}
+              </AutoSizer>
+            </List>
+          </div>
+        )}
+      </WindowScroller>
+    </Card>
+  )
 }
 
-WhiteList.propTypes = {
-  whiteList: PropTypes.arrayOf(PropTypes.string),
-  addWhiteList: PropTypes.func,
-  removeWhiteList: PropTypes.func
-}
-
-export default connect(
-  ({ whiteList }) => ({ whiteList }),
-  { addWhiteList, removeWhiteList }
-)(WhiteList)
+export default WhiteList

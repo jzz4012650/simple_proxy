@@ -3,21 +3,22 @@ import { Switch, Route } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
 import AppBar from '@material-ui/core/AppBar'
-import Paper from '@material-ui/core'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import Cloud from '@material-ui/icons/Cloud'
+import Lens from '@material-ui/icons/Lens'
+import LensOutlined from '@material-ui/icons/LensOutlined'
 
 import ProxyServers from './ProxyServers'
+import WhiteList from './WhiteList'
+import BlackList from './BlackList'
 import BtnSave from './BtnSave'
 import Snackbar from './Snackbar'
 
 const useStyles = makeStyles(theme => ({
   container: {
-    height: '100vh',
     paddingTop: 72 + theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-    overflow: 'auto'
+    paddingBottom: theme.spacing(2)
   },
   toolbarIcon: {
     marginRight: theme.spacing(1)
@@ -30,11 +31,12 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Options = props => {
-  const { path } = props.match
+  const { pathname } = props.location
   const classes = useStyles()
-  const [activeTab, setTab] = React.useState(path)
+  const [activeTab, setTab] = React.useState(pathname)
   const handleChange = (e, newValue) => {
     setTab(newValue)
+    props.history.push(newValue)
   }
 
   return (
@@ -48,22 +50,22 @@ const Options = props => {
           centered
         >
           <Tab icon={<Cloud/>} label={chrome.i18n.getMessage('proxy_server')} value="/"/>
-          <Tab icon={<Cloud/>} label={chrome.i18n.getMessage('')} value="/black-list"/>
-          <Tab icon={<Cloud/>} label={chrome.i18n.getMessage('')} value="/white-list"/>
+          <Tab icon={<LensOutlined/>} label={chrome.i18n.getMessage('black_list')} value="/black-list"/>
+          <Tab icon={<Lens/>} label={chrome.i18n.getMessage('white_list')} value="/white-list"/>
         </Tabs>
       </AppBar>
       <Container className={classes.container}>
-        {/* <Paper className={classes.paper}> */}
         <Switch>
           <Route exact path="/">
             <ProxyServers />
           </Route>
           <Route exact path="/black-list">
+            <BlackList/>
           </Route>
           <Route exact path="/white-list">
+            <WhiteList/>
           </Route>
         </Switch>
-        {/* </Paper> */}
         <BtnSave/>
       </Container>
       <Snackbar/>

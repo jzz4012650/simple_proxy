@@ -42,13 +42,13 @@
     "message": "白名单"
   },
   "white_list_desc": {
-    "message": "当开启白名模式时，除白名单之外的所有域名（及其子域名）都会经过代理。"
+    "message": "当开启白名模式时，除白名单之外的所有域名都会经过代理。"
   },
   "black_list":{
     "message": "黑名单"
   },
   "black_list_desc":{
-    "message": "当黑名单模式开启时，只有黑名单中的域名（及其子域名）才会经过代理。"
+    "message": "当黑名单模式开启时，只有黑名单中的域名才会经过代理。"
   },
   "option_saved":{
     "message": "配置保存成功！"
