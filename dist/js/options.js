@@ -15740,10 +15740,13 @@ var Menu = react__WEBPACK_IMPORTED_MODULE_2___default.a.forwardRef(function Menu
   !*** ./node_modules/@material-ui/core/esm/Menu/index.js ***!
   \**********************************************************/
 /*! exports provided: default */
+/*! exports used: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var _Menu__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Menu */ "./node_modules/@material-ui/core/esm/Menu/Menu.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _Menu__WEBPACK_IMPORTED_MODULE_0__["a"]; });
+
 
 
 /***/ }),
@@ -62438,16 +62441,16 @@ module.exports = function (originalModule) {
   !*** ./src/constants/proxyModes.js ***!
   \*************************************/
 /*! exports provided: DIRECT, SYSTEM, BLACK_LIST, WHITE_LIST, PROXY_MODES, PROXY_MODE_MAP */
-/*! exports used: BLACK_LIST, DIRECT, PROXY_MODES, SYSTEM, WHITE_LIST */
+/*! exports used: BLACK_LIST, DIRECT, PROXY_MODES, PROXY_MODE_MAP, SYSTEM, WHITE_LIST */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DIRECT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SYSTEM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SYSTEM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BLACK_LIST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return WHITE_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return WHITE_LIST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return PROXY_MODES; });
-/* unused harmony export PROXY_MODE_MAP */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return PROXY_MODE_MAP; });
 const DIRECT = 'DIRECT';
 const SYSTEM = 'SYSTEM';
 const BLACK_LIST = 'BLACK_LIST';
@@ -63680,7 +63683,7 @@ const generateProxySettingObj = mode => {
     };
 
     switch (mode) {
-      case _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* SYSTEM */ "d"]:
+      case _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* SYSTEM */ "e"]:
         settingObj.value.mode = 'system';
         resolve(settingObj);
         break;
@@ -63690,8 +63693,8 @@ const generateProxySettingObj = mode => {
         resolve(settingObj);
         break;
 
-      case _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* WHITE_LIST */ "e"]:
-        Object(_pacScript__WEBPACK_IMPORTED_MODULE_3__[/* generatePac */ "a"])(_constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* WHITE_LIST */ "e"]).then(pac => {
+      case _constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* WHITE_LIST */ "f"]:
+        Object(_pacScript__WEBPACK_IMPORTED_MODULE_3__[/* generatePac */ "a"])(_constants_proxyModes__WEBPACK_IMPORTED_MODULE_2__[/* WHITE_LIST */ "f"]).then(pac => {
           settingObj.value.mode = 'pac_script';
           settingObj.value.pacScript = {
             data: pac

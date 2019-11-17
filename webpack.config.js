@@ -17,7 +17,7 @@ module.exports = function (env, argv) {
     devtool: devtool[argv.mode],
     entry: {
       options: './src/options/index.js',
-      // popup: './src/popup/index.js',
+      popup: './src/popup/index.js',
       background: './src/background/index.js'
     },
     output: {

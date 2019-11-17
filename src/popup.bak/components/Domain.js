@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react'
 import { ListItem, ListItemSecondaryAction, ListItemText } from 'material-ui/List'
 import Menu, { MenuItem } from 'material-ui/Menu'
 import IconButton from 'material-ui/IconButton'
@@ -6,18 +6,17 @@ import IconButton from 'material-ui/IconButton'
 import DomainState from './DomainState'
 
 class Domain extends PureComponent {
-
-  render() {
-    const { host, blackList, whiteList } = this.props;
+  render () {
+    const { host, blackList, whiteList } = this.props
     let iconType
 
     switch (true) {
-      case (blackList.indexOf(host) >= 0):
-        iconType = 1; break;
-      case (whiteList.indexOf(host) >= 0):
-        iconType = 0; break;
-      default:
-        iconType = -1;
+    case (blackList.indexOf(host) >= 0):
+      iconType = 1; break
+    case (whiteList.indexOf(host) >= 0):
+      iconType = 0; break
+    default:
+      iconType = -1
     }
 
     return (
@@ -29,8 +28,8 @@ class Domain extends PureComponent {
           </IconButton>
         </ListItemSecondaryAction>
       </ListItem>
-    );
+    )
   }
 }
 
-export default Domain;
+export default Domain

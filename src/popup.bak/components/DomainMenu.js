@@ -1,22 +1,21 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent } from 'react'
 import Menu, { MenuItem } from 'material-ui/Menu'
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from 'material-ui/styles'
 
 import DomainState from './DomainState'
 
 const styles = theme => ({
   leftIcon: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   }
 })
 
 class DomainMenu extends PureComponent {
-
-  handleMenuClick(value) {
+  handleMenuClick (value) {
     this.props.onMenuChange(this.props.iconType, value)
   }
 
-  render() {
+  render () {
     const { classes } = this.props
     return (
       <Menu
@@ -37,4 +36,4 @@ class DomainMenu extends PureComponent {
   }
 }
 
-export default withStyles(styles)(DomainMenu);
+export default withStyles(styles)(DomainMenu)

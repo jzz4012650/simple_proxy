@@ -1,22 +1,22 @@
-import React, { PureComponent } from 'react';
-import List, { ListSubheader } from 'material-ui/List';
-import { withStyles } from 'material-ui/styles';
+import React, { PureComponent } from 'react'
+import List, { ListSubheader } from 'material-ui/List'
+import { withStyles } from 'material-ui/styles'
 
-import Domain from './Domain';
+import Domain from './Domain'
 
 const styles = theme => ({
   list: {
-    background: theme.palette.background.paper,
+    background: theme.palette.background.paper
   }
 })
 
 class DomainList extends PureComponent {
-  render() {
+  render () {
     const props = this.props
     return (
       <List
         className={props.classes.list}
-        subheader={<ListSubheader>{chrome.i18n.getMessage("domain_list")}</ListSubheader>}>
+        subheader={<ListSubheader>{chrome.i18n.getMessage('domain_list')}</ListSubheader>}>
         {props.hostList.map((d, i) => (
           <Domain
             key={i}
@@ -32,4 +32,4 @@ class DomainList extends PureComponent {
   }
 }
 
-export default withStyles(styles)(DomainList);
+export default withStyles(styles)(DomainList)

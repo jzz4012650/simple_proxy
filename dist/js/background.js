@@ -318,16 +318,16 @@ function generateProxySettingObj(mode) {
   !*** ./src/constants/proxyModes.js ***!
   \*************************************/
 /*! exports provided: DIRECT, SYSTEM, BLACK_LIST, WHITE_LIST, PROXY_MODES, PROXY_MODE_MAP */
-/*! exports used: BLACK_LIST, DIRECT, PROXY_MODES, SYSTEM, WHITE_LIST */
+/*! exports used: BLACK_LIST, DIRECT, PROXY_MODES, PROXY_MODE_MAP, SYSTEM, WHITE_LIST */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return DIRECT; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SYSTEM; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SYSTEM; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return BLACK_LIST; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return WHITE_LIST; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return WHITE_LIST; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return PROXY_MODES; });
-/* unused harmony export PROXY_MODE_MAP */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return PROXY_MODE_MAP; });
 const DIRECT = 'DIRECT';
 const SYSTEM = 'SYSTEM';
 const BLACK_LIST = 'BLACK_LIST';
