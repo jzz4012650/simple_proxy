@@ -1,0 +1,6 @@
+{
+    "editor.tabSize": 2,
+    "eslint.autoFixOnSave": true,
+    "eslint.packageManager": "yarn",
+    "editor.detectIndentation": false
+}

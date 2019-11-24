@@ -1,54 +1,58 @@
-var path = require("path");
-var webpack = require("webpack");
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
+const path = require('path')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-var ENV = process.argv.includes('--dev') ? 'development' : 'production';
-var HOT_SERVER_PORT = 3000;
-var SRC_PATH = "/src";
-var OUTPUT_PATH = "/dist";
-var STATIC_PATH = "/static";
-var JS_NAME = "[name].js";
-var CSS_NAME = "[name].css";
+const PUBLIC_PATH = 'assets'
+const JS_NAME = 'js/[name].js'
 
-var options = {
-    devtool: 'source-map',
+module.exports = function (env, argv) {
+  const devtool = {
+    development: 'source-map',
+    production: 'none'
+  }
+  const options = {
+    devtool: devtool[argv.mode],
     entry: {
-        'options': './src/options/index.js',
-        'popup': './src/popup/index.js'
+      options: './src/options/index.js',
+      popup: './src/popup/index.js',
+      background: './src/background/index.js'
     },
     output: {
-        filename: JS_NAME,
-        path: path.join(__dirname, OUTPUT_PATH),
-        publicPath: OUTPUT_PATH
-    },
-    resolve: {
-        root: path.join(__dirname, SRC_PATH),
-        extensions: ["", ".js", ".jsx"]
+      publicPath: PUBLIC_PATH,
+      filename: JS_NAME,
+      path: path.join(__dirname, 'public', PUBLIC_PATH)
     },
     module: {
-        loaders: [{
-            test: /\.less$/,
-            loader: ExtractTextPlugin.extract("css!less"),
-            include: path.join(__dirname, SRC_PATH)
-        }, {
-            test: /\.jsx?$/,
-            loader: 'babel-loader',
-            include: path.join(__dirname, SRC_PATH)
-        }, {
-            test: /\.json$/,
-            loader: "json-loader",
-            include: path.join(__dirname, STATIC_PATH)
-        }]
+      rules: [{
+        test: /\.jsx?$/,
+        use: {
+          loader: 'babel-loader'
+        },
+        include: [path.resolve('src')]
+      }, {
+        test: /\.less$/,
+        use: [
+          'css-loader',
+          'less-loader'
+        ]
+      }, {
+        test: /\.css$/,
+        use: [
+          'css-loader'
+        ]
+      }]
     },
     plugins: [
-        new ExtractTextPlugin(CSS_NAME),
-        new webpack.DefinePlugin({
-            'process.env': {
-                NODE_ENV: JSON.stringify(ENV),
-            },
-        })
+      new CleanWebpackPlugin(),
+      // new CopyWebpackPlugin([{
+      //   from: path.resolve(__dirname, './dist/'),
+      //   to: path.resolve(__dirname, './public/asserts/'),
+      //   transformPath: (targetPath, absolutePath) => {
+      //     return targetPath.replace(/dist\//, '')
+      //   }
+      // }])
     ]
+  }
+
+  return options
 }
-
-
-module.exports = options;

@@ -1,27 +1,23 @@
-import React, { Component } from 'react';
-import { render } from 'react-dom';
-import { createStore, applyMiddleware } from 'redux'
-import { Provider } from 'react-redux'
-import promiseMiddleware from 'redux-promise'
-import { MuiThemeProvider, createMuiTheme } from 'material-ui/styles';
-import { blue } from 'material-ui/colors'
+import React from 'react'
+import { render } from 'react-dom'
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { blue, pink } from '@material-ui/core/colors'
 
-import reducers from './reducers'
-import Container from './components/Container';
-
-let store = createStore(reducers, applyMiddleware(promiseMiddleware));
+import Container from './components/Container'
 
 const theme = createMuiTheme({
-    palette: {
-        primary: blue
-    }
-});
+  palette: {
+    primary: blue,
+    secondary: pink
+  },
+  typography: {
+    useNextVariants: true
+  }
+})
 
 render(
-    <Provider store={store}>
-        <MuiThemeProvider theme={theme}>
-            <Container />
-        </MuiThemeProvider>
-    </Provider>,
-    document.getElementById('root')
-);
+  <MuiThemeProvider theme={theme}>
+    <Container />
+  </MuiThemeProvider>,
+  document.getElementById('root')
+)
