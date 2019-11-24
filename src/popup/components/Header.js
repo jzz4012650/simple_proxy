@@ -17,7 +17,8 @@ import RemoveCircleOutline from '@material-ui/icons/RemoveCircleOutline'
 import IconDesktop from '@material-ui/icons/DesktopMac'
 import IconDirect from '@material-ui/icons/SwapHoriz'
 import { SYSTEM, DIRECT, BLACK_LIST, WHITE_LIST, PROXY_MODES, PROXY_MODE_MAP } from '../../constants/proxyModes'
-import { updateProxyMode, getProxyMode } from '../../services/config'
+import { updateProxyMode, getProxyMode, getProxyServers } from '../../services/config'
+import { Tooltip } from '@material-ui/core'
 
 const modeIcons = {
   [SYSTEM]: <IconDesktop />,
@@ -39,10 +40,15 @@ const useStyle = makeStyles(theme => ({
 const Header = ({ setModified }) => {
   const classes = useStyle()
   const [mode, setMode] = useState(SYSTEM)
+  const [warn, setWarn] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null)
   const initProxyMode = async () => {
     const mode = await getProxyMode()
     setMode(mode)
+    const proxyServers = await getProxyServers()
+    if (!proxyServers.length) {
+      setWarn(true)
+    }
   }
   const handleModeChange = async (mode) => {
     await updateProxyMode(mode)
@@ -68,7 +74,7 @@ const Header = ({ setModified }) => {
           onClick={e => setAnchorEl(e.currentTarget)}>
           {React.cloneElement(modeIcons[mode], { className: classes.leftIcon })}
           {PROXY_MODE_MAP[mode].title}
-          <ArrowDropDown/>
+          <ArrowDropDown />
         </Button>
         <Menu
           id="mode-menu"
@@ -90,9 +96,11 @@ const Header = ({ setModified }) => {
             </MenuItem>
           )}
         </Menu>
-        <IconButton size="small" onClick={() => chrome.runtime.openOptionsPage()}>
-          <IconSetting />
-        </IconButton>
+        <Tooltip arrow open={warn} title={chrome.i18n.getMessage('no_proxy_server_warning')}>
+          <IconButton size="small" onClick={() => chrome.runtime.openOptionsPage()}>
+            <IconSetting />
+          </IconButton>
+        </Tooltip>
       </Toolbar>
     </AppBar >
   )

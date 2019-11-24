@@ -6,8 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack --config webpack.config.js --watch --mode=development",
-    "build": "webpack --config webpack.config.js --profile --mode=production",
-    "dll": "webpack --config webpack.config.dll.js --mode=production"
+    "build": "webpack --config webpack.config.js --profile --mode=production"
   },
   "browserslist": [
     "chrome >= 49"
@@ -32,6 +31,7 @@
     "@babel/preset-react": "^7.0.0",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^4.6.0",
     "css-loader": "^2.1.1",
     "eslint": "^6.6.0",
@@ -50,8 +50,8 @@
     "webpack-cli": "^3.3.2"
   },
   "dependencies": {
-    "@material-ui/core": "^4.0.0",
-    "@material-ui/icons": "^4.0.0",
+    "@material-ui/core": "^4.7.0",
+    "@material-ui/icons": "^4.5.1",
     "@material-ui/lab": "^4.0.0-alpha.33",
     "core-js": "^3.4.2",
     "lodash": "^4.17.11",

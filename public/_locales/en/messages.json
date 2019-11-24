@@ -112,5 +112,8 @@
   },
   "migration_fail": {
     "message": "Migration failed!"
+  },
+  "no_proxy_server_warning": {
+    "message": "No proxy server found, Please click to add one."
   }
 }

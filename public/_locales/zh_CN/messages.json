@@ -112,5 +112,8 @@
   },
   "migration_fail": {
     "message": "迁移失败！"
+  },
+  "no_proxy_server_warning": {
+    "message": "未配置代理服务器，请点击配置"
   }
 }

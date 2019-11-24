@@ -1,5 +1,6 @@
 const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const JS_OUTPUT_PATH = 'dist'
 const PUBLIC_PATH = 'asserts'
@@ -7,7 +8,7 @@ const JS_NAME = 'js/[name].js'
 
 module.exports = function (env, argv) {
   const devtool = {
-    development: 'cheap-source-map',
+    development: 'source-map',
     production: 'none'
   }
   const options = {
@@ -46,8 +47,9 @@ module.exports = function (env, argv) {
       usedExports: true
     },
     plugins: [
+      new CleanWebpackPlugin(),
       new CopyWebpackPlugin([{
-        from: path.resolve(__dirname, './dist/**/*'),
+        from: path.resolve(__dirname, './dist/'),
         to: path.resolve(__dirname, './public/asserts/'),
         transformPath: (targetPath, absolutePath) => {
           return targetPath.replace(/dist\//, '')

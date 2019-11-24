@@ -1,6 +1,7 @@
 import { storageLocal, storageSync } from './storage'
 import { BLACK_LIST, WHITE_LIST, PROXY_SERVERS, PROXY_MODE } from '../constants/storage'
 import { updateProxyConfig } from './proxyConfig'
+import { SYSTEM } from '../constants/proxyModes'
 
 export const getConfig = async () => {
   const [local, sync] = await Promise.all([
@@ -8,9 +9,9 @@ export const getConfig = async () => {
     storageSync.get([BLACK_LIST, WHITE_LIST])
   ])
   return {
-    PROXY_SERVERS: local[PROXY_SERVERS],
-    BLACK_LIST: sync[BLACK_LIST],
-    WHITE_LIST: sync[WHITE_LIST]
+    PROXY_SERVERS: local[PROXY_SERVERS] || [],
+    BLACK_LIST: sync[BLACK_LIST] || [],
+    WHITE_LIST: sync[WHITE_LIST] || []
   }
 }
 
@@ -24,7 +25,12 @@ export const saveConfig = async (config) => {
 
 export const getProxyMode = async () => {
   const res = await storageLocal.get([PROXY_MODE])
-  return res[PROXY_MODE]
+  return res[PROXY_MODE] || SYSTEM
+}
+
+export const getProxyServers = async () => {
+  const res = await storageLocal.get([PROXY_SERVERS])
+  return res[PROXY_SERVERS] || []
 }
 
 export const updateProxyMode = async (mode) => {

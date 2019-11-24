@@ -4,7 +4,6 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { blue, pink } from '@material-ui/core/colors'
 
 import Container from './components/Container'
-import { getCurrentTabId } from '../services/chrome'
 
 const theme = createMuiTheme({
   palette: {
@@ -22,10 +21,3 @@ render(
   </MuiThemeProvider>,
   document.getElementById('root')
 )
-
-window.addEventListener('beforeunload', async () => {
-  const tabId = await getCurrentTabId()
-  chrome.tabs.executeScript(tabId, {
-    code: 'window.location.reload();'
-  })
-})
