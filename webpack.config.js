@@ -2,8 +2,7 @@ const path = require('path')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
-const JS_OUTPUT_PATH = 'dist'
-const PUBLIC_PATH = 'asserts'
+const PUBLIC_PATH = 'assets'
 const JS_NAME = 'js/[name].js'
 
 module.exports = function (env, argv) {
@@ -21,7 +20,7 @@ module.exports = function (env, argv) {
     output: {
       publicPath: PUBLIC_PATH,
       filename: JS_NAME,
-      path: path.resolve(__dirname, JS_OUTPUT_PATH)
+      path: path.join(__dirname, 'public', PUBLIC_PATH)
     },
     module: {
       rules: [{
@@ -43,18 +42,15 @@ module.exports = function (env, argv) {
         ]
       }]
     },
-    optimization: {
-      usedExports: true
-    },
     plugins: [
       new CleanWebpackPlugin(),
-      new CopyWebpackPlugin([{
-        from: path.resolve(__dirname, './dist/'),
-        to: path.resolve(__dirname, './public/asserts/'),
-        transformPath: (targetPath, absolutePath) => {
-          return targetPath.replace(/dist\//, '')
-        }
-      }])
+      // new CopyWebpackPlugin([{
+      //   from: path.resolve(__dirname, './dist/'),
+      //   to: path.resolve(__dirname, './public/asserts/'),
+      //   transformPath: (targetPath, absolutePath) => {
+      //     return targetPath.replace(/dist\//, '')
+      //   }
+      // }])
     ]
   }
 

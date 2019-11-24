@@ -40,8 +40,8 @@ const BlackList = props => {
         <ListItem divider>
           <ListItemText primary={blackList[index]} />
           <ListItemSecondaryAction>
-            <IconButton>
-              <IconDelete onClick={() => handleRemoveItem(index)} />
+            <IconButton onClick={() => handleRemoveItem(index)}>
+              <IconDelete />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>

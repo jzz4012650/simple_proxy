@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, Fragment } from 'react'
 import Header from './Header'
 import HostList from './HostList'
 
@@ -13,10 +13,10 @@ const Container = props => {
   }, [])
 
   return (
-    <div>
+    <Fragment>
       <Header setModified={setModified}/>
       <HostList setModified={setModified}/>
-    </div>
+    </Fragment>
   )
 }
 

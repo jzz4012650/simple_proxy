@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack --config webpack.config.js --watch --mode=development",
-    "build": "webpack --config webpack.config.js --profile --mode=production"
+    "start": "webpack --config webpack.config.js --watch --mode=\"development\"",
+    "build": "webpack --config webpack.config.js --profile --mode=\"production\""
   },
   "browserslist": [
     "chrome >= 49"
@@ -46,8 +46,8 @@
     "less": "^3.9.0",
     "less-loader": "^5.0.0",
     "mini-css-extract-plugin": "^0.6.0",
-    "webpack": "^4.32.2",
-    "webpack-cli": "^3.3.2"
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   },
   "dependencies": {
     "@material-ui/core": "^4.7.0",

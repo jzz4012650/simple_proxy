@@ -9,7 +9,7 @@
     "message": "Cancel"
   },
   "description": {
-    "message": "This extension can set up proxy for each host you have visited."
+    "message": "Proxy switch for each individual website."
   },
   "options": {
     "message": "Settings"
@@ -48,13 +48,13 @@
     "message": "White List"
   },
   "white_list_desc": {
-    "message": "When the whitelist mode is turned on, all the domain names outside the whitelist will use proxy."
+    "message": "When the whitelist mode is turned on, all the domain names outside the whitelist will use proxy. Wildcards supported. e.g. *.google.com (only host name will be used to compare, does not work for path after '/')"
   },
   "black_list": {
     "message": "Black List"
   },
   "black_list_desc": {
-    "message": "When the blacklist mode is turned on, only the domain name in the blacklist will use proxy."
+    "message": "When the blacklist mode is turned on, only the domain name in the blacklist will use proxy. Wildcards supported. e.g. *.google.com (only host name will be used to compare, does not work for path after '/')"
   },
   "option_saved": {
     "message": "Configuration saved successfully!"

@@ -40,8 +40,8 @@ const WhiteList = props => {
         <ListItem divider>
           <ListItemText primary={whiteList[index]} />
           <ListItemSecondaryAction>
-            <IconButton>
-              <IconDelete onClick={() => handleRemoveItem(index)} />
+            <IconButton onClick={() => handleRemoveItem(index)}>
+              <IconDelete />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>

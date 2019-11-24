@@ -8,8 +8,20 @@ import { storageSync } from '../../services/storage'
 import { BLACK_LIST, WHITE_LIST } from '../../constants/storage'
 import { updateBlackAndWhiteList } from '../../services/config'
 import { MESSAGE_HOSTS_UPDATE } from '../../constants/message'
+import { makeStyles } from '@material-ui/styles'
+
+const useStyle = makeStyles(theme => ({
+  list: {
+    flex: 1,
+    overflow: 'auto'
+  },
+  listHeader: {
+    background: theme.palette.common.white
+  }
+}))
 
 const HostList = ({ setModified }) => {
+  const classes = useStyle()
   const [hosts, setHosts] = useState([])
   const [blackListSet, setBlackList] = useState(new Set())
   const [whiteListSet, setWhiteList] = useState(new Set())
@@ -49,10 +61,11 @@ const HostList = ({ setModified }) => {
 
   return (
     <List
+      className={classes.list}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
-        <ListSubheader component="div" id="nested-list-subheader">
+        <ListSubheader component="div" className={classes.listHeader} id="nested-list-subheader">
           {chrome.i18n.getMessage('domain_list')}
         </ListSubheader>
       }
