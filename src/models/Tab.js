@@ -13,6 +13,7 @@ class Tab {
   }
 
   resetHosts () {
+    delete this.hosts
     this.hosts = new Set()
   }
 }

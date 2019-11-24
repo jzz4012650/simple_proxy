@@ -1,17 +1,14 @@
 const path = require('path')
-const Webpack = require('webpack')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const JS_OUTPUT_PATH = 'dist'
 const PUBLIC_PATH = 'asserts'
 const JS_NAME = 'js/[name].js'
-const CSS_NAME = 'css/[name].css'
 
 module.exports = function (env, argv) {
   const devtool = {
-    'development': 'cheap-source-map',
-    'production': 'none'
+    development: 'cheap-source-map',
+    production: 'none'
   }
   const options = {
     devtool: devtool[argv.mode],
@@ -30,18 +27,17 @@ module.exports = function (env, argv) {
         test: /\.jsx?$/,
         use: {
           loader: 'babel-loader'
-        }
+        },
+        include: [path.resolve('src')]
       }, {
         test: /\.less$/,
         use: [
-          // MiniCssExtractPlugin.loader,
           'css-loader',
           'less-loader'
         ]
       }, {
         test: /\.css$/,
         use: [
-          // MiniCssExtractPlugin.loader,
           'css-loader'
         ]
       }]
@@ -50,12 +46,6 @@ module.exports = function (env, argv) {
       usedExports: true
     },
     plugins: [
-      // new MiniCssExtractPlugin({
-      //   filename: CSS_NAME
-      // }),
-      new Webpack.DllReferencePlugin({
-        manifest: path.resolve(__dirname, 'dist/dll.manifest.json')
-      }),
       new CopyWebpackPlugin([{
         from: path.resolve(__dirname, './dist/**/*'),
         to: path.resolve(__dirname, './public/asserts/'),

@@ -89,6 +89,12 @@
   "domain_neither": {
     "message": "默认"
   },
+  "add_to_black": {
+    "message": "添加到黑名单"
+  },
+  "add_to_white": {
+    "message": "添加到白名单"
+  },
   "domain_black": {
     "message": "黑名单"
   },

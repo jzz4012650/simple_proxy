@@ -3,6 +3,11 @@ import Tab from './Tab'
 class TabCollection {
   constructor () {
     this.tabs = new Map()
+    chrome.tabs.query({}, tabs => {
+      tabs.forEach(tab => {
+        this.tabs.set(tab.id, new Tab(tab.id))
+      })
+    })
     this.currentTab = null
   }
 
@@ -14,15 +19,26 @@ class TabCollection {
     }
   }
 
+  getCurrent () {
+    return this.currentTab
+  }
+
   getTab (tabId) {
-    return this.tabs.get(tabId)
+    let tab = this.tabs.get(tabId)
+    if (tab === undefined) {
+      tab = new Tab(tabId)
+      this.tabs.set(tabId, tab)
+      return tab
+    } else {
+      return this.tabs.get(tabId)
+    }
   }
 
   addTab (tab) {
     if (!(tab instanceof Tab)) {
       throw Error('tab must be instance of Tab')
     }
-    this.tabs.add(tab.id, tab)
+    this.tabs.set(tab.id, tab)
   }
 
   removeTab (tabId) {

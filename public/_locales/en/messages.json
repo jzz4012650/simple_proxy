@@ -38,6 +38,12 @@
   "proxy_server_desc": {
     "message": "Configure your proxy server. One proxy server a line. Will auto try next server if the previous one fails."
   },
+  "add_to_black": {
+    "message": "Add To Black List"
+  },
+  "add_to_white": {
+    "message": "Add To White List"
+  },
   "white_list": {
     "message": "White List"
   },

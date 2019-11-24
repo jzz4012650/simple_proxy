@@ -5,7 +5,7 @@ import { generatePac } from './pacScript'
 
 const generateProxySettingObj = (mode) => {
   return new Promise(function (resolve, reject) {
-    let settingObj = { scope: 'regular', value: {} }
+    const settingObj = { scope: 'regular', value: {} }
     switch (mode) {
     case SYSTEM:
       settingObj.value.mode = 'system'
@@ -41,11 +41,9 @@ const setProxy = (settingObj) => {
   })
 }
 
-export const updateProxyConfig = () => {
-  storageLocal.get([PROXY_MODE]).then(obj => {
-    const proxyMode = obj[PROXY_MODE] || BLACK_LIST
-    generateProxySettingObj(proxyMode).then(settingObj => {
-      setProxy(settingObj)
-    })
-  })
+export const updateProxyConfig = async () => {
+  const obj = await storageLocal.get([PROXY_MODE])
+  const proxyMode = obj[PROXY_MODE] || SYSTEM
+  const settingObj = await generateProxySettingObj(proxyMode)
+  await setProxy(settingObj)
 }
