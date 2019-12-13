@@ -1,5 +1,6 @@
 import {
   ADD_PROXY_SERVER,
+  EDIT_PROXY_SERVER,
   REMOVE_PROXY_SERVER,
   ADD_BLACKLIST,
   ADD_WHITELIST,
@@ -15,6 +16,11 @@ export const init = obj => ({
 
 export const addProxyServer = server => ({
   type: ADD_PROXY_SERVER,
+  payload: server
+})
+
+export const editProxyServer = server => ({
+  type: EDIT_PROXY_SERVER,
   payload: server
 })
 
