@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -17,19 +17,10 @@ const style = theme => ({
   }
 })
 
-const NewServerPopup = ({ open, serverEditing, onClose, onConfirm, classes }) => {
+const NewServerPopup = ({ open, onClose, onConfirm, classes }) => {
   const [method, setMethod] = useState(PROXY_METHODS[0])
   const [host, setHost] = useState('')
   const [port, setPort] = useState('')
-
-  useEffect(() => {
-    if (serverEditing !== null) {
-      setMethod(serverEditing.method)
-      setHost(serverEditing.host)
-      setPort(serverEditing.port)
-    }
-  }, [serverEditing])
-
   return (
     <Dialog keepMounted disableBackdropClick open={open} onClose={onClose}>
       <DialogTitle>

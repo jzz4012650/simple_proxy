@@ -1,17 +1,20 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "__MSG_name__",
   "description": "__MSG_description__",
-  "version": "3.1.1",
-  "browser_action": {
-    "default_icon": "icon48.png",
+  "version": "3.2.0",
+  "action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    },
     "default_popup": "popup.html",
     "default_title": "Proxy"
   },
   "background": {
-    "scripts": [
-      "assets/js/background.js"
-    ]
+    "service_worker": "background.js",
+    "type": "module"
   },
   "icons": {
     "16": "icon16.png",
@@ -25,7 +28,9 @@
     "tabs",
     "storage",
     "webRequest",
-    "webNavigation",
+    "webNavigation"
+  ],
+  "host_permissions": [
     "http://*/*",
     "https://*/*"
   ]

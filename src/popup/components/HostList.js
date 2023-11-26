@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { List, ListSubheader, ListItem, ListItemIcon, ListItemText, ListItemSecondaryAction, IconButton, Tooltip } from '@material-ui/core'
 import Language from '@material-ui/icons/Language'
 import Lens from '@material-ui/icons/Lens'
-import CheckCircle from '@material-ui/icons/CheckCircle'
 import LensOutlined from '@material-ui/icons/LensOutlined'
-import CheckCircleOutline from '@material-ui/icons/CheckCircleOutline'
 import { getHostsOfCurrentTab } from '../../services/chrome'
 import { storageSync } from '../../services/storage'
 import { BLACK_LIST, WHITE_LIST } from '../../constants/storage'
@@ -82,12 +80,12 @@ const HostList = ({ setModified }) => {
             <ListItemSecondaryAction>
               <Tooltip title={chrome.i18n.getMessage('domain_black')}>
                 <IconButton size="small" color={blackListSet.has(host) ? 'secondary' : undefined} onClick={() => updateBW(host, BLACK_LIST)}>
-                  {blackListSet.has(host) ? <CheckCircle /> : <Lens /> }
+                  <Lens />
                 </IconButton>
               </Tooltip>
               <Tooltip title={chrome.i18n.getMessage('domain_white')}>
                 <IconButton size="small" color={whiteListSet.has(host) ? 'secondary' : undefined} onClick={() => updateBW(host, WHITE_LIST)}>
-                  {whiteListSet.has(host) ? <CheckCircleOutline /> : <LensOutlined />}
+                  <LensOutlined />
                 </IconButton>
               </Tooltip>
             </ListItemSecondaryAction>

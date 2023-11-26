@@ -15,35 +15,21 @@ import Avatar from '@material-ui/core/Avatar'
 
 import IconLink from '@material-ui/icons/Link'
 import IconDelete from '@material-ui/icons/DeleteForever'
-import IconEdit from '@material-ui/icons/Edit'
 import Add from '@material-ui/icons/Add'
 
 import NewServerPopup from './NewServerPopup'
-import { ADD_PROXY_SERVER, REMOVE_PROXY_SERVER, EDIT_PROXY_SERVER } from '../redux/actionTypes'
+import { ADD_PROXY_SERVER, REMOVE_PROXY_SERVER } from '../redux/actionTypes'
 
 const ProxyServers = props => {
   const [showPopup, setPopup] = useState(false)
-  const [serverEditing, setServer] = useState(null)
-  const [indexEditing, setIndex] = useState(-1)
   const proxyServers = useSelector(store => store.proxyServers, shallowEqual)
   const dispatch = useDispatch()
-  const handleNewServer = (proxyServer) => {
-    if (serverEditing === null) {
-      dispatch({ type: ADD_PROXY_SERVER, payload: proxyServer })
-    } else {
-      dispatch({ type: EDIT_PROXY_SERVER, payload: { server: proxyServer, index: indexEditing } })
-      setServer(null)
-      setIndex(-1)
-    }
+  const handleNewServer = (newProxyServer) => {
+    dispatch({ type: ADD_PROXY_SERVER, payload: newProxyServer })
     setPopup(false)
   }
   const handleRemoveServer = (index) => {
     dispatch({ type: REMOVE_PROXY_SERVER, payload: index })
-  }
-  const handleEditServer = (index) => {
-    setServer(proxyServers[index])
-    setIndex(index)
-    setPopup(true)
   }
 
   return (
@@ -62,9 +48,6 @@ const ProxyServers = props => {
               </ListItemIcon>
               <ListItemText primary={`${server.host}:${server.port}`} secondary={server.method} />
               <ListItemSecondaryAction>
-                <IconButton onClick={() => handleEditServer(i)}>
-                  <IconEdit />
-                </IconButton>
                 <IconButton onClick={() => handleRemoveServer(i)}>
                   <IconDelete />
                 </IconButton>
@@ -84,7 +67,6 @@ const ProxyServers = props => {
         </List>
       </Card>
       <NewServerPopup
-        serverEditing={serverEditing}
         open={showPopup}
         onConfirm={handleNewServer}
         onClose={() => setPopup(false)}

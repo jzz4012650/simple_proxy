@@ -44,17 +44,23 @@
   "add_to_white": {
     "message": "Add To White List"
   },
+  "remove_from_black": {
+    "message": "Remove From Black List"
+  },
+  "remove_from_white": {
+    "message": "Remove From White List"
+  },
   "white_list": {
     "message": "White List"
   },
   "white_list_desc": {
-    "message": "When the whitelist mode is turned on, all the domain names outside the whitelist will use proxy. Wildcards supported. e.g. *.google.com (only host name will be used to compare, does not work for path after '/')"
+    "message": "When the whitelist mode is turned on, all the hostnames outside the whitelist will use proxy. Wildcards supported. e.g. *.google.com (only host name will be used to compare, does not work for path after '/')"
   },
   "black_list": {
     "message": "Black List"
   },
   "black_list_desc": {
-    "message": "When the blacklist mode is turned on, only the domain name in the blacklist will use proxy. Wildcards supported. e.g. *.google.com (only host name will be used to compare, does not work for path after '/')"
+    "message": "When the blacklist mode is turned on, only the hostname in the blacklist will use proxy. Wildcards supported. e.g. *.google.com (only host name will be used to compare, does not work for path after '/')"
   },
   "option_saved": {
     "message": "Configuration saved successfully!"
@@ -84,13 +90,13 @@
     "message": "Disable proxy"
   },
   "mode_white_list_desc": {
-    "message": "All domains outside white list will use proxy"
+    "message": "All hostnames outside white list will use proxy"
   },
   "mode_black_list_desc": {
-    "message": "Only domain inside black list will use proxy"
+    "message": "Only hostname inside black list will use proxy"
   },
   "domain_list": {
-    "message": "The domain name requested by the current page: "
+    "message": "The hostname requested by the current page: "
   },
   "domain_neither": {
     "message": "Neither"
@@ -115,5 +121,23 @@
   },
   "no_proxy_server_warning": {
     "message": "No proxy server found, Please click to add one."
+  },
+  "to_top": {
+    "message": "Move to top"
+  },
+  "add_to_black_list_placeholder": {
+    "message": "Add hostname"
+  },
+  "add_to_black_list_helper_text": {
+    "message": "Enter the hostname to be added, press Enter to confirm"
+  },
+  "add_to_white_list_placeholder": {
+    "message": "Add hostname"
+  },
+  "add_to_white_list_helper_text": {
+    "message": "Enter the hostname to be added, press Enter to confirm"
+  },
+  "search": {
+    "message": "Enter keywords to search"
   }
 }
