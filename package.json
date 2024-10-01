@@ -14,11 +14,11 @@
     "@mui/icons-material": "^5.14.8",
     "@mui/material": "^5.14.8",
     "@mui/styled-engine-sc": "^5.14.8",
+    "@tanstack/react-virtual": "^3.10.8",
     "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.20.0",
-    "react-virtualized": "^9.22.5",
     "styled-components": "^5.3.11"
   },
   "devDependencies": {

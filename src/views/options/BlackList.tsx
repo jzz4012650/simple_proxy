@@ -12,10 +12,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { CSSProperties, KeyboardEvent, useEffect, useState } from 'react';
-import AutoSizer from 'react-virtualized/dist/es/AutoSizer';
-import VirtualList from 'react-virtualized/dist/es/List';
-import WindowScroller from 'react-virtualized/dist/es/WindowScroller';
+import { CSSProperties, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
 import { getBlackList, setBlackList } from '../../services/config';
 
@@ -29,6 +27,7 @@ const BlackList = () => {
   const [keyword, setKeyword] = useState<string>('');
   const [filteredBlackList, setFilteredBlackList] = useState<BlackListForRender>([]);
   const [hostToAdd, setHostToAdd] = useState<string>('');
+  const listRef = useRef<HTMLDivElement | null>(null);
 
   const handleNewItem = (host: string) => {
     if (!host) {
@@ -52,24 +51,28 @@ const BlackList = () => {
     }
   };
 
-  const rowRenderer = ({ index, key, style }: {
+  const virtualizer = useWindowVirtualizer({
+    count: filteredBlackList.length,
+    estimateSize: () => 50,
+    overscan: 5,
+    scrollMargin: 0
+  });
+
+  const rowRenderer = ({ index, style }: {
     index: number;
-    key: string;
     style: CSSProperties;
-  }) => {
-    return (
-      <div key={key} style={style}>
-        <ListItem divider>
-          <ListItemText primary={filteredBlackList[index].host} />
-          <ListItemSecondaryAction>
-            <IconButton onClick={() => handleRemoveItem(filteredBlackList[index].originIndex)}>
-              <DeleteForeverIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-      </div>
-    );
-  };
+  }) => (
+    <div key={index} style={style} >
+      <ListItem divider>
+        <ListItemText primary={filteredBlackList[index].host} />
+        <ListItemSecondaryAction>
+          <IconButton onClick={() => handleRemoveItem(filteredBlackList[index].originIndex)}>
+            <DeleteForeverIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      </ListItem>
+    </div>
+  );
 
   useEffect(() => {
     getBlackList().then((res) => {
@@ -132,37 +135,24 @@ const BlackList = () => {
           />
         </Stack>
         <Card>
-          <WindowScroller scroll>
-            {({ height, isScrolling, registerChild, onChildScroll, scrollTop }: {
-              height: number;
-              isScrolling: boolean;
-              registerChild: (element: HTMLElement | null) => void;
-              onChildScroll: (params: { scrollTop: number; }) => void;
-              scrollTop: number;
-            }) => (
-              <div>
-                <List>
-                  <AutoSizer disableHeight>
-                    {({ width }: { width: number; }) => (
-                      <div ref={registerChild}>
-                        <VirtualList
-                          autoHeight
-                          width={width}
-                          height={height}
-                          scrollTop={scrollTop}
-                          isScrolling={isScrolling}
-                          onScroll={onChildScroll}
-                          rowCount={filteredBlackList.length}
-                          rowHeight={47}
-                          rowRenderer={rowRenderer}
-                        />
-                      </div>
-                    )}
-                  </AutoSizer>
-                </List>
-              </div>
-            )}
-          </WindowScroller>
+        <div ref={listRef} style={{
+            height: `${virtualizer.getTotalSize()}px`,
+            position: 'relative',
+          }}>
+            <List>
+              {virtualizer.getVirtualItems().map((virtualRow) => rowRenderer({
+                index: virtualRow.index,
+                style: {
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: `${virtualRow.size}px`,
+                  transform: `translateY(${virtualRow.start}px)`,
+                },
+              }))}
+            </List>
+          </div>
         </Card>
       </Stack>
     </Box>
