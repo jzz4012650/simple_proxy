@@ -139,5 +139,20 @@
   },
   "search": {
     "message": "输入关键字以搜索"
+  },
+  "import": {
+    "message": "导入"
+  },
+  "export": {
+    "message": "导出"
+  },
+  "import_failed": {
+    "message": "导入失败，请确保文件格式正确。"
+  },
+  "import_tooltip": {
+    "message": "从文件导入"
+  },
+  "export_tooltip": {
+    "message": "导出到文件"
   }
 }

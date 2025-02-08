@@ -139,5 +139,20 @@
   },
   "search": {
     "message": "Enter keywords to search"
+  },
+  "import": {
+    "message": "Import"
+  },
+  "export": {
+    "message": "Export"
+  },
+  "import_failed": {
+    "message": "Failed to import. Please make sure the file format is correct."
+  },
+  "import_tooltip": {
+    "message": "Import from file"
+  },
+  "export_tooltip": {
+    "message": "Export to file"
   }
 }

@@ -1,9 +1,12 @@
 import AddBoxIcon from '@mui/icons-material/AddBox';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import SearchIcon from '@mui/icons-material/Search';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import InputAdornment from '@mui/material/InputAdornment';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -16,6 +19,7 @@ import { CSSProperties, KeyboardEvent, useEffect, useRef, useState } from 'react
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
 import { getWhiteList, setWhiteList } from '../../services/config';
+import { useImportExport } from '../../hooks/useImportExport';
 
 type WhiteListForRender = {
   originIndex: number;
@@ -28,6 +32,14 @@ const WhiteList = () => {
   const [filteredWhiteList, setFilteredWhiteList] = useState<WhiteListForRender>([]);
   const [hostToAdd, setHostToAdd] = useState<string>('');
   const listRef = useRef<HTMLDivElement | null>(null);
+
+  const { fileInputRef, handleExport, handleImport } = useImportExport({
+    currentList: whiteList,
+    onImport: (newList) => {
+      _setWhiteList(newList);
+      setWhiteList(newList);
+    }
+  });
 
   const handleNewItem = (host: string) => {
     if (!host) {
@@ -102,7 +114,7 @@ const WhiteList = () => {
         <Typography variant="body1" gutterBottom>
           {chrome.i18n.getMessage('white_list_desc')}
         </Typography>
-        <Stack direction="row" spacing={2}>
+        <Stack direction="row" spacing={2} alignItems="flex-start">
           <TextField
             variant="standard"
             value={hostToAdd}
@@ -132,6 +144,31 @@ const WhiteList = () => {
                 </InputAdornment>
               ),
             }}
+          />
+          <Tooltip title={chrome.i18n.getMessage('import_tooltip')} arrow>
+            <IconButton
+              color="primary"
+              onClick={() => fileInputRef.current?.click()}
+              sx={{ mt: 1 }}
+            >
+              <FileUploadIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={chrome.i18n.getMessage('export_tooltip')} arrow>
+            <IconButton
+              color="primary"
+              onClick={handleExport}
+              sx={{ mt: 1 }}
+            >
+              <FileDownloadIcon />
+            </IconButton>
+          </Tooltip>
+          <input
+            type="file"
+            ref={fileInputRef}
+            style={{ display: 'none' }}
+            accept=".json"
+            onChange={handleImport}
           />
         </Stack>
         <Card>
