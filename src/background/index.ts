@@ -5,9 +5,21 @@ import { getCurrentTabId } from '../services/tabs';
 import { getHost } from '../utils/host';
 
 const tabCollection = new TabCollection();
+let isPopupConnected = false;
+
+chrome.runtime.onConnect.addListener((port) => {
+  if (port.name === 'popup') {
+    isPopupConnected = true;
+    port.onDisconnect.addListener(() => {
+      isPopupConnected = false;
+    });
+  }
+});
 
 const notifyPopup = debounce(() => {
-  chrome.runtime.sendMessage(MESSAGE_HOSTS_UPDATE);
+  if (isPopupConnected) {
+    chrome.runtime.sendMessage(MESSAGE_HOSTS_UPDATE);
+  }
 }, 300, { leading: false, trailing: true });
 
 const getCurrentTabHosts = async () => {
@@ -43,7 +55,7 @@ chrome.webRequest.onBeforeRequest.addListener((details: { url: string; tabId: nu
   ]
 });
 
-chrome.runtime.onMessage.addListener((message: string, _sender: unknown, sendResponse: (res: unknown) => void) => {
+chrome.runtime.onMessage.addListener((message: string, _sender: chrome.runtime.MessageSender, sendResponse: (res: unknown) => void) => {
   if (message === MESSAGE_GET_CURRENT_TAB_HOSTS) {
     getCurrentTabHosts().then(hosts => sendResponse(hosts));
   } else {

@@ -6,7 +6,13 @@ const getCurrentTabId = async (): Promise<number | undefined> => {
 };
 
 async function getHostsOfCurrentTab(): Promise<string[]> {
-  return chrome.runtime.sendMessage(MESSAGE_GET_CURRENT_TAB_HOSTS);
+  try {
+    const response = await chrome.runtime.sendMessage(MESSAGE_GET_CURRENT_TAB_HOSTS);
+    return response || [];
+  } catch (error) {
+    console.error('Error getting current tab hosts:', error);
+    return [];
+  }
 }
 
 export {

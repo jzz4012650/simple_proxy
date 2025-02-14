@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom/client';
 import { theme } from '../../constants/theme';
 import Popup from './Popup';
 
+chrome.runtime.connect({ name: 'popup' });
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
