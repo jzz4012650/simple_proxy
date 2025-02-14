@@ -25,7 +25,6 @@
   "options_page": "options.html",
   "permissions": [
     "proxy",
-    "tabs",
     "storage",
     "webRequest",
     "webNavigation"

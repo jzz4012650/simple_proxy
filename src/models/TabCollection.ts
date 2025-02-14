@@ -6,9 +6,9 @@ class TabCollection {
 
   constructor() {
     this.tabs = new Map();
-    chrome.tabs.query({}, (tabs: Tab[]) => {
+    chrome.tabs.query({}, (tabs: chrome.tabs.Tab[]) => {
       tabs.forEach(tab => {
-        this.tabs.set(tab.id, new Tab(tab.id));
+        this.tabs.set(tab.id!, new Tab(tab.id!));
       });
     });
     this.currentTab = null;
