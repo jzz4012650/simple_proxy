@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "__MSG_name__",
   "description": "__MSG_description__",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "action": {
     "default_icon": {
       "16": "icon16.png",
