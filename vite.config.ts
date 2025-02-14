@@ -9,6 +9,7 @@ import type { Plugin } from 'vite'
 function watchPublicDir(): Plugin {
   let publicDir: string
   let distDir: string
+  let watcher: fs.FSWatcher | null = null
 
   // Function to copy a file
   const copyFile = (src: string, dest: string) => {
@@ -50,18 +51,27 @@ function watchPublicDir(): Plugin {
         copyDir(publicDir, distDir)
       }
 
-      // Watch for changes in build --watch mode
-      fs.watch(publicDir, { recursive: true }, (eventType, filename) => {
-        if (filename) {
-          const srcPath = path.join(publicDir, filename)
-          const destPath = path.join(distDir, filename)
+      // Only watch when --watch flag is present
+      if (process.argv.includes('--watch')) {
+        watcher = fs.watch(publicDir, { recursive: true }, (eventType, filename) => {
+          if (filename) {
+            const srcPath = path.join(publicDir, filename)
+            const destPath = path.join(distDir, filename)
 
-          if (fs.existsSync(srcPath)) {
-            copyFile(srcPath, destPath)
+            if (fs.existsSync(srcPath)) {
+              copyFile(srcPath, destPath)
+            }
           }
-        }
-      })
+        })
+      }
     },
+    closeBundle() {
+      // Clean up watcher when build is complete
+      if (watcher) {
+        watcher.close()
+        watcher = null
+      }
+    }
   }
 }
 
