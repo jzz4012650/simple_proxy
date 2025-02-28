@@ -154,5 +154,17 @@
   },
   "export_tooltip": {
     "message": "Export to file"
+  },
+  "add_all_to_black": {
+    "message": "Add All To Black List"
+  },
+  "add_all_to_white": {
+    "message": "Add All To White List"
+  },
+  "remove_all_from_black": {
+    "message": "Remove All From Black List"
+  },
+  "remove_all_from_white": {
+    "message": "Remove All From White List"
   }
 }

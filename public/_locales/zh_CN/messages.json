@@ -154,5 +154,17 @@
   },
   "export_tooltip": {
     "message": "导出到文件"
+  },
+  "add_all_to_black": {
+    "message": "全部添加到黑名单"
+  },
+  "add_all_to_white": {
+    "message": "全部添加到白名单"
+  },
+  "remove_all_from_black": {
+    "message": "全部从黑名单中移除"
+  },
+  "remove_all_from_white": {
+    "message": "全部从白名单中移除"
   }
 }
