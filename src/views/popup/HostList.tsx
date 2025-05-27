@@ -7,12 +7,16 @@ import ListItemText from "@mui/material/ListItemText";
 import ListSubheader from "@mui/material/ListSubheader";
 import Tooltip from "@mui/material/Tooltip";
 import Box from "@mui/material/Box";
-import { createElement, useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { MESSAGE_HOSTS_UPDATE } from "../../constants/message";
-import { PROXY_MODES, ProxyModes } from "../../constants/proxyModes";
+import { ProxyModes } from "../../constants/proxyModes";
 import { getHostsOfCurrentTab } from "../../services/tabs";
 import { STORAGE_BLACK_LIST, STORAGE_WHITE_LIST } from "../../constants/storage";
 import { updateProxyConfig } from "../../services/proxyConfig";
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 export function HostList() {
   const [hosts, setHosts] = useState<string[]>([]);
@@ -117,7 +121,7 @@ export function HostList() {
                 color={allInBlackList ? 'secondary' : 'default'}
                 onClick={() => toggleAllInList(ProxyModes.BlackList)}
               >
-                {createElement(PROXY_MODES[0].icon)}
+                {allInBlackList ? <CheckCircleIcon /> : <AddCircleIcon />}
               </IconButton>
             </Tooltip>
             <Tooltip title={allInWhiteList
@@ -128,7 +132,7 @@ export function HostList() {
                 color={allInWhiteList ? 'secondary' : 'default'}
                 onClick={() => toggleAllInList(ProxyModes.WhiteList)}
               >
-                {createElement(PROXY_MODES[1].icon)}
+                {allInWhiteList ? <CheckCircleOutlineIcon /> : <AddCircleOutlineIcon />}
               </IconButton>
             </Tooltip>
           </Box>
@@ -150,7 +154,7 @@ export function HostList() {
                 color={inBlackList ? 'secondary' : 'default'}
                 onClick={() => toggle(ProxyModes.BlackList, host)}
               >
-                {createElement(PROXY_MODES[0].icon)}
+                {inBlackList ? <CheckCircleIcon /> : <AddCircleIcon />}
               </IconButton>
             </Tooltip>
             <Tooltip title={inWhiteList ? chrome.i18n.getMessage('remove_from_white') : chrome.i18n.getMessage('add_to_white')}>
@@ -159,7 +163,7 @@ export function HostList() {
                 color={inWhiteList ? 'secondary' : 'default'}
                 onClick={() => toggle(ProxyModes.WhiteList, host)}
               >
-                {createElement(PROXY_MODES[1].icon)}
+                {inWhiteList ? <CheckCircleOutlineIcon /> : <AddCircleOutlineIcon />}
               </IconButton>
             </Tooltip>
           </ListItem>

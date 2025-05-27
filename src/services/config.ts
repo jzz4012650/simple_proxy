@@ -1,7 +1,8 @@
 import debounce from 'lodash/debounce';
 import { ProxyModes } from '../constants/proxyModes';
-import { STORAGE_BLACK_LIST, STORAGE_PROXY_MODE, STORAGE_PROXY_SERVERS, STORAGE_WHITE_LIST } from '../constants/storage';
+import { STORAGE_BLACK_LIST, STORAGE_PROXY_MODE, STORAGE_PROXY_SERVERS, STORAGE_WHITE_LIST, STORAGE_GFWLIST_ENABLED } from '../constants/storage';
 import { updateProxyConfig } from './proxyConfig';
+import { getGfwlist } from '../utils/gfwlist';
 
 export type BlackList = string[];
 export type WhiteList = string[];
@@ -97,4 +98,31 @@ export const updateBlackAndWhiteList = async (blackList: BlackList, whiteList: W
     [STORAGE_WHITE_LIST]: whiteList,
   });
   debounceUpdateProxyConfig();
+};
+
+export const getGfwlistEnabled = async (): Promise<boolean> => {
+  const res = await chrome.storage.local.get([STORAGE_GFWLIST_ENABLED]);
+  return res[STORAGE_GFWLIST_ENABLED] || false;
+};
+
+export const setGfwlistEnabled = async (enabled: boolean) => {
+  await chrome.storage.local.set({ [STORAGE_GFWLIST_ENABLED]: enabled });
+  await updateProxyConfig();
+};
+
+/**
+ * 刷新 GFWlist 缓存并更新代理配置
+ * @returns 是否刷新成功
+ */
+export const refreshGfwlist = async (): Promise<boolean> => {
+  try {
+    // 强制从网络获取最新的 GFWlist
+    await getGfwlist(true);
+    // 更新代理配置
+    await updateProxyConfig();
+    return true;
+  } catch (error) {
+    console.error('Failed to refresh GFWlist:', error);
+    return false;
+  }
 };

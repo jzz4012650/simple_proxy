@@ -166,5 +166,35 @@
   },
   "remove_all_from_white": {
     "message": "全部从白名单中移除"
+  },
+  "enable_gfwlist": {
+    "message": "启用 GFWList"
+  },
+  "enable_gfwlist_tooltip": {
+    "message": "启用后将自动拉取 GFWList 并与黑名单合并"
+  },
+  "gfwlist_fetch_success": {
+    "message": "GFWList 获取成功"
+  },
+  "gfwlist_fetch_failed": {
+    "message": "GFWList 获取失败"
+  },
+  "gfwlist_disabled": {
+    "message": "GFWList 已禁用"
+  },
+  "refresh_gfwlist": {
+    "message": "刷新 GFWList"
+  },
+  "refresh_gfwlist_tooltip": {
+    "message": "从网络获取最新的 GFWList 并更新代理设置"
+  },
+  "gfwlist_refresh_success": {
+    "message": "GFWList 刷新成功"
+  },
+  "gfwlist_refresh_failed": {
+    "message": "GFWList 刷新失败"
+  },
+  "enable_gfwlist_first": {
+    "message": "请先启用 GFWList"
   }
 }

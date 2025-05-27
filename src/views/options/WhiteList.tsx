@@ -20,6 +20,8 @@ import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
 import { getWhiteList, setWhiteList } from '../../services/config';
 import { useImportExport } from '../../hooks/useImportExport';
+import ButtonGroup from '@mui/material/ButtonGroup/ButtonGroup';
+import { Button } from '@mui/material';
 
 type WhiteListForRender = {
   originIndex: number;
@@ -107,9 +109,31 @@ const WhiteList = () => {
 
   return (
     <Box sx={{ paddingTop: 3, paddingBottom: 3 }}>
-      <Typography variant="h4" component="h4" gutterBottom>
-        {chrome.i18n.getMessage('white_list')}
-      </Typography>
+      <Stack direction='row' alignItems='flex-start'>
+        <Typography variant="h4" component="h4" gutterBottom sx={{ flexGrow: 1 }}>
+          {chrome.i18n.getMessage('white_list')}
+        </Typography>
+        <ButtonGroup variant="outlined">
+          <Tooltip title={chrome.i18n.getMessage('import_tooltip')} arrow>
+            <Button
+              startIcon={<FileDownloadIcon />}
+              color="primary"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              {chrome.i18n.getMessage('import')}
+            </Button>
+          </Tooltip>
+          <Tooltip title={chrome.i18n.getMessage('export_tooltip')} arrow>
+            <Button
+              startIcon={<FileUploadIcon />}
+              color="primary"
+              onClick={handleExport}
+            >
+              {chrome.i18n.getMessage('export')}
+            </Button>
+          </Tooltip>
+        </ButtonGroup>
+      </Stack>
       <Stack direction='column' spacing={1}>
         <Typography variant="body1" gutterBottom>
           {chrome.i18n.getMessage('white_list_desc')}
@@ -145,24 +169,6 @@ const WhiteList = () => {
               ),
             }}
           />
-          <Tooltip title={chrome.i18n.getMessage('import_tooltip')} arrow>
-            <IconButton
-              color="primary"
-              onClick={() => fileInputRef.current?.click()}
-              sx={{ mt: 1 }}
-            >
-              <FileUploadIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={chrome.i18n.getMessage('export_tooltip')} arrow>
-            <IconButton
-              color="primary"
-              onClick={handleExport}
-              sx={{ mt: 1 }}
-            >
-              <FileDownloadIcon />
-            </IconButton>
-          </Tooltip>
           <input
             type="file"
             ref={fileInputRef}

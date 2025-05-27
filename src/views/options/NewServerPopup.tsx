@@ -40,8 +40,15 @@ export default function NewServerPopup({ open, onClose, onConfirm }: {
             label={chrome.i18n.getMessage('proxy_method')}
             onChange={(e) => setMethod(e.target.value as ProxyMethods)}
           >
-            {Object.entries(ProxyMethods).map(([key, method]) => (
-              <MenuItem key={key} value={method}>{method}</MenuItem>
+            {[
+              ProxyMethods.PROXY,
+              ProxyMethods.SOCKS5,
+              ProxyMethods.SOCKS4,
+              ProxyMethods.SOCKS,
+              ProxyMethods.HTTPS,
+              ProxyMethods.HTTP,
+            ].map((method) => (
+              <MenuItem key={method} value={method}>{method}</MenuItem>
             ))}
           </TextField>
           <TextField

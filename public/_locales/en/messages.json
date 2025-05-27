@@ -36,7 +36,7 @@
     "message": "Proxy Server List"
   },
   "proxy_server_desc": {
-    "message": "Configure your proxy server. One proxy server a line. Will auto try next server if the previous one fails."
+    "message": "Configure your proxy servers, one per line. If a server fails, the next one will be tried automatically."
   },
   "add_to_black": {
     "message": "Add To Black List"
@@ -54,13 +54,13 @@
     "message": "White List"
   },
   "white_list_desc": {
-    "message": "When the whitelist mode is turned on, all the hostnames outside the whitelist will use proxy. Wildcards supported. e.g. *.google.com (only host name will be used to compare, does not work for path after '/')"
+    "message": "In whitelist mode, only domains in the whitelist bypass the proxy. All other domains use the proxy. Supports wildcards like *.google.com"
   },
   "black_list": {
     "message": "Black List"
   },
   "black_list_desc": {
-    "message": "When the blacklist mode is turned on, only the hostname in the blacklist will use proxy. Wildcards supported. e.g. *.google.com (only host name will be used to compare, does not work for path after '/')"
+    "message": "In blacklist mode, only listed domains use proxy. Supports wildcards like *.google.com. Note: Only domain names are matched, not URLs."
   },
   "option_saved": {
     "message": "Configuration saved successfully!"
@@ -166,5 +166,35 @@
   },
   "remove_all_from_white": {
     "message": "Remove All From White List"
+  },
+  "enable_gfwlist": {
+    "message": "Enable GFWList"
+  },
+  "enable_gfwlist_tooltip": {
+    "message": "When enabled, automatically fetch GFWList and merge with blacklist"
+  },
+  "gfwlist_fetch_success": {
+    "message": "GFWList fetched successfully"
+  },
+  "gfwlist_fetch_failed": {
+    "message": "Failed to fetch GFWList"
+  },
+  "gfwlist_disabled": {
+    "message": "GFWList disabled"
+  },
+  "refresh_gfwlist": {
+    "message": "Refresh GFWList"
+  },
+  "refresh_gfwlist_tooltip": {
+    "message": "Fetch the latest GFWList from network and update proxy settings"
+  },
+  "gfwlist_refresh_success": {
+    "message": "GFWList refreshed successfully"
+  },
+  "gfwlist_refresh_failed": {
+    "message": "Failed to refresh GFWList"
+  },
+  "enable_gfwlist_first": {
+    "message": "Please enable GFWList first"
   }
 }

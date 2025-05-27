@@ -58,5 +58,6 @@ export const updateProxyConfig = async () => {
   const obj = await chrome.storage.local.get(STORAGE_PROXY_MODE);
   const proxyMode = obj[STORAGE_PROXY_MODE] || ProxyModes.System;
   const settingObj = await generateProxySettingObj(proxyMode);
+  console.log(settingObj);
   await setProxy(settingObj);
 };
