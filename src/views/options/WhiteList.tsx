@@ -1,4 +1,4 @@
-import AddBoxIcon from '@mui/icons-material/AddBox';
+
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import SearchIcon from '@mui/icons-material/Search';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
@@ -22,6 +22,7 @@ import { getWhiteList, setWhiteList } from '../../services/config';
 import { useImportExport } from '../../hooks/useImportExport';
 import ButtonGroup from '@mui/material/ButtonGroup/ButtonGroup';
 import { Button } from '@mui/material';
+import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 
 type WhiteListForRender = {
   originIndex: number;
@@ -140,7 +141,7 @@ const WhiteList = () => {
         </Typography>
         <Stack direction="row" spacing={2} alignItems="flex-start">
           <TextField
-            variant="standard"
+            variant="outlined"
             value={hostToAdd}
             sx={{ flexGrow: 3 }}
             onKeyUp={handleKeyUp}
@@ -148,22 +149,24 @@ const WhiteList = () => {
             label={chrome.i18n.getMessage('add_to_white_list_placeholder')}
             helperText={chrome.i18n.getMessage('add_to_white_list_helper_text')}
             InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AddBoxIcon />
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => handleNewItem(hostToAdd)}>
+                    <AddCircleOutline />
+                  </IconButton>
                 </InputAdornment>
               ),
             }}
           />
           <TextField
-            variant="standard"
+            variant="outlined"
             value={keyword}
             sx={{ flexGrow: 1 }}
             onChange={(e) => setKeyword(e.target.value)}
             label={chrome.i18n.getMessage('search')}
             InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
+              endAdornment: (
+                <InputAdornment position="end">
                   <SearchIcon />
                 </InputAdornment>
               ),
