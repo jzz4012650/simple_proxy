@@ -35,6 +35,27 @@ function watchPublicDir(): Plugin {
     })
   }
 
+  // Function to update manifest.json version from package.json
+  const updateManifestVersion = () => {
+    try {
+      const packageJsonPath = path.resolve(process.cwd(), 'package.json')
+      const manifestJsonPath = path.resolve(distDir, 'manifest.json')
+
+      if (fs.existsSync(packageJsonPath) && fs.existsSync(manifestJsonPath)) {
+        const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf-8'))
+        const manifestJson = JSON.parse(fs.readFileSync(manifestJsonPath, 'utf-8'))
+
+        if (packageJson.version && packageJson.version !== manifestJson.version) {
+          manifestJson.version = packageJson.version
+          fs.writeFileSync(manifestJsonPath, JSON.stringify(manifestJson, null, 2))
+          console.log(`Updated manifest.json version to ${packageJson.version}`)
+        }
+      }
+    } catch (error) {
+      console.error('Error updating manifest.json version:', error)
+    }
+  }
+
   return {
     name: 'watch-public',
     buildStart() {
@@ -64,6 +85,10 @@ function watchPublicDir(): Plugin {
           }
         })
       }
+    },
+    writeBundle() {
+      // Update manifest.json version after build is complete
+      updateManifestVersion()
     },
     closeBundle() {
       // Clean up watcher when build is complete
