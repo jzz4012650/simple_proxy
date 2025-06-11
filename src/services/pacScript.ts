@@ -1,7 +1,7 @@
 import { ProxyModes } from '../constants/proxyModes';
 import { STORAGE_BLACK_LIST, STORAGE_PROXY_SERVERS, STORAGE_WHITE_LIST } from '../constants/storage';
 import { ProxyServer, getConfig, getGfwlistEnabled } from './config';
-import { getGfwlist, generateGfwlistCheckLogic } from '../utils/gfwlist';
+import { getGfwlist, gfwListToPacFragment } from '../utils/gfwlist';
 
 export const generatePac = async (proxyMode: ProxyModes) => {
   const config = await getConfig();
@@ -39,35 +39,31 @@ function generateCombinedPacContent(hostLists: string[], proxyServers: string, g
     }
   });
 
-  const proxyRules = `{
-    ${exactHosts.map(d => `"${d}": 1`).join(',')}
-  }`;
+  const proxyRules = `{ ${exactHosts.map(d => `"${d}": 1`).join(', ')} }`;
 
   // 直接生成 GFWList 检查逻辑
-  const gfwlistCheckLogic = generateGfwlistCheckLogic(gfwlistContent, proxyServers);
+  const gfwlistCheckLogic = gfwListToPacFragment(gfwlistContent, proxyServers);
 
   return `
-    function FindProxyForURL(url, host) {
-      var rules = ${proxyRules};
-      var wildcardsRules = ${JSON.stringify(hostsWithWildcards)};
-      var proxyServers = "${proxyServers}";
+function FindProxyForURL(url, host) {
+  var rules = ${proxyRules};
+  var wildcardsRules = ${JSON.stringify(hostsWithWildcards)};
+  var proxyServers = "${proxyServers}";
 
-      // First check local blacklist
-      if (host in rules) {
+  // First check local blacklist
+  if (host in rules) {
+    return proxyServers;
+  } else {
+    for (var i = 0; i < wildcardsRules.length; i++) {
+      if (shExpMatch(host, wildcardsRules[i])) {
         return proxyServers;
-      } else {
-        for (var i = 0; i < wildcardsRules.length; i++) {
-          if (shExpMatch(host, wildcardsRules[i])) {
-            return proxyServers;
-          }
-        }
       }
-
-      // Then check GFWList rules
-      ${gfwlistCheckLogic}
-
-      return "DIRECT";
     }
+  }
+
+  // Then check GFWList rules
+  ${gfwlistCheckLogic}
+}
   `;
 }
 

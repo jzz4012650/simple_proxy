@@ -2,197 +2,6 @@ import { DEFAULT_GFWLIST_URL } from "../constants/default";
 import { STORAGE_GFWLIST_CONTENT } from "../constants/storage";
 
 /**
- * 将 GFWlist 转换为 PAC 代理规则
- * @param gfwlistContent GFWlist 文本内容（已解析的 AutoProxy 规则，非 base64 编码）
- * @param proxyString 代理字符串，格式如 "PROXY 127.0.0.1:1087" 或 "SOCKS5 127.0.0.1:1080"
- * @returns PAC 文件内容
- */
-export function convertGfwlistToPac(gfwlistContent: string, proxyString: string): string {
-  // 解析 GFWlist 规则
-  const rules = parseGfwlistRules(gfwlistContent);
-
-  // 生成 PAC 文件内容
-  return generatePacContent(rules, proxyString);
-}
-
-interface ParsedRule {
-  type: 'domain' | 'url' | 'regex' | 'whitelist';
-  pattern: string;
-  original: string;
-}
-
-/**
- * 解析 GFWlist 规则
- */
-function parseGfwlistRules(content: string): ParsedRule[] {
-  const rules: ParsedRule[] = [];
-  const lines = content.split('\n');
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-
-    // 跳过空行和注释
-    if (!trimmed || trimmed.startsWith('!') || trimmed.startsWith('[AutoProxy')) {
-      continue;
-    }
-
-    const rule = trimmed;
-
-    // 处理白名单规则（@@开头）
-    if (rule.startsWith('@@')) {
-      const pattern = rule.substring(2);
-      rules.push({
-        type: 'whitelist',
-        pattern: normalizePattern(pattern),
-        original: rule
-      });
-      continue;
-    }
-
-    // 处理正则表达式规则（/开头和结尾/）
-    if (rule.startsWith('/') && rule.endsWith('/')) {
-      rules.push({
-        type: 'regex',
-        pattern: rule.slice(1, -1),
-        original: rule
-      });
-      continue;
-    }
-
-    // 处理域名规则（||开头）
-    if (rule.startsWith('||')) {
-      const domain = rule.substring(2);
-      // 移除末尾的路径分隔符
-      const cleanDomain = domain.replace(/\^.*$/, '').replace(/\/.*$/, '');
-      rules.push({
-        type: 'domain',
-        pattern: cleanDomain,
-        original: rule
-      });
-      continue;
-    }
-
-    // 处理 URL 匹配规则
-    if (rule.includes('*') || rule.includes('?') || rule.includes('.')) {
-      rules.push({
-        type: 'url',
-        pattern: normalizePattern(rule),
-        original: rule
-      });
-    }
-  }
-
-  return rules;
-}
-
-/**
- * 标准化模式字符串
- */
-function normalizePattern(pattern: string): string {
-  return pattern
-    .replace(/\^/g, '') // 移除分隔符标记
-    .replace(/\|/g, '') // 移除边界标记
-    .replace(/\*/g, '.*') // 将通配符转换为正则表达式
-    .replace(/\?/g, '.'); // 将单字符通配符转换为正则表达式
-}
-
-/**
- * Generate check logic (internal function, does not include function definition)
- */
-function generateCheckLogic(rules: ParsedRule[], proxyString: string): string {
-  const domainRules = rules.filter(r => r.type === 'domain');
-  const urlRules = rules.filter(r => r.type === 'url');
-  const regexRules = rules.filter(r => r.type === 'regex');
-  const whitelistRules = rules.filter(r => r.type === 'whitelist');
-
-  return `
-
-    // Domain matching
-    var domains = [${domainRules.map(r => `"${r.pattern}"`).join(', ')}];
-
-    // Check whitelist rules
-    ${generateWhitelistChecks(whitelistRules)}
-
-    // Check domain rules
-    for (var i = 0; i < domains.length; i++) {
-        if (dnsDomainIs(host, domains[i]) || shExpMatch(host, "*." + domains[i])) {
-            return "${proxyString}";
-        }
-    }
-
-    // Check URL rules
-    ${generateUrlChecks(urlRules, proxyString)}
-
-    // Check regex rules
-    ${generateRegexChecks(regexRules, proxyString)}`;
-}
-
-/**
- * 生成 PAC 文件内容
- */
-function generatePacContent(rules: ParsedRule[], proxyString: string): string {
-  const checkLogic = generateCheckLogic(rules, proxyString);
-
-  return `function FindProxyForURL(url, host) {
-    "use strict";
-
-    ${checkLogic}
-
-    return "DIRECT";
-}`;
-}
-
-/**
- * Generate whitelist check code
- */
-function generateWhitelistChecks(whitelistRules: ParsedRule[]): string {
-  if (whitelistRules.length === 0) return '';
-
-  let code = '// Whitelist rules check\n';
-  for (const rule of whitelistRules) {
-    if (rule.pattern.includes('*')) {
-      code += `    if (shExpMatch(url, "*${rule.pattern}*")) return "DIRECT";\n`;
-    } else if (rule.pattern.includes('.')) {
-      code += `    if (dnsDomainIs(host, "${rule.pattern}")) return "DIRECT";\n`;
-    } else {
-      code += `    if (url.indexOf("${rule.pattern}") !== -1) return "DIRECT";\n`;
-    }
-  }
-  return code;
-}
-
-/**
- * Generate URL check code
- */
-function generateUrlChecks(urlRules: ParsedRule[], proxyString: string): string {
-  if (urlRules.length === 0) return '';
-
-  let code = '// URL rules check\n';
-  for (const rule of urlRules) {
-    if (rule.pattern.includes('.*')) {
-      code += `    if (shExpMatch(url, "*${rule.pattern.replace(/\.\*/g, '*')}*")) return "${proxyString}";\n`;
-    } else {
-      code += `    if (url.indexOf("${rule.pattern}") !== -1) return "${proxyString}";\n`;
-    }
-  }
-  return code;
-}
-
-/**
- * Generate regex check code
- */
-function generateRegexChecks(regexRules: ParsedRule[], proxyString: string): string {
-  if (regexRules.length === 0) return '';
-
-  let code = '// Regex rules check\n';
-  for (const rule of regexRules) {
-    // Note: PAC files have limited regex support, simplified handling here
-    code += `    try { if (new RegExp("${rule.pattern.replace(/"/g, '\\"')}").test(url)) return "${proxyString}"; } catch(e) {}\n`;
-  }
-  return code;
-}
-
-/**
  * 从 base64 编码的 GFWlist 获取内容
  */
 export function decodeGfwlist(base64Content: string): string {
@@ -201,22 +10,6 @@ export function decodeGfwlist(base64Content: string): string {
   } catch (error) {
     throw new Error('Invalid base64 GFWlist content');
   }
-}
-
-/**
- * 验证代理字符串格式
- */
-export function validateProxyString(proxyString: string): boolean {
-  const validFormats = [
-    /^PROXY\s+[\w.-]+:\d+$/,           // PROXY host:port
-    /^SOCKS\s+[\w.-]+:\d+$/,          // SOCKS host:port
-    /^SOCKS4\s+[\w.-]+:\d+$/,         // SOCKS4 host:port
-    /^SOCKS5\s+[\w.-]+:\d+$/,         // SOCKS5 host:port
-    /^HTTP\s+[\w.-]+:\d+$/,           // HTTP host:port
-    /^HTTPS\s+[\w.-]+:\d+$/,          // HTTPS host:port
-  ];
-
-  return validFormats.some(format => format.test(proxyString.trim()));
 }
 
 /**
@@ -310,39 +103,59 @@ export async function clearGfwlistCache(): Promise<void> {
   }
 }
 
-/**
- * 使用示例和测试
- */
-export function createSamplePac(): string {
-  const sampleGfwlist = `! This is a sample GFWlist
-[AutoProxy 0.2.9]
-||google.com
-||youtube.com
-||facebook.com
-||twitter.com
-||instagram.com
-/google\\.com/
-*.blogspot.com
-@@||google.com/webhp
-!Comment line`;
+export function gfwListToPacFragment(gfwListText: string, proxy = "PROXY 127.0.0.1:1080") {
+  const domains = getDomainsFromGfwList(gfwListText);
 
-  const proxyString = "PROXY 127.0.0.1:1087";
+  const conditions = Array.from(domains).map(domain => {
+    return `shExpMatch(host, "*.${domain}") || host === "${domain}"`;
+  }).join(' ||\n        ') || 'false';
 
-  return convertGfwlistToPac(sampleGfwlist, proxyString);
+  return `
+  if (
+    ${conditions}
+  ) {
+    return "${proxy}";
+  }
+  return "DIRECT";
+`;
 }
 
 /**
- * Generate GFWList check logic (does not include function definition, for embedding into other PAC)
+ * Get domains from GFWList
+ * @param gfwListText GFWList text
+ * @returns Set of domains
  */
-export function generateGfwlistCheckLogic(gfwlistContent: string, proxyString: string): string {
-  // Parse GFWlist rules
-  const rules = parseGfwlistRules(gfwlistContent);
+export function getDomainsFromGfwList(gfwListText: string): Set<string> {
+  const lines = gfwListText
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line && !line.startsWith('!') && !line.startsWith('[') && !line.startsWith('@@') && !line.startsWith('/') && line !== '');
 
-  const checkLogic = generateCheckLogic(rules, proxyString);
+  const domains = new Set<string>();
 
-  return `
-    // GFWList check logic start
-${checkLogic}
-    // GFWList check logic end
-  `.trim();
+  for (const line of lines) {
+    if (line.startsWith('||')) {
+      // ||google.com
+      const domain = line.slice(2).split('/')[0];
+      domains.add(domain);
+    } else if (line.startsWith('|')) {
+      // |http://google.com
+      const domain = line.slice(1).split('/')[0];
+      domains.add(domain);
+    } else if (line.startsWith('.')) {
+      // .google.com
+      domains.add(line.slice(1));
+    } else {
+      // fallback: try parse as domain or URL
+      try {
+        const domain = line.split('//')[1].split('/')[0];
+        domains.add(domain);
+      } catch {
+        // fallback: treat line as domain
+        domains.add(line.split('/')[0]);
+      }
+    }
+  }
+
+  return domains;
 }
