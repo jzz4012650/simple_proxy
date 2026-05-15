@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.5.0] - 2025-05-15
+
+### Features
+
+- 重命名代理模式，提升可理解性
+  - 黑名单模式 → 按需代理 (On-Demand)
+  - 白名单模式 → 全局代理 (Global)
+- 重命名域名列表
+  - 黑名单 → 代理域名列表 (Proxy Domains)
+  - 白名单 → 直连域名列表 (Bypass Domains)
+- 更新代理模式图标
+  - 按需代理：FilterAltOutlined
+  - 全局代理：Language
+
+### Technical Improvements
+
+- 添加历史数据迁移逻辑，兼容旧版黑名单/白名单配置
+- 更新所有 i18n 文案（英文 + 中文）
+- 重命名组件文件：BlackList → ProxyDomains, WhiteList → BypassDomains
+
 ## [3.4.0] - 2025-05-27
 
 ### Features
