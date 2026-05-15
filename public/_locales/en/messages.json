@@ -27,10 +27,10 @@
     "message": "Method"
   },
   "hosts_use_proxy": {
-    "message": "Blacklisted hosts"
+    "message": "Proxy Domains"
   },
   "hosts_bypass_proxy": {
-    "message": "Whitelisted hosts"
+    "message": "Bypass Domains"
   },
   "proxy_server_list": {
     "message": "Proxy Server List"
@@ -38,29 +38,29 @@
   "proxy_server_desc": {
     "message": "Configure your proxy servers, one per line. If a server fails, the next one will be tried automatically."
   },
-  "add_to_black": {
-    "message": "Add To Black List"
+  "add_to_proxy_domains": {
+    "message": "Add To Proxy Domains"
   },
-  "add_to_white": {
-    "message": "Add To White List"
+  "add_to_bypass_domains": {
+    "message": "Add To Bypass Domains"
   },
-  "remove_from_black": {
-    "message": "Remove From Black List"
+  "remove_from_proxy_domains": {
+    "message": "Remove From Proxy Domains"
   },
-  "remove_from_white": {
-    "message": "Remove From White List"
+  "remove_from_bypass_domains": {
+    "message": "Remove From Bypass Domains"
   },
-  "white_list": {
-    "message": "White List"
+  "bypass_domains": {
+    "message": "Bypass Domains"
   },
-  "white_list_desc": {
-    "message": "In whitelist mode, only domains in the whitelist bypass the proxy. All other domains use the proxy. Supports wildcards like *.google.com"
+  "bypass_domains_desc": {
+    "message": "In global proxy mode, only domains in the bypass list connect directly. All other domains use the proxy. Supports wildcards like *.google.com"
   },
-  "black_list": {
-    "message": "Black List"
+  "proxy_domains": {
+    "message": "Proxy Domains"
   },
-  "black_list_desc": {
-    "message": "In blacklist mode, only listed domains use proxy. Supports wildcards like *.google.com. Note: Only domain names are matched, not URLs."
+  "proxy_domains_desc": {
+    "message": "In on-demand proxy mode, only listed domains use proxy. Supports wildcards like *.google.com. Note: Only domain names are matched, not URLs."
   },
   "option_saved": {
     "message": "Configuration saved successfully!"
@@ -77,11 +77,11 @@
   "mode_direct": {
     "message": "DIRECT"
   },
-  "mode_white_list": {
-    "message": "WHITE_LIST"
+  "mode_global": {
+    "message": "GLOBAL"
   },
-  "mode_black_list": {
-    "message": "BLACK_LIST"
+  "mode_on_demand": {
+    "message": "ON-DEMAND"
   },
   "mode_system_desc": {
     "message": "Use the proxy settings of system"
@@ -89,11 +89,11 @@
   "mode_direct_desc": {
     "message": "Disable proxy"
   },
-  "mode_white_list_desc": {
-    "message": "All hostnames outside white list will use proxy"
+  "mode_global_desc": {
+    "message": "All domains outside bypass list will use proxy"
   },
-  "mode_black_list_desc": {
-    "message": "Only hostname inside black list will use proxy"
+  "mode_on_demand_desc": {
+    "message": "Only domains in proxy domains list will use proxy"
   },
   "domain_list": {
     "message": "The hostname requested by the current page: "
@@ -101,17 +101,17 @@
   "domain_neither": {
     "message": "Neither"
   },
-  "domain_black": {
-    "message": "Black"
+  "domain_proxy": {
+    "message": "Proxy"
   },
-  "domain_white": {
-    "message": "White"
+  "domain_bypass": {
+    "message": "Bypass"
   },
   "migration": {
     "message": "Migrate from old version"
   },
   "migration_explain": {
-    "message": "Since the rule format of black(white) list has been changed in new version, click this button will change the format of rules in black(white) list"
+    "message": "Since the rule format of proxy/bypass domains list has been changed in new version, click this button will change the format of rules in proxy/bypass domains list"
   },
   "migration_ok": {
     "message": "Migration success!"
@@ -125,16 +125,16 @@
   "to_top": {
     "message": "Move to top"
   },
-  "add_to_black_list_placeholder": {
+  "add_to_proxy_domains_placeholder": {
     "message": "Add hostname"
   },
-  "add_to_black_list_helper_text": {
+  "add_to_proxy_domains_helper_text": {
     "message": "Enter the hostname to be added, press Enter to confirm"
   },
-  "add_to_white_list_placeholder": {
+  "add_to_bypass_domains_placeholder": {
     "message": "Add hostname"
   },
-  "add_to_white_list_helper_text": {
+  "add_to_bypass_domains_helper_text": {
     "message": "Enter the hostname to be added, press Enter to confirm"
   },
   "search": {
@@ -155,23 +155,23 @@
   "export_tooltip": {
     "message": "Export to file"
   },
-  "add_all_to_black": {
-    "message": "Add All To Black List"
+  "add_all_to_proxy_domains": {
+    "message": "Add All To Proxy Domains"
   },
-  "add_all_to_white": {
-    "message": "Add All To White List"
+  "add_all_to_bypass_domains": {
+    "message": "Add All To Bypass Domains"
   },
-  "remove_all_from_black": {
-    "message": "Remove All From Black List"
+  "remove_all_from_proxy_domains": {
+    "message": "Remove All From Proxy Domains"
   },
-  "remove_all_from_white": {
-    "message": "Remove All From White List"
+  "remove_all_from_bypass_domains": {
+    "message": "Remove All From Bypass Domains"
   },
   "enable_gfwlist": {
     "message": "Enable GFWList"
   },
   "enable_gfwlist_tooltip": {
-    "message": "When enabled, automatically fetch GFWList and merge with blacklist"
+    "message": "When enabled, automatically fetch GFWList and merge with proxy domains"
   },
   "gfwlist_fetch_success": {
     "message": "GFWList fetched successfully"

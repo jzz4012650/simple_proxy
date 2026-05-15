@@ -1,14 +1,14 @@
 import ArrowForward from '@mui/icons-material/ArrowForward';
 import DesktopWindowsOutlinedIcon from '@mui/icons-material/DesktopWindowsOutlined';
-import RadioButtonChecked from "@mui/icons-material/RadioButtonChecked";
-import RadioButtonUnchecked from '@mui/icons-material/RadioButtonUnchecked';
+import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
+import Language from '@mui/icons-material/Language';
 import { FunctionComponent } from "react";
 
 export enum ProxyModes {
   'Direct' = 'DIRECT',
   'System' = 'SYSTEM',
-  'BlackList' = 'BLACK_LIST',
-  'WhiteList' = 'WHITE_LIST',
+  'OnDemand' = 'ON_DEMAND',
+  'Global' = 'GLOBAL',
 }
 
 export type ProxyModeOption = {
@@ -19,15 +19,15 @@ export type ProxyModeOption = {
 }
 
 export const PROXY_MODES: ProxyModeOption[] = [{
-  name: ProxyModes.BlackList,
-  title: chrome.i18n.getMessage('mode_black_list'),
-  desc: chrome.i18n.getMessage('mode_black_list_desc'),
-  icon: RadioButtonChecked,
+  name: ProxyModes.OnDemand,
+  title: chrome.i18n.getMessage('mode_on_demand'),
+  desc: chrome.i18n.getMessage('mode_on_demand_desc'),
+  icon: FilterAltOutlined,
 }, {
-  name: ProxyModes.WhiteList,
-  title: chrome.i18n.getMessage('mode_white_list'),
-  desc: chrome.i18n.getMessage('mode_white_list_desc'),
-  icon: RadioButtonUnchecked,
+  name: ProxyModes.Global,
+  title: chrome.i18n.getMessage('mode_global'),
+  desc: chrome.i18n.getMessage('mode_global_desc'),
+  icon: Language,
 }, {
   name: ProxyModes.System,
   title: chrome.i18n.getMessage('mode_system'),

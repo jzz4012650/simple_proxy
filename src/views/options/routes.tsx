@@ -1,8 +1,8 @@
 import { RouteObject } from "react-router-dom";
 import ProxyServers from "./ProxyServers";
 import Options from './Options';
-import BlackList from "./BlackList";
-import WhiteList from "./WhiteList";
+import ProxyDomainsList from "./ProxyDomains";
+import BypassDomainsList from "./BypassDomains";
 
 export const routes: RouteObject[] = [
   {
@@ -14,12 +14,12 @@ export const routes: RouteObject[] = [
         Component: ProxyServers,
       },
       {
-        path: '/black-list',
-        Component: BlackList,
+        path: '/proxy-domains',
+        Component: ProxyDomainsList,
       },
       {
-        path: '/white-list',
-        Component: WhiteList,
+        path: '/bypass-domains',
+        Component: BypassDomainsList,
       }
     ]
   },

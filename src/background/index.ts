@@ -3,6 +3,10 @@ import { MESSAGE_GET_CURRENT_TAB_HOSTS, MESSAGE_HOSTS_UPDATE } from '../constant
 import TabCollection from '../models/TabCollection';
 import { getCurrentTabId } from '../services/tabs';
 import { getHost } from '../utils/host';
+import { migrateLegacyData } from '../services/migration';
+
+// Migrate legacy BLACK_LIST/WHITE_LIST data on first run
+migrateLegacyData();
 
 const tabCollection = new TabCollection();
 let isPopupConnected = false;

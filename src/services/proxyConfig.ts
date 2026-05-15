@@ -34,14 +34,14 @@ const generateProxySettingObj = async (mode: ProxyModes) => {
     case ProxyModes.Direct:
       settingObj.value.mode = 'direct';
       break;
-    case ProxyModes.WhiteList: {
-      const pac = await generatePac(ProxyModes.WhiteList);
+    case ProxyModes.Global: {
+      const pac = await generatePac(ProxyModes.Global);
       settingObj.value.mode = 'pac_script';
       settingObj.value.pacScript = { data: pac };
       break;
     }
-    case ProxyModes.BlackList: {
-      const pac = await generatePac(ProxyModes.BlackList);
+    case ProxyModes.OnDemand: {
+      const pac = await generatePac(ProxyModes.OnDemand);
       settingObj.value.mode = 'pac_script';
       settingObj.value.pacScript = { data: pac };
       break;

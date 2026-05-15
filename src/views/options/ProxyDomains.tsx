@@ -23,21 +23,21 @@ import Alert from '@mui/material/Alert';
 import { CSSProperties, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
-import { getBlackList, setBlackList, getGfwlistEnabled, setGfwlistEnabled, refreshGfwlist } from '../../services/config';
+import { getProxyDomains, setProxyDomains, getGfwlistEnabled, setGfwlistEnabled, refreshGfwlist } from '../../services/config';
 import { useImportExport } from '../../hooks/useImportExport';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import { Button } from '@mui/material';
 import AddCircle from '@mui/icons-material/AddCircle';
 
-type BlackListForRender = {
+type ProxyDomainsForRender = {
   originIndex: number;
   host: string;
 }[];
 
-const BlackList = () => {
-  const [blackList, _setBlackList] = useState<string[]>([]);
+const ProxyDomainsList = () => {
+  const [proxyDomains, _setProxyDomains] = useState<string[]>([]);
   const [keyword, setKeyword] = useState<string>('');
-  const [filteredBlackList, setFilteredBlackList] = useState<BlackListForRender>([]);
+  const [filteredProxyDomains, setFilteredProxyDomains] = useState<ProxyDomainsForRender>([]);
   const [hostToAdd, setHostToAdd] = useState<string>('');
   const [gfwlistEnabled, setGfwlistEnabledState] = useState<boolean>(false);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
@@ -47,10 +47,10 @@ const BlackList = () => {
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const { fileInputRef, handleExport, handleImport } = useImportExport({
-    currentList: blackList,
+    currentList: proxyDomains,
     onImport: (newList) => {
-      _setBlackList(newList);
-      setBlackList(newList);
+      _setProxyDomains(newList);
+      setProxyDomains(newList);
     }
   });
 
@@ -111,16 +111,16 @@ const BlackList = () => {
     if (!host) {
       return;
     }
-    const newList = [host, ...blackList];
-    _setBlackList(newList);
+    const newList = [host, ...proxyDomains];
+    _setProxyDomains(newList);
     setHostToAdd('');
-    setBlackList(newList);
+    setProxyDomains(newList);
   };
 
   const handleRemoveItem = (index: number) => {
-    const newList = blackList.filter((_, i) => i !== index);
-    _setBlackList(newList);
-    setBlackList(newList);
+    const newList = proxyDomains.filter((_, i) => i !== index);
+    _setProxyDomains(newList);
+    setProxyDomains(newList);
   };
 
   const handleKeyUp = (e: KeyboardEvent) => {
@@ -130,7 +130,7 @@ const BlackList = () => {
   };
 
   const virtualizer = useWindowVirtualizer({
-    count: filteredBlackList.length,
+    count: filteredProxyDomains.length,
     estimateSize: () => 50,
     overscan: 5,
     scrollMargin: 0
@@ -142,9 +142,9 @@ const BlackList = () => {
   }) => (
     <div key={index} style={style} >
       <ListItem divider>
-        <ListItemText primary={filteredBlackList[index].host} />
+        <ListItemText primary={filteredProxyDomains[index].host} />
         <ListItemSecondaryAction>
-          <IconButton onClick={() => handleRemoveItem(filteredBlackList[index].originIndex)}>
+          <IconButton onClick={() => handleRemoveItem(filteredProxyDomains[index].originIndex)}>
             <DeleteForeverIcon />
           </IconButton>
         </ListItemSecondaryAction>
@@ -153,8 +153,8 @@ const BlackList = () => {
   );
 
   useEffect(() => {
-    getBlackList().then((res) => {
-      _setBlackList(res);
+    getProxyDomains().then((res) => {
+      _setProxyDomains(res);
     });
     getGfwlistEnabled().then((enabled) => {
       setGfwlistEnabledState(enabled);
@@ -162,8 +162,8 @@ const BlackList = () => {
   }, []);
 
   useEffect(() => {
-    const filtered: BlackListForRender = [];
-    blackList.forEach((host, index) => {
+    const filtered: ProxyDomainsForRender = [];
+    proxyDomains.forEach((host, index) => {
       if (host.toLocaleLowerCase().includes((keyword ?? '').toLocaleLowerCase())) {
         filtered.push({
           originIndex: index,
@@ -171,14 +171,14 @@ const BlackList = () => {
         });
       }
     });
-    setFilteredBlackList(filtered);
-  }, [blackList, keyword]);
+    setFilteredProxyDomains(filtered);
+  }, [proxyDomains, keyword]);
 
   return (
     <Box sx={{ paddingTop: 3, paddingBottom: 3 }}>
       <Stack direction='row' alignItems='flex-start' gap={2}>
         <Typography variant="h4" component="h4" gutterBottom sx={{ flexGrow: 1 }}>
-          {chrome.i18n.getMessage('black_list')}
+          {chrome.i18n.getMessage('proxy_domains')}
         </Typography>
         {/* 刷新 GFWList 按钮 */}
         {gfwlistEnabled && (
@@ -234,7 +234,7 @@ const BlackList = () => {
       </Stack>
       <Stack direction='column' spacing={1}>
         <Typography variant="body1" gutterBottom>
-          {chrome.i18n.getMessage('black_list_desc')}
+          {chrome.i18n.getMessage('proxy_domains_desc')}
         </Typography>
         <Stack direction="row" spacing={2} alignItems="flex-start">
           <TextField
@@ -243,8 +243,8 @@ const BlackList = () => {
             sx={{ flexGrow: 3 }}
             onKeyUp={handleKeyUp}
             onChange={(e) => setHostToAdd(e.target.value)}
-            label={chrome.i18n.getMessage('add_to_black_list_placeholder')}
-            helperText={chrome.i18n.getMessage('add_to_black_list_helper_text')}
+            label={chrome.i18n.getMessage('add_to_proxy_domains_placeholder')}
+            helperText={chrome.i18n.getMessage('add_to_proxy_domains_helper_text')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -311,4 +311,4 @@ const BlackList = () => {
   );
 };
 
-export default BlackList;
+export default ProxyDomainsList;

@@ -11,7 +11,7 @@ import { useEffect, useState, useMemo } from "react";
 import { MESSAGE_HOSTS_UPDATE } from "../../constants/message";
 import { ProxyModes } from "../../constants/proxyModes";
 import { getHostsOfCurrentTab } from "../../services/tabs";
-import { STORAGE_BLACK_LIST, STORAGE_WHITE_LIST } from "../../constants/storage";
+import { STORAGE_PROXY_DOMAINS, STORAGE_BYPASS_DOMAINS, LEGACY_BLACK_LIST, LEGACY_WHITE_LIST } from "../../constants/storage";
 import { updateProxyConfig } from "../../services/proxyConfig";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
@@ -20,20 +20,20 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 export function HostList() {
   const [hosts, setHosts] = useState<string[]>([]);
-  const [blackList, setBlackList] = useState<string[]>([]);
-  const [whiteList, setWhiteList] = useState<string[]>([]);
+  const [proxyDomains, setProxyDomains] = useState<string[]>([]);
+  const [bypassDomains, setBypassDomains] = useState<string[]>([]);
 
-  const blackListSet = useMemo(() => new Set(blackList), [blackList]);
-  const whiteListSet = useMemo(() => new Set(whiteList), [whiteList]);
+  const proxyDomainsSet = useMemo(() => new Set(proxyDomains), [proxyDomains]);
+  const bypassDomainsSet = useMemo(() => new Set(bypassDomains), [bypassDomains]);
 
-  // Check if all hosts are in the black/white list
-  const allInBlackList = useMemo(() => {
-    return hosts.length > 0 && hosts.every(host => blackListSet.has(host));
-  }, [hosts, blackListSet]);
+  // Check if all hosts are in the proxy/bypass domains
+  const allInProxyDomains = useMemo(() => {
+    return hosts.length > 0 && hosts.every(host => proxyDomainsSet.has(host));
+  }, [hosts, proxyDomainsSet]);
 
-  const allInWhiteList = useMemo(() => {
-    return hosts.length > 0 && hosts.every(host => whiteListSet.has(host));
-  }, [hosts, whiteListSet]);
+  const allInBypassDomains = useMemo(() => {
+    return hosts.length > 0 && hosts.every(host => bypassDomainsSet.has(host));
+  }, [hosts, bypassDomainsSet]);
 
   const getHosts = async () => {
     getHostsOfCurrentTab().then(hosts => {
@@ -41,19 +41,16 @@ export function HostList() {
     });
   };
 
-  const getBlackWhiteList = async () => {
-    const [blackList, whiteList] = await Promise.all([
-      chrome.storage.sync.get(STORAGE_BLACK_LIST),
-      chrome.storage.sync.get(STORAGE_WHITE_LIST),
-    ]);
-    setBlackList(blackList[STORAGE_BLACK_LIST] ?? []);
-    setWhiteList(whiteList[STORAGE_WHITE_LIST] ?? []);
+  const getProxyAndBypassDomains = async () => {
+    const syncData = await chrome.storage.sync.get([STORAGE_PROXY_DOMAINS, STORAGE_BYPASS_DOMAINS, LEGACY_BLACK_LIST, LEGACY_WHITE_LIST]);
+    setProxyDomains(syncData[STORAGE_PROXY_DOMAINS] ?? syncData[LEGACY_BLACK_LIST] ?? []);
+    setBypassDomains(syncData[STORAGE_BYPASS_DOMAINS] ?? syncData[LEGACY_WHITE_LIST] ?? []);
   };
 
-  const toggle = (mode: ProxyModes.BlackList | ProxyModes.WhiteList, host: string) => {
-    const set = mode === ProxyModes.BlackList ? blackListSet : whiteListSet;
-    const storageKey = mode === ProxyModes.BlackList ? STORAGE_BLACK_LIST : STORAGE_WHITE_LIST;
-    const setter = mode === ProxyModes.BlackList ? setBlackList : setWhiteList;
+  const toggle = (mode: ProxyModes.OnDemand | ProxyModes.Global, host: string) => {
+    const set = mode === ProxyModes.OnDemand ? proxyDomainsSet : bypassDomainsSet;
+    const storageKey = mode === ProxyModes.OnDemand ? STORAGE_PROXY_DOMAINS : STORAGE_BYPASS_DOMAINS;
+    const setter = mode === ProxyModes.OnDemand ? setProxyDomains : setBypassDomains;
     if (set.has(host)) {
       set.delete(host);
     } else {
@@ -65,11 +62,11 @@ export function HostList() {
     setter(newList);
   };
 
-  const toggleAllInList = (mode: ProxyModes.BlackList | ProxyModes.WhiteList) => {
-    const set = mode === ProxyModes.BlackList ? new Set(blackList) : new Set(whiteList);
-    const storageKey = mode === ProxyModes.BlackList ? STORAGE_BLACK_LIST : STORAGE_WHITE_LIST;
-    const setter = mode === ProxyModes.BlackList ? setBlackList : setWhiteList;
-    const allInList = mode === ProxyModes.BlackList ? allInBlackList : allInWhiteList;
+  const toggleAllInList = (mode: ProxyModes.OnDemand | ProxyModes.Global) => {
+    const set = mode === ProxyModes.OnDemand ? new Set(proxyDomains) : new Set(bypassDomains);
+    const storageKey = mode === ProxyModes.OnDemand ? STORAGE_PROXY_DOMAINS : STORAGE_BYPASS_DOMAINS;
+    const setter = mode === ProxyModes.OnDemand ? setProxyDomains : setBypassDomains;
+    const allInList = mode === ProxyModes.OnDemand ? allInProxyDomains : allInBypassDomains;
 
     if (allInList) {
       // Remove all hosts from the list
@@ -103,7 +100,7 @@ export function HostList() {
 
   useEffect(() => {
     getHosts();
-    getBlackWhiteList();
+    getProxyAndBypassDomains();
   }, []);
 
   return (
@@ -113,26 +110,26 @@ export function HostList() {
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <ListSubheader sx={{ pl: 2 }}>{chrome.i18n.getMessage('domain_list')}</ListSubheader>
           <Box sx={{ display: 'flex', pr: 2 }}>
-            <Tooltip title={allInBlackList
-              ? chrome.i18n.getMessage('remove_all_from_black')
-              : chrome.i18n.getMessage('add_all_to_black')}>
+            <Tooltip title={allInProxyDomains
+              ? chrome.i18n.getMessage('remove_all_from_proxy_domains')
+              : chrome.i18n.getMessage('add_all_to_proxy_domains')}>
               <IconButton
                 edge="end"
-                color={allInBlackList ? 'secondary' : 'default'}
-                onClick={() => toggleAllInList(ProxyModes.BlackList)}
+                color={allInProxyDomains ? 'secondary' : 'default'}
+                onClick={() => toggleAllInList(ProxyModes.OnDemand)}
               >
-                {allInBlackList ? <CheckCircleIcon /> : <AddCircleIcon />}
+                {allInProxyDomains ? <CheckCircleIcon /> : <AddCircleIcon />}
               </IconButton>
             </Tooltip>
-            <Tooltip title={allInWhiteList
-              ? chrome.i18n.getMessage('remove_all_from_white')
-              : chrome.i18n.getMessage('add_all_to_white')}>
+            <Tooltip title={allInBypassDomains
+              ? chrome.i18n.getMessage('remove_all_from_bypass_domains')
+              : chrome.i18n.getMessage('add_all_to_bypass_domains')}>
               <IconButton
                 edge="end"
-                color={allInWhiteList ? 'secondary' : 'default'}
-                onClick={() => toggleAllInList(ProxyModes.WhiteList)}
+                color={allInBypassDomains ? 'secondary' : 'default'}
+                onClick={() => toggleAllInList(ProxyModes.Global)}
               >
-                {allInWhiteList ? <CheckCircleOutlineIcon /> : <AddCircleOutlineIcon />}
+                {allInBypassDomains ? <CheckCircleOutlineIcon /> : <AddCircleOutlineIcon />}
               </IconButton>
             </Tooltip>
           </Box>
@@ -140,30 +137,30 @@ export function HostList() {
       }
     >
       {hosts.map(host => {
-        const inBlackList = blackListSet.has(host);
-        const inWhiteList = whiteListSet.has(host);
+        const inProxyDomains = proxyDomainsSet.has(host);
+        const inBypassDomains = bypassDomainsSet.has(host);
         return (
           <ListItem key={host}>
             <ListItemIcon>
               <Public />
             </ListItemIcon>
             <ListItemText primary={host}></ListItemText>
-            <Tooltip title={inBlackList ? chrome.i18n.getMessage('remove_from_black') : chrome.i18n.getMessage('add_to_black')}>
+            <Tooltip title={inProxyDomains ? chrome.i18n.getMessage('remove_from_proxy_domains') : chrome.i18n.getMessage('add_to_proxy_domains')}>
               <IconButton
                 edge='end'
-                color={inBlackList ? 'secondary' : 'default'}
-                onClick={() => toggle(ProxyModes.BlackList, host)}
+                color={inProxyDomains ? 'secondary' : 'default'}
+                onClick={() => toggle(ProxyModes.OnDemand, host)}
               >
-                {inBlackList ? <CheckCircleIcon /> : <AddCircleIcon />}
+                {inProxyDomains ? <CheckCircleIcon /> : <AddCircleIcon />}
               </IconButton>
             </Tooltip>
-            <Tooltip title={inWhiteList ? chrome.i18n.getMessage('remove_from_white') : chrome.i18n.getMessage('add_to_white')}>
+            <Tooltip title={inBypassDomains ? chrome.i18n.getMessage('remove_from_bypass_domains') : chrome.i18n.getMessage('add_to_bypass_domains')}>
               <IconButton
                 edge='end'
-                color={inWhiteList ? 'secondary' : 'default'}
-                onClick={() => toggle(ProxyModes.WhiteList, host)}
+                color={inBypassDomains ? 'secondary' : 'default'}
+                onClick={() => toggle(ProxyModes.Global, host)}
               >
-                {inWhiteList ? <CheckCircleOutlineIcon /> : <AddCircleOutlineIcon />}
+                {inBypassDomains ? <CheckCircleOutlineIcon /> : <AddCircleOutlineIcon />}
               </IconButton>
             </Tooltip>
           </ListItem>

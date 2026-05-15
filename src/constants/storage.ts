@@ -1,6 +1,10 @@
 export const STORAGE_PROXY_SERVERS = 'PROXY_SERVERS'
-export const STORAGE_BLACK_LIST = 'BLACK_LIST'
-export const STORAGE_WHITE_LIST = 'WHITE_LIST'
+export const STORAGE_PROXY_DOMAINS = 'PROXY_DOMAINS'
+export const STORAGE_BYPASS_DOMAINS = 'BYPASS_DOMAINS'
 export const STORAGE_PROXY_MODE = 'PROXY_MODE'
 export const STORAGE_GFWLIST_ENABLED = 'GFWLIST_ENABLED'
 export const STORAGE_GFWLIST_CONTENT = 'GFWLIST_CONTENT'
+
+// Legacy keys from previous versions (used for migration)
+export const LEGACY_BLACK_LIST = 'BLACK_LIST'
+export const LEGACY_WHITE_LIST = 'WHITE_LIST'

@@ -18,29 +18,29 @@ import Typography from '@mui/material/Typography';
 import { CSSProperties, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
-import { getWhiteList, setWhiteList } from '../../services/config';
+import { getBypassDomains, setBypassDomains } from '../../services/config';
 import { useImportExport } from '../../hooks/useImportExport';
 import ButtonGroup from '@mui/material/ButtonGroup/ButtonGroup';
 import { Button } from '@mui/material';
 import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
 
-type WhiteListForRender = {
+type BypassDomainsForRender = {
   originIndex: number;
   host: string;
 }[];
 
-const WhiteList = () => {
-  const [whiteList, _setWhiteList] = useState<string[]>([]);
+const BypassDomainsList = () => {
+  const [bypassDomains, _setBypassDomains] = useState<string[]>([]);
   const [keyword, setKeyword] = useState<string>('');
-  const [filteredWhiteList, setFilteredWhiteList] = useState<WhiteListForRender>([]);
+  const [filteredBypassDomains, setFilteredBypassDomains] = useState<BypassDomainsForRender>([]);
   const [hostToAdd, setHostToAdd] = useState<string>('');
   const listRef = useRef<HTMLDivElement | null>(null);
 
   const { fileInputRef, handleExport, handleImport } = useImportExport({
-    currentList: whiteList,
+    currentList: bypassDomains,
     onImport: (newList) => {
-      _setWhiteList(newList);
-      setWhiteList(newList);
+      _setBypassDomains(newList);
+      setBypassDomains(newList);
     }
   });
 
@@ -48,16 +48,16 @@ const WhiteList = () => {
     if (!host) {
       return;
     }
-    const newList = [host, ...whiteList];
-    _setWhiteList(newList);
+    const newList = [host, ...bypassDomains];
+    _setBypassDomains(newList);
     setHostToAdd('');
-    setWhiteList(newList);
+    setBypassDomains(newList);
   };
 
   const handleRemoveItem = (index: number) => {
-    const newList = whiteList.filter((_, i) => i !== index);
-    _setWhiteList(newList);
-    setWhiteList(newList);
+    const newList = bypassDomains.filter((_, i) => i !== index);
+    _setBypassDomains(newList);
+    setBypassDomains(newList);
   };
 
   const handleKeyUp = (e: KeyboardEvent) => {
@@ -67,7 +67,7 @@ const WhiteList = () => {
   };
 
   const virtualizer = useWindowVirtualizer({
-    count: filteredWhiteList.length,
+    count: filteredBypassDomains.length,
     estimateSize: () => 50,
     overscan: 5,
     scrollMargin: 0,
@@ -79,9 +79,9 @@ const WhiteList = () => {
   }) => (
     <div key={index} style={style} >
       <ListItem divider>
-        <ListItemText primary={filteredWhiteList[index].host} />
+        <ListItemText primary={filteredBypassDomains[index].host} />
         <ListItemSecondaryAction>
-          <IconButton onClick={() => handleRemoveItem(filteredWhiteList[index].originIndex)}>
+          <IconButton onClick={() => handleRemoveItem(filteredBypassDomains[index].originIndex)}>
             <DeleteForeverIcon />
           </IconButton>
         </ListItemSecondaryAction>
@@ -90,14 +90,14 @@ const WhiteList = () => {
   );
 
   useEffect(() => {
-    getWhiteList().then((res) => {
-      _setWhiteList(res);
+    getBypassDomains().then((res) => {
+      _setBypassDomains(res);
     });
   }, []);
 
   useEffect(() => {
-    const filtered: WhiteListForRender = [];
-    whiteList.forEach((host, index) => {
+    const filtered: BypassDomainsForRender = [];
+    bypassDomains.forEach((host, index) => {
       if (host.toLocaleLowerCase().includes((keyword ?? '').toLocaleLowerCase())) {
         filtered.push({
           originIndex: index,
@@ -105,14 +105,14 @@ const WhiteList = () => {
         });
       }
     });
-    setFilteredWhiteList(filtered);
-  }, [whiteList, keyword]);
+    setFilteredBypassDomains(filtered);
+  }, [bypassDomains, keyword]);
 
   return (
     <Box sx={{ paddingTop: 3, paddingBottom: 3 }}>
       <Stack direction='row' alignItems='flex-start'>
         <Typography variant="h4" component="h4" gutterBottom sx={{ flexGrow: 1 }}>
-          {chrome.i18n.getMessage('white_list')}
+          {chrome.i18n.getMessage('bypass_domains')}
         </Typography>
         <ButtonGroup variant="outlined">
           <Tooltip title={chrome.i18n.getMessage('import_tooltip')} arrow>
@@ -137,7 +137,7 @@ const WhiteList = () => {
       </Stack>
       <Stack direction='column' spacing={1}>
         <Typography variant="body1" gutterBottom>
-          {chrome.i18n.getMessage('white_list_desc')}
+          {chrome.i18n.getMessage('bypass_domains_desc')}
         </Typography>
         <Stack direction="row" spacing={2} alignItems="flex-start">
           <TextField
@@ -146,8 +146,8 @@ const WhiteList = () => {
             sx={{ flexGrow: 3 }}
             onKeyUp={handleKeyUp}
             onChange={(e) => setHostToAdd(e.target.value)}
-            label={chrome.i18n.getMessage('add_to_white_list_placeholder')}
-            helperText={chrome.i18n.getMessage('add_to_white_list_helper_text')}
+            label={chrome.i18n.getMessage('add_to_bypass_domains_placeholder')}
+            helperText={chrome.i18n.getMessage('add_to_bypass_domains_helper_text')}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -205,4 +205,4 @@ const WhiteList = () => {
   );
 };
 
-export default WhiteList;
+export default BypassDomainsList;

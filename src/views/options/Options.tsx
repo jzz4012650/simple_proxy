@@ -1,7 +1,7 @@
 import Cloud from '@mui/icons-material/Cloud';
 import LinkIcon from '@mui/icons-material/Link';
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
+import Language from '@mui/icons-material/Language';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -17,15 +17,15 @@ const Navigations = {
     text: chrome.i18n.getMessage('proxy_server'),
     icon: Cloud,
   },
-  BlackList: {
-    pathname: '/black-list',
-    text: chrome.i18n.getMessage('black_list'),
-    icon: RadioButtonCheckedIcon
+  ProxyDomains: {
+    pathname: '/proxy-domains',
+    text: chrome.i18n.getMessage('proxy_domains'),
+    icon: FilterAltOutlined
   },
-  WhiteList: {
-    pathname: '/white-list',
-    text: chrome.i18n.getMessage('white_list'),
-    icon: RadioButtonUncheckedIcon,
+  BypassDomains: {
+    pathname: '/bypass-domains',
+    text: chrome.i18n.getMessage('bypass_domains'),
+    icon: Language,
   },
 };
 

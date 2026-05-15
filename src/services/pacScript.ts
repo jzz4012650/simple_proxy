@@ -1,18 +1,18 @@
 import { ProxyModes } from '../constants/proxyModes';
-import { STORAGE_BLACK_LIST, STORAGE_PROXY_SERVERS, STORAGE_WHITE_LIST } from '../constants/storage';
+import { STORAGE_PROXY_DOMAINS, STORAGE_PROXY_SERVERS, STORAGE_BYPASS_DOMAINS } from '../constants/storage';
 import { ProxyServer, getConfig, getGfwlistEnabled } from './config';
 import { getGfwlist, gfwListToPacFragment } from '../utils/gfwlist';
 
 export const generatePac = async (proxyMode: ProxyModes) => {
   const config = await getConfig();
   const proxyServers = config[STORAGE_PROXY_SERVERS].map((d: ProxyServer) => `${d.method} ${d.host}:${d.port}`).join(';') || 'DIRECT';
-  const hostLists = config[proxyMode === ProxyModes.BlackList ? STORAGE_BLACK_LIST : STORAGE_WHITE_LIST];
+  const hostLists = config[proxyMode === ProxyModes.OnDemand ? STORAGE_PROXY_DOMAINS : STORAGE_BYPASS_DOMAINS];
 
   // 使用封装的方法获取 GFWList 开关状态
   const isGfwlistEnabled = await getGfwlistEnabled();
 
-  // 如果是黑名单模式且启用了 GFWList，生成结合 GFWList 的 PAC
-  if (proxyMode === ProxyModes.BlackList && isGfwlistEnabled) {
+  // 如果是按需代理模式且启用了 GFWList，生成结合 GFWList 的 PAC
+  if (proxyMode === ProxyModes.OnDemand && isGfwlistEnabled) {
     try {
       const gfwlistContent = await getGfwlist();
       return generateCombinedPacContent(hostLists, proxyServers, gfwlistContent);
@@ -26,7 +26,7 @@ export const generatePac = async (proxyMode: ProxyModes) => {
   return generatePacContent(hostLists, proxyServers, proxyMode);
 };
 
-// 生成结合 GFWList 的 PAC 内容
+// 生成结合 GFWList 的 PAC 内容（按需代理模式）
 function generateCombinedPacContent(hostLists: string[], proxyServers: string, gfwlistContent: string): string {
   const exactHosts: string[] = [];
   const hostsWithWildcards: string[] = [];
@@ -50,7 +50,7 @@ function FindProxyForURL(url, host) {
   var wildcardsRules = ${JSON.stringify(hostsWithWildcards)};
   var proxyServers = "${proxyServers}";
 
-  // First check local blacklist
+  // First check local proxy domains
   if (host in rules) {
     return proxyServers;
   } else {
@@ -89,15 +89,15 @@ function generatePacContent(hostLists: string[], proxyServers: string, proxyMode
       var wildcardsRules = ${JSON.stringify(hostsWithWildcards)};
       var proxyServers = "${proxyServers}";
       if (host in rules) {
-        return ${proxyMode === ProxyModes.BlackList ? 'proxyServers' : 'DIRECT'};
+        return ${proxyMode === ProxyModes.OnDemand ? 'proxyServers' : 'DIRECT'};
       } else {
         for (var i = 0; i < wildcardsRules.length; i++) {
           if (shExpMatch(host, wildcardsRules[i])) {
-            return ${proxyMode === ProxyModes.BlackList ? 'proxyServers' : 'DIRECT'};
+            return ${proxyMode === ProxyModes.OnDemand ? 'proxyServers' : 'DIRECT'};
           }
         }
       }
-      return ${proxyMode === ProxyModes.BlackList ? 'DIRECT' : 'proxyServers'};
+      return ${proxyMode === ProxyModes.OnDemand ? 'DIRECT' : 'proxyServers'};
     }
   `;
 }

@@ -1,11 +1,11 @@
 import debounce from 'lodash/debounce';
 import { ProxyModes } from '../constants/proxyModes';
-import { STORAGE_BLACK_LIST, STORAGE_PROXY_MODE, STORAGE_PROXY_SERVERS, STORAGE_WHITE_LIST, STORAGE_GFWLIST_ENABLED } from '../constants/storage';
+import { STORAGE_PROXY_DOMAINS, STORAGE_PROXY_MODE, STORAGE_PROXY_SERVERS, STORAGE_BYPASS_DOMAINS, STORAGE_GFWLIST_ENABLED, LEGACY_BLACK_LIST, LEGACY_WHITE_LIST } from '../constants/storage';
 import { updateProxyConfig } from './proxyConfig';
 import { getGfwlist } from '../utils/gfwlist';
 
-export type BlackList = string[];
-export type WhiteList = string[];
+export type ProxyDomains = string[];
+export type BypassDomains = string[];
 
 export enum ProxyMethods {
   PROXY = 'PROXY',
@@ -24,8 +24,8 @@ export type ProxyServer = {
 
 export type Config = {
   PROXY_SERVERS: string[],
-  BLACK_LIST: BlackList,
-  WHITE_LIST: WhiteList,
+  PROXY_DOMAINS: ProxyDomains,
+  BYPASS_DOMAINS: BypassDomains,
 };
 
 const debounceUpdateProxyConfig = () => debounce(() => {
@@ -35,26 +35,30 @@ const debounceUpdateProxyConfig = () => debounce(() => {
 export const getConfig = async () => {
   const [local, sync] = await Promise.all([
     chrome.storage.local.get([STORAGE_PROXY_SERVERS]),
-    chrome.storage.sync.get([STORAGE_BLACK_LIST, STORAGE_WHITE_LIST])
+    chrome.storage.sync.get([STORAGE_PROXY_DOMAINS, STORAGE_BYPASS_DOMAINS, LEGACY_BLACK_LIST, LEGACY_WHITE_LIST])
   ]);
   return {
     PROXY_SERVERS: local[STORAGE_PROXY_SERVERS] || [],
-    BLACK_LIST: sync[STORAGE_BLACK_LIST] || [],
-    WHITE_LIST: sync[STORAGE_WHITE_LIST] || []
+    PROXY_DOMAINS: sync[STORAGE_PROXY_DOMAINS] ?? sync[LEGACY_BLACK_LIST] ?? [],
+    BYPASS_DOMAINS: sync[STORAGE_BYPASS_DOMAINS] ?? sync[LEGACY_WHITE_LIST] ?? []
   };
 };
 
 export const saveConfig = async (config: Config) => {
   await Promise.all([
     chrome.storage.local.set({ [STORAGE_PROXY_SERVERS]: config[STORAGE_PROXY_SERVERS] }),
-    chrome.storage.sync.set({ [STORAGE_BLACK_LIST]: config[STORAGE_BLACK_LIST], [STORAGE_WHITE_LIST]: config[STORAGE_WHITE_LIST] })
+    chrome.storage.sync.set({ [STORAGE_PROXY_DOMAINS]: config[STORAGE_PROXY_DOMAINS], [STORAGE_BYPASS_DOMAINS]: config[STORAGE_BYPASS_DOMAINS] })
   ]);
   await updateProxyConfig();
 };
 
 export const getProxyMode = async () => {
   const res = await chrome.storage.local.get([STORAGE_PROXY_MODE]);
-  return res[STORAGE_PROXY_MODE] || ProxyModes.System;
+  const mode = res[STORAGE_PROXY_MODE] || ProxyModes.System;
+  // Fallback for legacy values
+  if (mode === 'BLACK_LIST') return ProxyModes.OnDemand;
+  if (mode === 'WHITE_LIST') return ProxyModes.Global;
+  return mode;
 };
 
 export const getProxyServers = async (): Promise<ProxyServer[]> => {
@@ -72,30 +76,30 @@ export const setProxyMode = async (mode: ProxyModes) => {
   await updateProxyConfig();
 };
 
-export const getBlackList = async (): Promise<BlackList> => {
-  const res = await chrome.storage.sync.get([STORAGE_BLACK_LIST]);
-  return res[STORAGE_BLACK_LIST] || [];
+export const getProxyDomains = async (): Promise<ProxyDomains> => {
+  const res = await chrome.storage.sync.get([STORAGE_PROXY_DOMAINS, LEGACY_BLACK_LIST]);
+  return res[STORAGE_PROXY_DOMAINS] ?? res[LEGACY_BLACK_LIST] ?? [];
 }
 
-export const setBlackList = async (blackList: BlackList) => {
-  await chrome.storage.sync.set({ [STORAGE_BLACK_LIST]: blackList });
+export const setProxyDomains = async (proxyDomains: ProxyDomains) => {
+  await chrome.storage.sync.set({ [STORAGE_PROXY_DOMAINS]: proxyDomains });
   debounceUpdateProxyConfig();
 }
 
-export const getWhiteList = async (): Promise<WhiteList> => {
-  const res = await chrome.storage.sync.get([STORAGE_WHITE_LIST]);
-  return res[STORAGE_WHITE_LIST] || [];
+export const getBypassDomains = async (): Promise<BypassDomains> => {
+  const res = await chrome.storage.sync.get([STORAGE_BYPASS_DOMAINS, LEGACY_WHITE_LIST]);
+  return res[STORAGE_BYPASS_DOMAINS] ?? res[LEGACY_WHITE_LIST] ?? [];
 }
 
-export const setWhiteList = async (whiteList: WhiteList) => {
-  await chrome.storage.sync.set({ [STORAGE_WHITE_LIST]: whiteList });
+export const setBypassDomains = async (bypassDomains: BypassDomains) => {
+  await chrome.storage.sync.set({ [STORAGE_BYPASS_DOMAINS]: bypassDomains });
   debounceUpdateProxyConfig();
 }
 
-export const updateBlackAndWhiteList = async (blackList: BlackList, whiteList: WhiteList) => {
+export const updateProxyAndBypassDomains = async (proxyDomains: ProxyDomains, bypassDomains: BypassDomains) => {
   await chrome.storage.sync.set({
-    [STORAGE_BLACK_LIST]: blackList,
-    [STORAGE_WHITE_LIST]: whiteList,
+    [STORAGE_PROXY_DOMAINS]: proxyDomains,
+    [STORAGE_BYPASS_DOMAINS]: bypassDomains,
   });
   debounceUpdateProxyConfig();
 };

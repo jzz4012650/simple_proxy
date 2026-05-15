@@ -9,7 +9,7 @@
     "message": "取消"
   },
   "description": {
-    "message": "域名级别代理，能自动识别网站请求的域名，并支持黑白名单模式。"
+    "message": "域名级别代理，能自动识别网站请求的域名，并支持按需代理和全局代理模式。"
   },
   "options": {
     "message": "设置"
@@ -27,10 +27,10 @@
     "message": "代理方式"
   },
   "hosts_use_proxy": {
-    "message": "域名黑名单"
+    "message": "代理域名"
   },
   "hosts_bypass_proxy": {
-    "message": "域名白名单"
+    "message": "直连域名"
   },
   "proxy_server_list": {
     "message": "代理服务器列表"
@@ -38,17 +38,17 @@
   "proxy_server_desc": {
     "message": "配置你的代理服务器，每行一个代理服务器，当前面的代理服务器不可用时，会自动尝试后面的。"
   },
-  "white_list": {
-    "message": "白名单"
+  "bypass_domains": {
+    "message": "直连域名列表"
   },
-  "white_list_desc": {
-    "message": "当开启白名模式时，除白名单之外的所有域名都会经过代理。白名单支持通配符，例如：*.cn（注意，插件仅拿域名与通配符进行匹配，不匹配域名后面的路径）"
+  "bypass_domains_desc": {
+    "message": "当开启全局代理模式时，除直连域名列表之外的所有域名都会经过代理。列表支持通配符，例如：*.cn（注意，插件仅拿域名与通配符进行匹配，不匹配域名后面的路径）"
   },
-  "black_list": {
-    "message": "黑名单"
+  "proxy_domains": {
+    "message": "代理域名列表"
   },
-  "black_list_desc": {
-    "message": "当黑名单模式开启时，只有黑名单中的域名才会经过代理。黑名单支持通配符，例如：*.google.com（注意，插件仅拿域名与通配符进行匹配，不匹配域名后面的路径）"
+  "proxy_domains_desc": {
+    "message": "当按需代理模式开启时，只有代理域名列表中的域名才会经过代理。列表支持通配符，例如：*.google.com（注意，插件仅拿域名与通配符进行匹配，不匹配域名后面的路径）"
   },
   "option_saved": {
     "message": "配置保存成功！"
@@ -65,11 +65,11 @@
   "mode_direct": {
     "message": "直连模式"
   },
-  "mode_white_list": {
-    "message": "白名单模式"
+  "mode_global": {
+    "message": "全局代理"
   },
-  "mode_black_list": {
-    "message": "黑名单模式"
+  "mode_on_demand": {
+    "message": "按需代理"
   },
   "mode_system_desc": {
     "message": "使用系统设置"
@@ -77,11 +77,11 @@
   "mode_direct_desc": {
     "message": "所有流量都不走代理"
   },
-  "mode_white_list_desc": {
-    "message": "所有白名单外的域名使用代理"
+  "mode_global_desc": {
+    "message": "除直连域名列表外的所有域名使用代理"
   },
-  "mode_black_list_desc": {
-    "message": "仅黑名单内的域名使用代理"
+  "mode_on_demand_desc": {
+    "message": "仅代理域名列表内的域名使用代理"
   },
   "domain_list": {
     "message": "当前页面请求过的域名："
@@ -89,29 +89,29 @@
   "domain_neither": {
     "message": "默认"
   },
-  "add_to_black": {
-    "message": "添加到黑名单"
+  "add_to_proxy_domains": {
+    "message": "添加到代理域名列表"
   },
-  "add_to_white": {
-    "message": "添加到白名单"
+  "add_to_bypass_domains": {
+    "message": "添加到直连域名列表"
   },
-  "remove_from_black": {
-    "message": "从黑名单中移除"
+  "remove_from_proxy_domains": {
+    "message": "从代理域名列表中移除"
   },
-  "remove_from_white": {
-    "message": "从白名单中移除"
+  "remove_from_bypass_domains": {
+    "message": "从直连域名列表中移除"
   },
-  "domain_black": {
-    "message": "黑名单"
+  "domain_proxy": {
+    "message": "代理"
   },
-  "domain_white": {
-    "message": "白名单"
+  "domain_bypass": {
+    "message": "直连"
   },
   "migration": {
     "message": "从旧版本迁移"
   },
   "migration_explain": {
-    "message": "新版本黑白名单中的规则格式已改变，点击此按钮将更新黑白名单的格式。"
+    "message": "新版本代理域名列表/直连域名列表中的规则格式已改变，点击此按钮将更新列表的格式。"
   },
   "migration_ok": {
     "message": "迁移成功！"
@@ -125,16 +125,16 @@
   "to_top": {
     "message": "移至顶部"
   },
-  "add_to_black_list_placeholder": {
+  "add_to_proxy_domains_placeholder": {
     "message": "添加域名"
   },
-  "add_to_black_list_helper_text": {
+  "add_to_proxy_domains_helper_text": {
     "message": "输入要添加的域名，按回车添加"
   },
-  "add_to_white_list_placeholder": {
+  "add_to_bypass_domains_placeholder": {
     "message": "添加域名"
   },
-  "add_to_white_list_helper_text": {
+  "add_to_bypass_domains_helper_text": {
     "message": "输入要添加的域名，按回车添加"
   },
   "search": {
@@ -155,23 +155,23 @@
   "export_tooltip": {
     "message": "导出到文件"
   },
-  "add_all_to_black": {
-    "message": "全部添加到黑名单"
+  "add_all_to_proxy_domains": {
+    "message": "全部添加到代理域名列表"
   },
-  "add_all_to_white": {
-    "message": "全部添加到白名单"
+  "add_all_to_bypass_domains": {
+    "message": "全部添加到直连域名列表"
   },
-  "remove_all_from_black": {
-    "message": "全部从黑名单中移除"
+  "remove_all_from_proxy_domains": {
+    "message": "全部从代理域名列表中移除"
   },
-  "remove_all_from_white": {
-    "message": "全部从白名单中移除"
+  "remove_all_from_bypass_domains": {
+    "message": "全部从直连域名列表中移除"
   },
   "enable_gfwlist": {
     "message": "启用 GFWList"
   },
   "enable_gfwlist_tooltip": {
-    "message": "启用后将自动拉取 GFWList 并与黑名单合并"
+    "message": "启用后将自动拉取 GFWList 并与代理域名列表合并"
   },
   "gfwlist_fetch_success": {
     "message": "GFWList 获取成功"
