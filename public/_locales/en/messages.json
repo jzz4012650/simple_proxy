@@ -60,7 +60,7 @@
     "message": "Proxy Domains"
   },
   "proxy_domains_desc": {
-    "message": "In on-demand proxy mode, only listed domains use proxy. Supports wildcards like *.google.com. Note: Only domain names are matched, not URLs."
+    "message": "In on-demand proxy mode, only listed domains use proxy. Supports wildcards like *.google.com. Note: Only the domain part is matched; URL paths and query strings are not included in matching."
   },
   "option_saved": {
     "message": "Configuration saved successfully!"
@@ -171,7 +171,7 @@
     "message": "Enable GFWList"
   },
   "enable_gfwlist_tooltip": {
-    "message": "When enabled, automatically fetch GFWList and merge with proxy domains"
+    "message": "When enabled, automatically fetch GFWList and merge with proxy domains."
   },
   "gfwlist_fetch_success": {
     "message": "GFWList fetched successfully"
@@ -196,5 +196,44 @@
   },
   "enable_gfwlist_first": {
     "message": "Please enable GFWList first"
+  },
+  "bypass_private_networks": {
+    "message": "Bypass Private Networks"
+  },
+  "bypass_private_networks_tooltip": {
+    "message": "When enabled, private network addresses (127.0.0.1, 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, localhost, *.local) will bypass proxy in global proxy mode"
+  },
+  "basic_config": {
+    "message": "Basic Configuration"
+  },
+  "on_demand_proxy_mode": {
+    "message": "On-Demand Proxy Mode"
+  },
+  "on_demand_proxy_mode_desc": {
+    "message": "Only domains in proxy domains list will use proxy."
+  },
+  "global_proxy_mode": {
+    "message": "Global Proxy Mode"
+  },
+  "global_proxy_mode_desc": {
+    "message": "All domains outside bypass list will use proxy."
+  },
+  "proxy_domains_entry": {
+    "message": "Proxy Domains List"
+  },
+  "proxy_domains_entry_desc": {
+    "message": "Manage domains that use proxy in on-demand mode"
+  },
+  "proxy_domains_empty": {
+    "message": "No proxy domains yet. Add one using the input above."
+  },
+  "bypass_domains_entry": {
+    "message": "Bypass Domains List"
+  },
+  "bypass_domains_entry_desc": {
+    "message": "Manage domains that bypass proxy in global mode"
+  },
+  "bypass_domains_empty": {
+    "message": "No bypass domains yet. Add one using the input above."
   }
 }

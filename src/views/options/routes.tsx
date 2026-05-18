@@ -1,5 +1,5 @@
 import { RouteObject } from "react-router-dom";
-import ProxyServers from "./ProxyServers";
+import BasicConfig from "./BasicConfig";
 import Options from './Options';
 import ProxyDomainsList from "./ProxyDomains";
 import BypassDomainsList from "./BypassDomains";
@@ -10,8 +10,8 @@ export const routes: RouteObject[] = [
     Component: Options,
     children: [
       {
-        path: '/proxy-servers',
-        Component: ProxyServers,
+        path: '/basic-config',
+        Component: BasicConfig,
       },
       {
         path: '/proxy-domains',

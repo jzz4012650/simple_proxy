@@ -4,6 +4,7 @@ export const STORAGE_BYPASS_DOMAINS = 'BYPASS_DOMAINS'
 export const STORAGE_PROXY_MODE = 'PROXY_MODE'
 export const STORAGE_GFWLIST_ENABLED = 'GFWLIST_ENABLED'
 export const STORAGE_GFWLIST_CONTENT = 'GFWLIST_CONTENT'
+export const STORAGE_BYPASS_PRIVATE_NETWORKS = 'BYPASS_PRIVATE_NETWORKS'
 
 // Legacy keys from previous versions (used for migration)
 export const LEGACY_BLACK_LIST = 'BLACK_LIST'

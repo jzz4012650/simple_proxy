@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce';
 import { ProxyModes } from '../constants/proxyModes';
-import { STORAGE_PROXY_DOMAINS, STORAGE_PROXY_MODE, STORAGE_PROXY_SERVERS, STORAGE_BYPASS_DOMAINS, STORAGE_GFWLIST_ENABLED, LEGACY_BLACK_LIST, LEGACY_WHITE_LIST } from '../constants/storage';
+import { STORAGE_PROXY_DOMAINS, STORAGE_PROXY_MODE, STORAGE_PROXY_SERVERS, STORAGE_BYPASS_DOMAINS, STORAGE_GFWLIST_ENABLED, STORAGE_BYPASS_PRIVATE_NETWORKS, LEGACY_BLACK_LIST, LEGACY_WHITE_LIST } from '../constants/storage';
 import { updateProxyConfig } from './proxyConfig';
 import { getGfwlist } from '../utils/gfwlist';
 
@@ -103,6 +103,16 @@ export const updateProxyAndBypassDomains = async (proxyDomains: ProxyDomains, by
   });
   debounceUpdateProxyConfig();
 };
+
+export const getBypassPrivateNetworks = async (): Promise<boolean> => {
+  const res = await chrome.storage.sync.get([STORAGE_BYPASS_PRIVATE_NETWORKS]);
+  return res[STORAGE_BYPASS_PRIVATE_NETWORKS] ?? true;
+}
+
+export const setBypassPrivateNetworks = async (enabled: boolean) => {
+  await chrome.storage.sync.set({ [STORAGE_BYPASS_PRIVATE_NETWORKS]: enabled });
+  debounceUpdateProxyConfig();
+}
 
 export const getGfwlistEnabled = async (): Promise<boolean> => {
   const res = await chrome.storage.local.get([STORAGE_GFWLIST_ENABLED]);

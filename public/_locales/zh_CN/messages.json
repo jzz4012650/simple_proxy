@@ -48,7 +48,7 @@
     "message": "代理域名列表"
   },
   "proxy_domains_desc": {
-    "message": "当按需代理模式开启时，只有代理域名列表中的域名才会经过代理。列表支持通配符，例如：*.google.com（注意，插件仅拿域名与通配符进行匹配，不匹配域名后面的路径）"
+    "message": "当按需代理模式开启时，只有列表中的域名才会经过代理。支持通配符，例如 *.google.com。注意：仅匹配域名部分，URL 的路径和参数不参与匹配。"
   },
   "option_saved": {
     "message": "配置保存成功！"
@@ -171,7 +171,7 @@
     "message": "启用 GFWList"
   },
   "enable_gfwlist_tooltip": {
-    "message": "启用后将自动拉取 GFWList 并与代理域名列表合并"
+    "message": "启用后将自动拉取 GFWList 并与代理域名列表合并。"
   },
   "gfwlist_fetch_success": {
     "message": "GFWList 获取成功"
@@ -196,5 +196,44 @@
   },
   "enable_gfwlist_first": {
     "message": "请先启用 GFWList"
+  },
+  "bypass_private_networks": {
+    "message": "绕过私有网络"
+  },
+  "bypass_private_networks_tooltip": {
+    "message": "启用后，在全局代理模式下，私有网络地址（127.0.0.1, 192.168.0.0/16, 10.0.0.0/8, 172.16.0.0/12, localhost, *.local）将直连而不经过代理"
+  },
+  "basic_config": {
+    "message": "基础配置"
+  },
+  "on_demand_proxy_mode": {
+    "message": "按需代理模式"
+  },
+  "on_demand_proxy_mode_desc": {
+    "message": "仅代理域名列表内的域名使用代理。"
+  },
+  "global_proxy_mode": {
+    "message": "全局代理模式"
+  },
+  "global_proxy_mode_desc": {
+    "message": "除直连域名列表外的所有域名使用代理。"
+  },
+  "proxy_domains_entry": {
+    "message": "代理域名列表"
+  },
+  "proxy_domains_entry_desc": {
+    "message": "管理按需代理模式下的代理域名"
+  },
+  "proxy_domains_empty": {
+    "message": "暂无代理域名，请在上方输入框添加"
+  },
+  "bypass_domains_entry": {
+    "message": "直连域名列表"
+  },
+  "bypass_domains_entry_desc": {
+    "message": "管理全局代理模式下的直连域名"
+  },
+  "bypass_domains_empty": {
+    "message": "暂无直连域名，请在上方输入框添加"
   }
 }

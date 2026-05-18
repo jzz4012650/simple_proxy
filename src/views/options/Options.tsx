@@ -1,7 +1,7 @@
-import Cloud from '@mui/icons-material/Cloud';
 import LinkIcon from '@mui/icons-material/Link';
 import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
 import Language from '@mui/icons-material/Language';
+import SettingsIcon from '@mui/icons-material/Settings';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -12,10 +12,10 @@ import { createElement, useEffect, useState } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 
 const Navigations = {
-  ProxyServer: {
-    pathname: '/proxy-servers',
-    text: chrome.i18n.getMessage('proxy_server'),
-    icon: Cloud,
+  BasicConfig: {
+    pathname: '/basic-config',
+    text: chrome.i18n.getMessage('basic_config'),
+    icon: SettingsIcon,
   },
   ProxyDomains: {
     pathname: '/proxy-domains',
@@ -32,14 +32,14 @@ const Navigations = {
 export default function Options() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [currentTab, setCurrentTab] = useState(Navigations.ProxyServer.pathname);
+  const [currentTab, setCurrentTab] = useState(Navigations.BasicConfig.pathname);
 
   useEffect(() => {
     const tab = Object.values(Navigations).find((nav) => nav.pathname === location.pathname);
     if (tab) {
       setCurrentTab(tab.pathname);
     } else {
-      navigate(Navigations.ProxyServer.pathname);
+      navigate(Navigations.BasicConfig.pathname);
     }
   }, [location, navigate]);
 

@@ -1,12 +1,13 @@
 
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import SearchIcon from '@mui/icons-material/Search';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import SearchIcon from '@mui/icons-material/Search';
+
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
-import Tooltip from '@mui/material/Tooltip';
 import InputAdornment from '@mui/material/InputAdornment';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -14,15 +15,17 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import { CSSProperties, KeyboardEvent, useEffect, useRef, useState } from 'react';
-import { useWindowVirtualizer } from '@tanstack/react-virtual';
 
-import { getBypassDomains, setBypassDomains } from '../../services/config';
-import { useImportExport } from '../../hooks/useImportExport';
-import ButtonGroup from '@mui/material/ButtonGroup/ButtonGroup';
+import { useWindowVirtualizer } from '@tanstack/react-virtual';
+import { CSSProperties, KeyboardEvent, useEffect, useRef, useState } from 'react';
+
+import { AddOutlined } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import AddCircleOutline from '@mui/icons-material/AddCircleOutline';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import { useImportExport } from '../../hooks/useImportExport';
+import { getBypassDomains, setBypassDomains } from '../../services/config';
 
 type BypassDomainsForRender = {
   originIndex: number;
@@ -110,14 +113,15 @@ const BypassDomainsList = () => {
 
   return (
     <Box sx={{ paddingTop: 3, paddingBottom: 3 }}>
-      <Stack direction='row' alignItems='flex-start'>
-        <Typography variant="h4" component="h4" gutterBottom sx={{ flexGrow: 1 }}>
+      <Stack direction='row' alignItems='center' gap={2} marginBottom={1}>
+        <Typography variant="h5" component="h4" gutterBottom={false} sx={{ flexGrow: 1 }}>
           {chrome.i18n.getMessage('bypass_domains')}
         </Typography>
-        <ButtonGroup variant="outlined">
+        {/* 导入导出按钮 */}
+        <ButtonGroup variant="outlined" size="small">
           <Tooltip title={chrome.i18n.getMessage('import_tooltip')} arrow>
             <Button
-              startIcon={<FileDownloadIcon />}
+              startIcon={<FileUploadIcon />}
               color="primary"
               onClick={() => fileInputRef.current?.click()}
             >
@@ -126,7 +130,7 @@ const BypassDomainsList = () => {
           </Tooltip>
           <Tooltip title={chrome.i18n.getMessage('export_tooltip')} arrow>
             <Button
-              startIcon={<FileUploadIcon />}
+              startIcon={<FileDownloadIcon />}
               color="primary"
               onClick={handleExport}
             >
@@ -134,57 +138,64 @@ const BypassDomainsList = () => {
             </Button>
           </Tooltip>
         </ButtonGroup>
+        <input
+          type="file"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          accept=".json"
+          onChange={handleImport}
+        />
       </Stack>
-      <Stack direction='column' spacing={1}>
-        <Typography variant="body1" gutterBottom>
+
+      <Box marginBottom={1}>
+        <Alert severity="info">
           {chrome.i18n.getMessage('bypass_domains_desc')}
-        </Typography>
-        <Stack direction="row" spacing={2} alignItems="flex-start">
-          <TextField
-            variant="outlined"
-            value={hostToAdd}
-            sx={{ flexGrow: 3 }}
-            onKeyUp={handleKeyUp}
-            onChange={(e) => setHostToAdd(e.target.value)}
-            label={chrome.i18n.getMessage('add_to_bypass_domains_placeholder')}
-            helperText={chrome.i18n.getMessage('add_to_bypass_domains_helper_text')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => handleNewItem(hostToAdd)}>
-                    <AddCircleOutline />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-          <TextField
-            variant="outlined"
-            value={keyword}
-            sx={{ flexGrow: 1 }}
-            onChange={(e) => setKeyword(e.target.value)}
-            label={chrome.i18n.getMessage('search')}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
-          <input
-            type="file"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            accept=".json"
-            onChange={handleImport}
-          />
-        </Stack>
-        <Card>
-          <div ref={listRef} style={{
-            height: `${virtualizer.getTotalSize()}px`,
-            position: 'relative',
-          }}>
+        </Alert>
+      </Box>
+
+      <Card>
+        <List>
+          <ListItem>
+            <Stack direction="row" spacing={2} alignItems="flex-start" width={'100%'}>
+              <TextField
+                size="small"
+                variant="outlined"
+                value={hostToAdd}
+                sx={{ flexGrow: 3 }}
+                onKeyUp={handleKeyUp}
+                onChange={(e) => setHostToAdd(e.target.value)}
+                label={chrome.i18n.getMessage('add_to_bypass_domains_placeholder')}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position='end'>
+                      <AddOutlined />
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <TextField
+                size="small"
+                variant="outlined"
+                value={keyword}
+                sx={{ flexGrow: 1 }}
+                onChange={(e) => setKeyword(e.target.value)}
+                label={chrome.i18n.getMessage('search')}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <SearchIcon />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Stack>
+          </ListItem>
+        </List>
+        <div ref={listRef} style={{
+          height: filteredBypassDomains.length > 0 ? `${virtualizer.getTotalSize()}px` : 'auto',
+          position: 'relative',
+        }}>
+          {filteredBypassDomains.length > 0 ? (
             <List>
               {virtualizer.getVirtualItems().map((virtualRow) => rowRenderer({
                 index: virtualRow.index,
@@ -198,9 +209,16 @@ const BypassDomainsList = () => {
                 },
               }))}
             </List>
-          </div>
-        </Card>
-      </Stack>
+          ) : (
+            <ListItem>
+              <ListItemText
+                primary={chrome.i18n.getMessage('bypass_domains_empty')}
+                sx={{ textAlign: 'center', color: 'text.disabled' }}
+              />
+            </ListItem>
+          )}
+        </div>
+      </Card>
     </Box>
   );
 };

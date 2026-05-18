@@ -1,3 +1,10 @@
 {
-  "typescript.format.semicolons": "insert",
+  "js/ts.format.semicolons": "insert",
+  "editor.codeActionsOnSave": {
+    "source.removeUnusedImports": "explicit",
+    "source.addMissingImports.ts": "explicit",
+    "source.organizeImports": "explicit",
+    "source.sortImports": "explicit",
+    "source.fixAll.ts": "explicit"
+  }
 }
