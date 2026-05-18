@@ -122,6 +122,12 @@
   "no_proxy_server_warning": {
     "message": "未配置代理服务器，请点击配置"
   },
+  "no_proxy_server_hint": {
+    "message": "尚未配置代理服务器"
+  },
+  "no_proxy_server_go_settings": {
+    "message": "前往设置"
+  },
   "to_top": {
     "message": "移至顶部"
   },

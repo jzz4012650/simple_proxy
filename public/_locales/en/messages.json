@@ -122,6 +122,12 @@
   "no_proxy_server_warning": {
     "message": "No proxy server found, Please click to add one."
   },
+  "no_proxy_server_hint": {
+    "message": "No proxy server configured yet"
+  },
+  "no_proxy_server_go_settings": {
+    "message": "Go to Settings"
+  },
   "to_top": {
     "message": "Move to top"
   },

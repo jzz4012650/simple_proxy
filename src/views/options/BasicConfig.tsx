@@ -154,6 +154,14 @@ const BasicConfig = () => {
       </Typography>
       <Card sx={{ mb: 5 }}>
         <List>
+          {proxyServers.length === 0 && (
+            <ListItem>
+              <ListItemText
+                primary={chrome.i18n.getMessage('no_proxy_server_warning')}
+                sx={{ textAlign: 'center', color: 'text.disabled' }}
+              />
+            </ListItem>
+          )}
           {proxyServers.map((server, i) => (
             <ListItem key={i} divider>
               <ListItemAvatar>

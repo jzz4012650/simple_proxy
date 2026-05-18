@@ -25,6 +25,10 @@ export default function NewServerPopup({ open, onClose, onConfirm }: {
     onClose();
   };
 
+  const handleSubmit = () => {
+    onConfirm({ method, host, port: Number(port) });
+  };
+
   return (
     <Dialog keepMounted disableEscapeKeyDown open={open} onClose={_onClose}>
       <DialogTitle>
@@ -58,6 +62,7 @@ export default function NewServerPopup({ open, onClose, onConfirm }: {
             value={host}
             variant='standard'
             onChange={e => setHost(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
           />
           <TextField
             id="port"
@@ -68,11 +73,12 @@ export default function NewServerPopup({ open, onClose, onConfirm }: {
             inputProps={{ min: 0, max: 65535, step: 1 }}
             value={port}
             onChange={e => setPort(e.target.value)}
+            onKeyDown={e => { if (e.key === 'Enter') handleSubmit(); }}
           />
         </Stack>
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={() => onConfirm({ method, host, port: Number(port) })}>
+        <Button color="primary" onClick={handleSubmit}>
           {chrome.i18n.getMessage('confirm')}
         </Button>
         <Button onClick={onClose}>
