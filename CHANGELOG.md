@@ -2,6 +2,35 @@
 
 All notable changes to this project will be documented in this file.
 
+## [3.6.0] - 2025-05-19
+
+### Features
+
+- 重构选项页面，新增 BasicConfig 页面整合代理服务器、按需代理设置（GFWList 开关、代理域名）和全局代理设置（直连域名、绕过私有网络）
+- 新增绕过私有网络功能：在全局代理模式下，私有 IP 地址段及 localhost/*.local 自动绕过代理
+- 改进无代理服务器时的用户体验
+  - Popup：显示专用空状态页面（图标 + 提示文字 + 跳转设置链接），取代之前的警告 tooltip
+  - 代理服务器列表：为空时居中显示提示文字
+- 新增代理服务器添加弹窗按 Enter 键提交支持
+
+### Documentation
+
+- 优化直连域名列表描述文案，对齐代理域名列表描述风格，补充仅匹配域名说明和 `*.cn` 示例
+
+### Technical Improvements
+
+- 添加 `STORAGE_BYPASS_PRIVATE_NETWORKS` 存储键及对应配置读写函数
+- PAC 脚本增强：支持 `isInNet`/`shExpMatch` 绕过私有网络
+- Popup 区分加载状态（`null`）与空列表状态（`[]`）
+- 提取 `NewServerPopup` 的 `handleSubmit` 函数，避免重复逻辑
+- 新增 i18n 消息（英文 + 中文）
+- VSCode 设置：添加 import 自动排序
+
+### Chore
+
+- gitignore 添加 `*.zip`
+- 版本号升级至 3.6.0
+
 ## [3.5.0] - 2025-05-15
 
 ### Features
