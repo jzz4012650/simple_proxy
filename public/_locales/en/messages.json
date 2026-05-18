@@ -54,7 +54,7 @@
     "message": "Bypass Domains"
   },
   "bypass_domains_desc": {
-    "message": "In global proxy mode, only domains in the bypass list connect directly. All other domains use the proxy. Supports wildcards like *.google.com"
+    "message": "In global proxy mode, only listed domains connect directly. Supports wildcards like *.cn. Note: Only the domain part is matched; URL paths and query strings are not included in matching."
   },
   "proxy_domains": {
     "message": "Proxy Domains"
